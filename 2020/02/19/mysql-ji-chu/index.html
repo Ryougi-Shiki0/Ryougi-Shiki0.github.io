@@ -1,0 +1,2043 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="MySQL基础, Shiki&#39;s Blog">
+    <meta name="description" content="数据库
+概念：
+
+数据是数据库中储存的基本对象，数据的含义为数据的语义
+数据库DB：长期储存、有组织、可共享、大量数据：长期储存、有组织、可共享、大量数据
+按一定的数据模型组织、描述和储存；可共享；冗余度较小；数据独立性较高；易扩展
+
+
+
+">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>MySQL基础 | Shiki&#39;s Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Shiki's Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Shiki's Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">MySQL基础</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-02-19
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h1><ul>
+<li><p>概念：</p>
+<ul>
+<li>数据是数据库中储存的基本对象，数据的含义为数据的语义</li>
+<li>数据库DB：长期储存、有组织、可共享、大量数据：长期储存、有组织、可共享、大量数据<ul>
+<li>按一定的数据模型组织、描述和储存；可共享；冗余度较小；数据独立性较高；易扩展</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>数据库管理系统DBMS</p>
+<ul>
+<li>数据定义，数据组织、储存和管理，数据操纵</li>
+<li>主要功能：运行管理、建立和维护</li>
+</ul>
+</li>
+<li><p>DBMS特点</p>
+<ul>
+<li>数据放到表中，表再放在库中</li>
+<li>一个数据库中可以有多个表，每个表都有一个名字标识，具有唯一性</li>
+<li>表具有一些特性，定义了数据再表中如何储存，类似java中“类”</li>
+<li>表由列组成，也称字段，所有表都是由一个或多个列组成的，每一列类似java中的”属性“</li>
+<li>表中的数据是按行储存的，每一行类似java中的“对象”</li>
+</ul>
+</li>
+<li><p>Mysql启动： mysql -h 主机名 -P端口号 -u 用户名 -p 密码</p>
+</li>
+</ul>
+<pre><code>show databases;
+use 库名;
+show tables;
+show tables from 库名;
+create table 表名(
+    列名 列类型,
+    列名 列类型,
+    ...
+);</code></pre><ul>
+<li>查看表结构： desc 表名</li>
+<li>mysql不区分大小写，但关键字大写，表明列名小写</li>
+</ul>
+<h2 id="1-DQL语言"><a href="#1-DQL语言" class="headerlink" title="1.DQL语言"></a>1.DQL语言</h2><p>做查询时前面添加命令 USE 库名;</p>
+<p>查询时，先确认是否所需数据都在一张表里，决定是否连接表，再进行筛选，注意GROUP BY前后筛选</p>
+<h3 id="基础查询"><a href="#基础查询" class="headerlink" title="基础查询"></a>基础查询</h3><ul>
+<li><p>select 查询列表 from 表名</p>
+</li>
+<li><p>查询列表可以是：表中的字段、常量值、表达式、函数</p>
+</li>
+<li><p>查询的结果是一个虚拟的表格</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 查询表中的单个字段
+SELECT last_name FROM employees;
+-- 查询表中的多个字段
+SELECT last_name,salary,email FROM employees;
+-- 查询表中的所有字段
+SELECT * FROM employees;-- 星号不可以自定义顺序
+-- 查询常量值
+SELECT 100; SELECT 'john';
+-- 查询表达式
+SELECT 100%98；
+-- 查询函数
+SELECT version();
+-- 可以起别名 别名可加双引号避免歧义报错
+SELECT 100%98 AS 结果;
+SELECT last_name AS 姓,first_name AS 名 FROM employees;
+SELECT last_name 姓,first_name 名 FROM employees;
+-- 去重
+SELECT DISTINCT department_id FROM employees;
+-- 加号
+-- mysql中对字符型进行转换，转换成功则继续运算，否则字符型转化为0，如果有一方为null，则结果输出null
+SELECT CONCAT('a','b','c') AS 结果; 则输出 abc
+IFNULL(字段,数值)</code></pre>
+</li>
+</ul>
+<h3 id="条件查询"><a href="#条件查询" class="headerlink" title="条件查询"></a>条件查询</h3><pre><code>SELECT 查询列表
+FROM 表名
+WHERE 筛选条件</code></pre><ul>
+<li><p>支持条件运算符（包括模糊查询）、逻辑表达式AND NOT OR</p>
+<ul>
+<li><p>模糊查询：like、between and、in、is null</p>
+<ul>
+<li><p>like</p>
+<p>通配符：%-&gt;0-n个任意字符、一个任意字符用\转义，</p>
+<p>或 <code>last_name LIKE &#39;_$_%&#39; ESCAPE &#39;$&#39;;($可换成任意字符充当转义)</code></p>
+</li>
+<li><p>between and 包含为闭区间 </p>
+</li>
+<li><p>in job_id(‘’,’’,’’);</p>
+</li>
+<li><p>is null/is not null -&gt;由于= &lt;&gt; 不可判断null值</p>
+</li>
+<li><p>&lt;=&gt;安全等于（可以判断null</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="排序查询"><a href="#排序查询" class="headerlink" title="排序查询"></a>排序查询</h3><pre class=" language-mysql"><code class="language-mysql">SELECT 查询列表 
+FROM 表 
+where 筛选条件 
+ORDER BY 排序列表(ASC|DESC);</code></pre>
+<ul>
+<li><p>特点：默认升序；</p>
+<p>order by 支持单个多个字段、表达式、函数、别名；一般放在查询语句最后（只有Limit 子句在其后</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT * FROM employees ORDER BY salary DESC;
+SELECT * FROM employees ORDER BY salary ASC;
+
+-- 按年薪高低显示员工的信息和 年薪按表达式顺序
+SELECT *,salary*12*(1+IFNULL(commission_pct,0)) 年薪 FROM employees 
+ORDER BY salary*12*(1+IFNULL(commission_pct,0)) DESC;
+
+-- 按年薪高低显示员工的信息和 年薪按别名顺序
+SELECT *,salary*12*(1+IFNULL(commission_pct,0)) 年薪
+FROM employees 
+ORDER BY 年薪 DESC;
+
+-- 按函数排序
+SELECT LENGTH(last_name) 字节长度，last_name,salary FROM employees 
+ORDER BY LENGTH(last_name) DESC;
+
+-- 按多个字段排序
+SELECT * FROM employees 
+ORDER BY salary ASC,employees_id DESC;</code></pre>
+</li>
+</ul>
+<h3 id="常见函数"><a href="#常见函数" class="headerlink" title="常见函数"></a>常见函数</h3><p>类似于方法</p>
+<ul>
+<li><p>单行函数：concat、length、ifnull等</p>
+<ul>
+<li><p>字符函数</p>
+<ul>
+<li>SELECT LENGTH 注意这里是字节长度</li>
+<li>CONCAT( , , )</li>
+<li>UPPER,LOWER</li>
+<li>SUBSTR、SUBSTRING sql中索引从1开始，substr的第三个参数为长度类似C++substr</li>
+<li>INSTR 返回子串中出现的第一次起始位置，否则返回0</li>
+<li>TRIM （’a’ FROM ‘aaaaneawwwaaaa’）则仅去掉前后两端的a</li>
+<li>LPAD (‘test’,10,’*’) output 则左边用星号填充至10个字符（如果输出长度小于原字符则截断</li>
+<li>RPAD同理</li>
+<li>REPLACE(‘test’,’e’,’s’)</li>
+</ul>
+</li>
+<li><p>数学函数</p>
+<ul>
+<li>ROUND四舍五入 </li>
+<li>SELECT ROUND(1.45);</li>
+<li>CEIL向上取整</li>
+<li>FLOOR返回&lt;=该参数的最大整数</li>
+<li>TRUNCATE截断 SELECT TRUNCATE(1.555，1)保留一位小数</li>
+<li>MOD取余</li>
+</ul>
+</li>
+<li><p>日期函数</p>
+<ul>
+<li>SELECT NOW();返回当前系统日期+时间</li>
+<li>SELECT CURDATE();返回当前系统日期</li>
+<li>SELECT CURTIME();返回当前时间</li>
+<li>SELECT year(),month(),day(),hour(),minute(),second() 获取年月日时分秒</li>
+<li>SELECT MONTHNAME(NOW());</li>
+<li>str_to_date将日期格式的字符串转汉城指定格式的日期  STR_TO_DATE(‘9-13-1999’,’%m-%d=%Y’);</li>
+<li>date_format:将日期转换成字符</li>
+<li>SELECT DATE_FORMAT(NOW(),’%y年%m月%d日’) AS out_put;</li>
+</ul>
+</li>
+<li><p>其他函数</p>
+<ul>
+<li>SELECT VERSION();                    </li>
+<li>SELECT DATABASE();                </li>
+<li>SELECT USER();</li>
+<li>SELECT PASSWORD(‘’);//字符加密</li>
+</ul>
+</li>
+<li><p>流程控制函数</p>
+<ul>
+<li><p>IF类似三目运算符?:</p>
+</li>
+<li><p>SELECT IF(10&gt;5,’大’，’小’);</p>
+</li>
+<li><p>CASE</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 类似switch
+CASE department_id
+WHEN 30 THEN salary*1.1
+WHEN 40 THEN salary*1.2
+ELSE salary
+END AS 新工资
+FROM employees;
+-- 类似多重if-else
+CASE
+WHEN salary>20000 THEN 'A'
+WHEN salary>15000 THEN 'B'
+ELSE 'D'
+END AS 工资级别
+FROM employees;</code></pre>
+</li>
+</ul>
+</li>
+<li><p>分组函数：</p>
+<p>用于统计又称聚合、统计函数，SUM、AVG、MAX、MIN、COUNT</p>
+<ul>
+<li><p>SUM、AVG对数值型处理</p>
+</li>
+<li><p>MAX、MIN、COUNT对任何类型可处理</p>
+</li>
+<li><p>所有的分组函数都忽略NULL值；都可以和DISTINCT搭配实现去重</p>
+</li>
+<li><p>COUNT详解</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 统计行数
+SELECT COUNT(*) FROM employees;
+SELECT COUNT(1) FROM employees;</code></pre>
+<p>MYISAM引擎COUNT(*)效率高INNODB两者差不多，比COUNT(字段)效率高<br>和分组函数一同查询的字段要求是group by后的字段<br>DATEDIFF 计算两参数差值</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="分组查询"><a href="#分组查询" class="headerlink" title="分组查询"></a>分组查询</h3><pre><code>SELECT 分组函数，列
+FROM 表
+WHERE 删选条件
+GROUP BY 分组的列表
+ORDER BY 子句</code></pre><ul>
+<li><p>案例</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT AVG(salary)，department_id
+FROM employees
+WHERE email LIKE '%a%'
+GROUP BY department_id;
+
+SELECT COUNT(*),department_id
+FROM employees
+GROUP BY department_id
+HAVING COUNT(*)>2;
+
+SELECT MAX(salary),job_id
+FROM employees
+WHERE commission_pct IS NOT NULL
+GROUP BY job_id
+HAVING MAX(salary)>12000
+
+SELECT MIN(salary),manager_id
+FROM employees
+WHERE department_id>102
+GROUP BY manager_id
+HAVING MIN(salary)>5000;</code></pre>
+</li>
+<li><p>特点</p>
+<p>筛选条件 两者筛选数据源不同 </p>
+<p>分组前筛选 筛选的是原始表</p>
+<p>分组后筛选 筛选的是分组后的结果集</p>
+<p>能分组前筛选的尽量分组前筛选（性能考虑</p>
+</li>
+<li><p>GROUP BY</p>
+<p>支持多分组 支持按表达式或函数分组</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 按员工姓名的长度分组，查询每一组的员工个数，筛选员工个数>5的有哪些
+SELECT COUNT(*),LENGTH(last_name) len_name
+FROM employees
+GROUP BY LENGTH(last_name)
+HAVING COUNT(*)>5;</code></pre>
+</li>
+</ul>
+<h3 id="连接查询"><a href="#连接查询" class="headerlink" title="连接查询"></a>连接查询</h3><p>又称多表查询</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT 查询列表
+FROM 表1 别名 连接类型
+JOIN 表2 别名
+ON 连接条件</code></pre>
+<ul>
+<li><p>内连接 INNER JOIN</p>
+<ul>
+<li><p>等值连接</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT NAME,boyName FROM boys,beauty
+WHERE beauty.boyfriend_id=boys.id;</code></pre>
+<ul>
+<li><p>查询员工名、工种号、工种名 可以为表起别名</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT last_name,employees.job_id,job_title
+FROM employees,jobs
+WHERE employees.`job_id`=jobs.`job_id`;</code></pre>
+</li>
+<li><p>可以加筛选</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT last_name,department_name                        
+FROM employees,departments
+WHERE employees.`department_id`=departments.department_id
+AND employees.`commission_pct` IS NOT NULL;</code></pre>
+</li>
+<li><p>可以加分组</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 查询有奖金的每个部门的部门名和部门的领导编号和该部门的最低工资
+SELECT department_name,d.manager_id,MIN(e.salary)
+FROM employees e,departments d
+WHERE e.department_id =d.department_id
+and e.commission_pct is not null
+GROUP BY department_name,d.manager_id;</code></pre>
+</li>
+<li><p>可以加排序</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 查询每个工种的工种名和员工的个数,并按员工个数降序
+SELECT
+    job_title,
+    count(*)
+FROM
+    employees e,
+    jobs j
+WHERE
+    e.job_id = j.job_id
+GROUP BY
+    job_title
+ORDER BY
+    count(*) DESC</code></pre>
+</li>
+<li><p>可以进行三表连接</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT last_name,department_name,city
+FROM employees e,departments d,locations l
+WHERE e.`department_id`=d.`department_id`
+AND d.`location_id`=l.`location_id`
+AND city LIKE 's%'
+ORDER BY department_name DESC;</code></pre>
+</li>
+<li><p>也可以加分组后筛选</p>
+</li>
+</ul>
+</li>
+<li><p>非等值连接</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 查询员工的工资和工资级别
+SELECT salary,grade_level
+FROM employees e,job_grades g
+WHERE salary BETWEEN g.`lowest_sal` AND g.`highest_sal`;</code></pre>
+</li>
+<li><p>自连接</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 查询员工名和上级的名称
+SELECT e.employee_id,e.last_name,m.employee_id,m.last_name
+FROM employees e,employees m
+WHERE e.`manager_id`=m.`employee_id`;</code></pre>
+</li>
+<li><p>注意</p>
+<ul>
+<li>多表连接的结果为多表的交集部分</li>
+<li>n表连接至少需要n-1个连接条件</li>
+<li>多表的顺序无要求，一般需起别名</li>
+<li>可搭配其他子句使用</li>
+</ul>
+</li>
+<li><p>总结</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT 查询列表
+FROM 表1 别名1，表2 别名2（等值连接、非等值连接 / FROM 表 别名1，表 别名2（自连接
+WHERE （非）等值的连接条件
+AND 筛选条件
+GROUP BY 分组字段
+HAVING 分组后的筛选
+ORDER BY 排序字段</code></pre>
+</li>
+</ul>
+</li>
+<li><p>外连接：连接类型outer</p>
+<p>用与查询一个表有，另一个表没有的记录</p>
+<ul>
+<li><p>左外连接</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT <select_list>
+FROM A
+LEFT OUTER JOIN B
+ON A.key=B.key
+WHERE B.key IS NULL;</code></pre>
+<p>左外连接还返回左表中不符合连接条件单符合查询条件的数据行</p>
+</li>
+<li><p>右外连接</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT <select_list>
+FROM B
+RIGHT OUTER JOIN A
+ON A.key=B.key
+WHERE A.key IS NULL;</code></pre>
+<p>右外连接还返回右表中不符合连接条件单符合查询条件的数据行</p>
+</li>
+<li><p>交叉连接</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT b.* ,bo.*
+FROM beauty b
+CROSS JOIN boys bo;
+-- 结果为笛卡尔乘积结果</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><blockquote>
+<p>出现在其他语句中的select语句，成为子查询或内查询</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>子查询类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>select后</td>
+<td>标量子查询</td>
+</tr>
+<tr>
+<td>FROM后</td>
+<td>表子查询</td>
+</tr>
+<tr>
+<td>WHERE或HAVING后</td>
+<td>标量子查询、列子查询、行子查询</td>
+</tr>
+<tr>
+<td>EXISTS后</td>
+<td>表子查询</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>特征</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>标量子查询</td>
+<td>结果集只有一行一列</td>
+</tr>
+<tr>
+<td>列子查询</td>
+<td>结果集只有一行多列</td>
+</tr>
+<tr>
+<td>行子查询</td>
+<td>结果集有一行多列</td>
+</tr>
+<tr>
+<td>表子查询</td>
+<td>结果集一般为多行多列</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>SELECT后面</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 查询每个部门的员工个数
+SELECT d.*,(SELECT COUNT(*) 
+FROM employees 
+WHERE employees.`department_id`=d.`department_id`)
+FROM departments d</code></pre>
+</li>
+<li><p>FROM后面</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 查询每个部门的平均工资的工资等级
+SELECT t1.*,t2.`grade_level`
+FROM(
+    SELECT department_id,AVG(salary) avg_salary 
+    FROM employees
+    GROUP BY department_id
+) t1 
+INNER JOIN job_grades t2
+ON t1.avg_salary BETWEEN t2.`lowest_sal` AND t2.`highest_sal`</code></pre>
+</li>
+<li><p>WHERE和HAVING后</p>
+<ul>
+<li><p>标量子查询    单行</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 谁的工资比abel高
+SELECT e.`last_name` 
+FROM employees e 
+WHERE e.`salary`>(
+    SELECT salary 
+    FROM employees 
+    WHERE last_name = 'Abel')；</code></pre>
+</li>
+<li><p>列子查询        多行</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 返回location_id是1400或1700的部门中的所有员工姓名
+SELECT last_name
+FROM employees
+WHERE department_id IN(
+    SELECT DISTINCT department_id
+    FROM departments
+    WHERE location_id IN(1400,1700)
+);
+-- 返回其他工种中比job_id为`IT_PROG`工种任一工资低的员工的员工号、姓名、job_id、salary
+SELECT last_name,employee_id,job_id,salary 
+FROM employees 
+WHERE salary<ALL( 
+    SELECT DISTINCT salary 
+    FROM employees 
+    WHERE job_id = 'IT_PROG' ) 
+AND job_id<>'IT_PROG';</code></pre>
+</li>
+<li><p>行子查询         多列多行</p>
+<ul>
+<li><p>特点</p>
+<p>子查询放在小括号内、子查询一帮放在条件的右侧、标量子查询一般搭配着单行操作符使用<br>列子查询，一般搭配着多行操作符使用</p>
+</li>
+</ul>
+<pre class=" language-mysql"><code class="language-mysql">-- 员工编号最小并且工资最高的员工信息
+SELECT *
+FROM employees
+WHERE (employee_id,salary)=(
+    SELECT MIN(employee_id),MAX(salary)
+    FROM employees
+);
+-- 或用以下形式
+SELECT *
+FROM employees
+WHERE employee_id=(
+    SELECT MIN(employee_id)
+    FROM employees
+) AND salary=(
+    SELECT MAX(salary)
+    FROM employees
+);</code></pre>
+</li>
+</ul>
+</li>
+<li><p>EXISTS后面：相关子查询</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT EXISTS(
+    SELECT employee_id 
+    FROM employees  
+    WHERE salary=30000
+);</code></pre>
+</li>
+</ul>
+<h3 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询"></a>分页查询</h3><p>当显示的数据，一页显示不全，需要分页提交sql请求</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT 查询列表
+FROM 表
+连接类型 JOIN 表2
+ON 连接条件
+WHERE 筛选条件
+GROUP BY 分组字段
+HAVING 分组后的筛选
+ORDER BY 排序的字段
+LIMIT offset,size;
+-- 每页公式为 SELECT 查询列表 FROM 表 LIMIT (page-1)*size,size;</code></pre>
+<h3 id="union联合查询"><a href="#union联合查询" class="headerlink" title="union联合查询"></a>union联合查询</h3><p>将多条查询语句合并成一个结果</p>
+<ul>
+<li>应用场景     多个表没有连接关系，但是列数相同的表</li>
+<li>特点   多条查询语句列数一致、字段名和类型顺序要一致、自动去重（取消去重则UNION ALL）</li>
+</ul>
+<h2 id="2-DML语言"><a href="#2-DML语言" class="headerlink" title="2.DML语言"></a>2.DML语言</h2><h3 id="插入语句insert"><a href="#插入语句insert" class="headerlink" title="插入语句insert"></a>插入语句insert</h3><pre class=" language-mysql"><code class="language-mysql">-- 前者支持插入多行VALUES(),(),();后者不支持
+-- 前者支持子查询 SELECT ,后者不支持
+insert into 表名（列名，...）
+values(值，...)
+或
+insert into 表名
+set 列名=值,列名=值;</code></pre>
+<ul>
+<li><p>插入的类型要与列的类型一致或兼容</p>
+<pre class=" language-mysql"><code class="language-mysql">INSERT INTO beauty(id,NAME,sex,borndate,phone,photo,boyfriend_id)
+VALUES(13,'唐艺昕','女','1990-4-23','18988888888',NULL,2);</code></pre>
+</li>
+<li><p>注意</p>
+<ul>
+<li>不可为NULL的值可以写NULL或省略</li>
+<li>可以省略列名，但是此时NULL值不能省略写</li>
+</ul>
+</li>
+</ul>
+<h3 id="修改语句update"><a href="#修改语句update" class="headerlink" title="修改语句update"></a>修改语句update</h3><pre class=" language-mysql"><code class="language-mysql">-- 修改单表的记录
+update 表名
+set 列=新值,列=新值,...
+where 筛选条件;
+-- 修改多表的记录
+update 表1
+inner|left|right join 表2
+set 列=值,列=值
+where 筛选条件;
+
+-- Example
+UPDATE boys bo
+INNER JOIN beauty b ON bo.`id`=b.`boyfriend_id`
+SET b.`phone`=`114`
+WHERE bo.`boyName`=`张无忌`;
+
+UPDATE boys bo
+RIGHT JOIN beauty b ON bo.`id`=b.`boyfriend_id`
+SET b.`boyfriend_id`=2
+WHERE bo.`id` IS NULL;</code></pre>
+<h3 id="删除语句delete"><a href="#删除语句delete" class="headerlink" title="删除语句delete"></a>删除语句delete</h3><pre class=" language-mysql"><code class="language-mysql">-- 单表删除
+delete from 表1,表2
+inner|left|right join 表2
+on 连接条件
+where 筛选条件;            
+-- 多表删除
+truncate table 表名;</code></pre>
+<ul>
+<li>注意<ul>
+<li>如果删除的表中有自增长列，delete后再插入数据，值从断点开始，ertruncate从1开始</li>
+<li>truncate 没有返回值，delete有返回值</li>
+<li>truncate不能回滚，delete可以回滚</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-DDL语言"><a href="#3-DDL语言" class="headerlink" title="3.DDL语言"></a>3.DDL语言</h2><h3 id="库的管理"><a href="#库的管理" class="headerlink" title="库的管理"></a>库的管理</h3><ul>
+<li>创建</li>
+</ul>
+<pre class=" language-mysql"><code class="language-mysql">create database 
+IF NOT EXISTS 库名;</code></pre>
+<ul>
+<li>修改 (一般不做修改 </li>
+</ul>
+<pre class=" language-mysql"><code class="language-mysql">-- 可改字符集：
+ALTER DATABASE books 
+CHARACTER SET gbk;</code></pre>
+<ul>
+<li>删除</li>
+</ul>
+<pre class=" language-mysql"><code class="language-mysql">DROP DATABASE 
+IF EXISTS books;</code></pre>
+<h3 id="表的管理"><a href="#表的管理" class="headerlink" title="表的管理"></a>表的管理</h3><ul>
+<li><p>创建</p>
+<pre class=" language-mysql"><code class="language-mysql">CREATE TABLE 表名(
+    列名 列的类型(长度)约束,
+    列名 列的类型(长度)约束,
+    列名 列的类型(长度)约束,
+);
+
+CREATE TABLE book(
+    id INT,#编号
+    bName VARCHAR(20),
+    authorId INT,
+    publishDate DATETIME
+);</code></pre>
+</li>
+<li><p>修改</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 修改列名
+ALTER TABLE book 
+CHANGE COLUMN publishdate pubDate DATETIME;
+-- 修改列的类型或约束
+ALTER TABLE book 
+MODIFY COLUMN pubdate TIMESTAMP;
+-- 添加新列
+ALTER TABLE author 
+ADD COLUMN annual DOUBLE;
+-- 删除列
+ALTER TABLE author 
+DROP COLUMN annual;
+-- 修改表名
+ALTER TABLE author 
+RENAME TO book_author;</code></pre>
+</li>
+<li><p>删除</p>
+<pre class=" language-mysql"><code class="language-mysql">DROP TABLE 
+IF EXISTS book_author;
+-- 通用写法
+DROP DATABASE IF EXISTS 旧库名;
+CREATE DATABASE 新库名;
+DROP TABLE IF EXISTS 旧表名;
+CREATE TABLE 表名();</code></pre>
+</li>
+<li><p>表的复制</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 仅仅复制表的结构
+CREATE TABLE 
+LIKE author;
+复制表的结构+数据
+CREATE TABLE copy2
+SELECT * FROM author;
+-- 仅复制某些字段
+CREATE TABLE copy4
+SELECT id，au_name
+FROM author
+WHERE 0;</code></pre>
+</li>
+</ul>
+<h3 id="常见的数据类型"><a href="#常见的数据类型" class="headerlink" title="常见的数据类型"></a>常见的数据类型</h3><blockquote>
+<p>选择类型越简单越好，能保存数值的类型越小越好</p>
+</blockquote>
+<ul>
+<li><p>整形</p>
+<ul>
+<li>用UNSIGNED标识有无符号，超范围则为临界值，如果不设置长度，会有默认的长度</li>
+<li>长度代表了显示的最大宽度，如果不够会用0在左边填充，但必须搭配ZEROFILL</li>
+</ul>
+</li>
+<li><p>小数</p>
+<ul>
+<li>浮点数  float(M,D) double(M,D)</li>
+<li>定点数  DEC(M,D) DECIMAL(M,D)</li>
+<li>特点：M为总位数，D为小数位数，默认float、double符合范围即可，decimal默认10,0    </li>
+</ul>
+</li>
+<li><p>字符型</p>
+<ul>
+<li><p>较短文本char、varchar</p>
+<p>char固定长度字符M默认为1，varchar可变长度字符M无默认必须指定，char性能高</p>
+</li>
+<li><p>较长文本test、blob</p>
+</li>
+</ul>
+</li>
+<li><p>枚举</p>
+</li>
+<li><p>集合</p>
+<pre class=" language-mysql"><code class="language-mysql">CREATE TABLE tab_set(
+    s1 SET/ENUM('a','b','c','d')
+);        </code></pre>
+<p>集合插入多个，枚举插入一个</p>
+</li>
+<li><p>日期型</p>
+<p>date、datetime、timestamp、time、year<br>datetime从1000-1-1到9999-12-31<br>timestamp则和实际时区有关，反应实际时间，且受mysql版本和sqlmode的影响，范围1970某时到2038某时</p>
+</li>
+</ul>
+<h3 id="常见约束"><a href="#常见约束" class="headerlink" title="常见约束"></a>常见约束</h3><p>限制表中的数据，为了保证表中的数据的准确性和可靠性</p>
+<ul>
+<li><p>六大约束</p>
+<ul>
+<li>NOT NULL</li>
+<li>DEFAULT：保证该字段有默认值</li>
+<li>PRIMARY KEY：主键，用于保证该字段的值的唯一性，并且非空</li>
+<li>UNIQUE:唯一，用于保证该字段的值具有唯一性，可以为空</li>
+<li>CHECK:（mysql中不支持）</li>
+<li>FOREIGN KEY:外键，用于限制两个表的关系，用于保证该字段的值必须来自主表的关联列的值，在从表添加外键约束，用于引用主表中的某列的值，比如各种编号</li>
+</ul>
+</li>
+<li><p>添加约束时机</p>
+<ul>
+<li><p>创建表时</p>
+<ul>
+<li><p>列级约束<br>直接在字段名和类型后面追加约束类型，六种语法都支持，但外键无效果</p>
+</li>
+<li><p>表级约束<br>六种中除了非空和默认都支持</p>
+<pre class=" language-mysql"><code class="language-mysql">[constraint 约束名] 约束类型(字段名) [FOREIGN KEY() REFERENCE 表名(字段名)];
+CREATE TABLE IF NOT EXISTS stuinfo(
+    id INT PRIMARY KEY,
+    stuname VARCHAR(20) NOT NULL,
+    age INT DEFAULT 18,
+    seat INT UNIQUE,
+    majorid INT,
+    CONSTRAINT fk_stuinfo_major FOREIGN KEY(majorid) REFERENCE major(id)
+);</code></pre>
+</li>
+<li><p>主键和UNIQUE：<br>主键只能在一个表里有一个，但可以有联合主键（不推荐），UNIQUE可以有多个，也可以组合        </p>
+</li>
+<li><p>外键<br>要求在从表设置外键关系、从外的外键列的类型和朱标的关联列的类型要求一致或兼容，名称无要求<br>主表的关联列必须是一个key（一般时主键或UNIQUE）<br>删除数据时先删从表才能再删除主表</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>修改表时</p>
+<ul>
+<li><p>列级约束</p>
+<pre class=" language-mysql"><code class="language-mysql">  ALTER TABLE stuinfo 
+  MODIFY COLUMN stuname VARCHAR(20) 约束;</code></pre>
+</li>
+<li><p>表级约束</p>
+<pre class=" language-mysql"><code class="language-mysql">  ALTER TABLE stuinfo 
+  ADD UNIQUE(seat);
+
+  ALTER TABLE stuinfo 
+  ADD FOREIGN KEY(majorid) REFERENCE major(id);</code></pre>
+</li>
+</ul>
+</li>
+<li><p>修改表时删除约束</p>
+<pre class=" language-mysql"><code class="language-mysql">  NOT NULL 改为NULL 默认改为不写 
+
+  -- 删除主键
+  ALTER TABLE stuinfo 
+  DROP PRIMARY KEY;
+
+  -- 删除UNIQUE 
+  ALTER TABLE 表名 
+  DROP INDEX 字段名;
+
+  -- 删除外键 
+  ALTER TABLE 表名 
+  DROP FOREIGN KEY 字段名;</code></pre>
+</li>
+</ul>
+<h3 id="标识列：自增长列"><a href="#标识列：自增长列" class="headerlink" title="标识列：自增长列"></a>标识列：自增长列</h3><ul>
+<li>类型后+AUTO_INCREMENT</li>
+<li>要求仅给主键、外键或UNIQUE类型添加</li>
+<li>一个表至多一个标识列</li>
+<li>修改为非标识列时直接后面不写</li>
+</ul>
+<h2 id="TCL语言"><a href="#TCL语言" class="headerlink" title="TCL语言"></a>TCL语言</h2><h3 id="事务和事务处理"><a href="#事务和事务处理" class="headerlink" title="事务和事务处理"></a>事务和事务处理</h3><blockquote>
+<p>事务：一个或一组sql语句组成一个执行单元，这个执行单元要么全部执行，要么全部不执行</p>
+</blockquote>
+<ul>
+<li><p>ACID属性</p>
+<ul>
+<li>原子性：事务是一个不可分割的工作单位，操作要么都发生要么都不发生</li>
+<li>一致性：事务必须是一个数据库从一个一致性状态变换到另一个一致性状态</li>
+<li>隔离性：一个事务的执行不能被其他事务干扰，事务内部操作对其他并发事务隔离，不可相互干扰</li>
+<li>持久性：一个事务一旦被提交，他对数据库中的改变就是永久性的，后续操作不会有任何影响</li>
+</ul>
+</li>
+<li><p>隐式事务没有明显的开始和结束如：insert、update、delete</p>
+<p>一般的显式事务都是insert、update、delete，显示事务必须先设置自动提交功能为禁用set autocommit=0;</p>
+<pre class=" language-mysql"><code class="language-mysql">开启事务：
+set autocommit=0;start transaction;
+编写sql
+结束事务
+-- 结束时才决定提交事务或回滚事务</code></pre>
+</li>
+<li><p>并发</p>
+<ul>
+<li><p>脏读：2读取了1没提交的数据（例如1回滚 read uncommitted</p>
+</li>
+<li><p>不可重复读：2读了数据后1更新 read committed</p>
+</li>
+<li><p>幻读：2读取了后1插入数据 repeatable read</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 设置当前连接的隔离级别
+set transaction isolation level read committed;
+-- 设置数据库系统的全局的隔离级别
+set global transaction isolation level read committed;
+savepoint 节点名;
+rollback to 节点名;</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><ul>
+<li><p>视图：虚拟表，和普通表一样使用 重用语句，简化操作，保护数据，提高安全性</p>
+</li>
+<li><p>查看视图</p>
+<pre class=" language-mysql"><code class="language-mysql">desc 视图名；
+show create view 视图名；</code></pre>
+</li>
+<li><p>视图的更新</p>
+<pre><code>CREATE OR REPLACE VIEW my_vl 
+AS
+SELECT .....
+或 ALTER VIEW +后续一样</code></pre><p>视图的增删会影响原表<br>tips：包含以下关键字的sql语句：分组函数、distinct、GROUP BY、HAVING 、UNION或者UNION ALL、SELECT、JOIN、FROM、WHERE子句的子查询引用了FROM子句中的视图不允许更新</p>
+</li>
+<li><p>视图的删除</p>
+<pre class=" language-mysql"><code class="language-mysql">DROP VIEW 视图名、视图名;</code></pre>
+</li>
+<li><p>视图和表的区别</p>
+<p>视图创建用create view，基本不占用实际物理空间，只是保存sql逻辑，一般不能增删改，表创建用create table，占用实际物理空间，保存了具体数据</p>
+</li>
+</ul>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ul>
+<li><p>系统变量</p>
+<ul>
+<li><p>查看所有的系统|会话变量</p>
+<pre class=" language-mysql"><code class="language-mysql">SHOW GLOBAL|SESSION VARIABLES [LIKE '%char%'];</code></pre>
+</li>
+<li><p>查看某个指定的系统|会话变量</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT @@GLOBAL|SESSION.系统变量名</code></pre>
+</li>
+<li><p>为某个系统变量赋值 若显式声明则默认为 SESSION            </p>
+<pre class=" language-mysql"><code class="language-mysql">SET GLOBAL|SESSION 名=值;
+SET @@GLOBAL|SESSION.系统变量名=值;</code></pre>
+</li>
+<li><p>全局变量：作用域：每次启动全局变量赋初值，对全局会话有效，重启无效                        </p>
+</li>
+<li><p>会话变量：针对于单独的会话（连接）有效</p>
+</li>
+</ul>
+</li>
+<li><p>自定义变量</p>
+</li>
+</ul>
+<h3 id="存储过程和函数"><a href="#存储过程和函数" class="headerlink" title="存储过程和函数"></a>存储过程和函数</h3><h4 id="储存过程"><a href="#储存过程" class="headerlink" title="储存过程"></a>储存过程</h4><blockquote>
+<p>存储过程是一组预先编译好的sql语句的集合，提高重用性、简化操作，减少编译和连接次数，提高效率</p>
+</blockquote>
+<ul>
+<li><p>创建</p>
+<pre><code>CREATE PROCEDURE 储存过程名(参数列表)
+BEGIN
+    储存过程体
+END</code></pre><ul>
+<li>参数模式：IN作为输入 OUT作为返回值 INOUT作为输入且返回值</li>
+<li>如果存储过程体中仅有一句话则可省略BEGIN END</li>
+<li>储存过程中每句sql结尾必须加分号，结尾可以用DELIMITER重新设置：DELIMITER 结束标记</li>
+</ul>
+</li>
+<li><p>调用</p>
+<pre class=" language-mysql"><code class="language-mysql">CALL 储存过程名(实参列表);
+
+DELIMITER $
+CREATE PROCEDURE myp1()
+BEGIN
+    INSERT INTO admin(user,`password`)
+    VALUES(),(),(),()
+END $
+
+CALL myp1()$
+CREATE PROCEDURE myp2(IN beautyName VARCHAR(20))
+BEGIN
+    SELECT bo.*
+    FROM boys bo
+    RIGHT JOIN beauty b ON bo.id= b.boyfriend_id
+    WHERE b.name=beautyName;
+END $
+
+-- 创建储存过程实现传入用户名和密码，插入到admin表中
+CREATE PROCEDURE test_pro1(IN username VARCHAR(20)),IN loginPwd VARCHAR(20)
+BEGIN
+    INSERT INTO admin(admin.username,PASSWORD)
+    VALUES(username,loginpwd);
+END $
+
+-- 传入女神名称返回 女神and男神格式的字符串
+CREATE PROCEDURE test_pro5(IN beautyName VARCHAR(20),OUT str VARCHAR(50))
+BEGIN
+    SELECT CONCAT(beautyName,' and ',IFNULL(boyName,'null')) INTO str
+    FROM boys bo                            
+    RIGHT JOIN beauty b ON b.boyfriend_id=bo.id
+    WHERE b.name=beautyName;
+END $
+CALL test_pro5('小昭',@str)$
+SELECT @str $</code></pre>
+</li>
+<li><p>删除</p>
+<pre class=" language-mysql"><code class="language-mysql">DROP PROCEDURE 储存过程名</code></pre>
+</li>
+<li><p>查看</p>
+<pre class=" language-mysql"><code class="language-mysql">SHOW CREATE PROCEDURE 存储过程名;</code></pre>
+</li>
+</ul>
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><blockquote>
+<p>有且只能有一个返回值，多用于处理数据</p>
+</blockquote>
+<pre class=" language-mysql"><code class="language-mysql">CREATE FUNCTION 函数名(参数列表) RETURNS 返回类型
+BEGIN
+    函数体
+END
+CREATE FUNCTION myf1() RETURNS INT
+BEGIN
+    DECLARE c INT DEFAULT 0;
+    SELECT COUNT(*) INTO c
+    FROM employees
+    RETURNS c;
+END $</code></pre>
+<h3 id="流程控制结构"><a href="#流程控制结构" class="headerlink" title="流程控制结构"></a>流程控制结构</h3><ul>
+<li><p>顺序结构</p>
+</li>
+<li><p>分支结构</p>
+<ul>
+<li><p>IF函数</p>
+<pre class=" language-mysql"><code class="language-mysql">SELECT IF(表达式1,表达式2，表达式3) ->同三目运算符算法</code></pre>
+</li>
+<li><p>CASE</p>
+<pre class=" language-mysql"><code class="language-mysql">-- 简单函数：枚举这个字段所有可能的值
+CASE 变量|表达式|字段
+WHEN 要判断的值 THEN 返回的值或语句1;
+WHEN 要判断的值 THEN 返回的值或语句2;
+...
+ELSE 返回的值或语句3;
+END    CASE;
+-- 搜索函数：可以写判断，并且搜索函数只会返回第一个符合条件的值，其他case被忽略
+CASE 
+    WHEN 要判断的表达式 THEN 返回的值或语句1;
+    WHEN 要判断的表达式 THEN 返回的值或语句2;
+    ...
+    ELSE 返回的值或语句3;
+END CASE;</code></pre>
+</li>
+</ul>
+</li>
+<li><p>循环结构</p>
+<pre><code>WHILE LOOP REPEAT
+WHILE 循环条件 DO
+    循环体;
+END WHILE[标签];
+-- 例：
+CREATE PROCEDURE pro_while1(IN insertCount INT)
+BEGIN
+    DECLAR i INT DEFAULT 1;
+    a: WHILE i&lt;=insertCount DO
+    INSERT INT amin(username,`passsword`) VALUES(CONCAT(&#39;Rose&#39;+i),&#39;666&#39;);
+    IF i&gt;=20 THEN LEAVE a;
+    SET i=i+1;
+END WHILE a;
+END;
+[标签:]LOOP 
+    循环体;
+END LOOP [标签];
+[标签:]REPEAT
+                循环体;
+                UNTIL 结束循环的条件;
+            END REPEAT {标签};
+            循环控制 
+                iterate继续，结束本次循环，继续下一次
+                leave 跳出，结束当前所在的循环</code></pre></li>
+</ul>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://ryougishiki0.gitee.io/2020/02/19/mysql-ji-chu/">https://ryougishiki0.gitee.io/2020/02/19/mysql-ji-chu/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/02/19/mysql-ji-chu/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="MySQL基础">
+                        
+                        <span class="card-title">MySQL基础</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            数据库
+概念：
+
+数据是数据库中储存的基本对象，数据的含义为数据的语义
+数据库DB：长期储存、有组织、可共享、大量数据：长期储存、有组织、可共享、大量数据
+按一定的数据模型组织、描述和储存；可共享；冗余度较小；数据独立性较高；易扩展
+
+
+
+
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-19
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Ryougi-Shiki
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/02/19/hello-world/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        
+                        <span class="card-title">Hello World</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-19
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Ryougi-Shiki
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme:='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
