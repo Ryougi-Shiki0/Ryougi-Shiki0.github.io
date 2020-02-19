@@ -475,7 +475,7 @@ Spring优势：方便解耦，简化开发，AOP变成的支持，声明式事�
 <li>Spring优势：方便解耦，简化开发，AOP变成的支持，声明式事务的支持，方便程序的测试，方便继承各种优秀的框架，降低java EE API的使用难度，java源码经典学习范例</li>
 <li>Spring体系结构</li>
 </ul>
-<img src="https://img-blog.csdnimg.cn/20191216224813110.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyNjgyNTI1,size_10,color_FFFFFF,t_70" alt="Spring Framework Runtime" style="zoom: 50%;" />
+<img src="/2020/02/19/spring/02/19/spring/Spring%E8%BF%90%E8%A1%8C%E6%97%B6%E7%BB%93%E6%9E%84.png" class title="Spring运行时结构">
 
 <h3 id="2-IoC的概念"><a href="#2-IoC的概念" class="headerlink" title="2. IoC的概念"></a>2. IoC的概念</h3><ul>
 <li><p>jdbcDemo1 debug小记</p>
@@ -600,7 +600,7 @@ Spring优势：方便解耦，简化开发，AOP变成的支持，声明式事�
 </ul>
 <h3 id="5-Spring基于注解的IOC以及IOC的案例"><a href="#5-Spring基于注解的IOC以及IOC的案例" class="headerlink" title="5.Spring基于注解的IOC以及IOC的案例"></a>5.Spring基于注解的IOC以及IOC的案例</h3><h4 id="Spring中IOC的常用注解"><a href="#Spring中IOC的常用注解" class="headerlink" title="Spring中IOC的常用注解"></a>Spring中IOC的常用注解</h4><ul>
 <li><p>用于创建对象的</p>
-<p>作用与在XML配置文件中<bean>标签实现的功能相同</p>
+<p>作用与在XML配置文件中<bean>标签实现的功能相同</bean></p>
 <p>@Component 用于把当前类对象存入Spring容器中</p>
 <p>属性：</p>
 <ul>
@@ -614,7 +614,7 @@ Spring优势：方便解耦，简化开发，AOP变成的支持，声明式事�
 </ul>
 </li>
 <li><p>用于注入数据的</p>
-<p>作用与在xml配置文件中的bean标签中<property>标签实现的功能相同</p>
+<p>作用与在xml配置文件中的bean标签中<property>标签实现的功能相同</property></p>
 <ul>
 <li><p>@Autowired: </p>
 <p>作用：自动按照类型注入。只要容器中有唯一的一个bean对象类型和要注入的变量类型匹配，就可以注入成功；如果ioc容器中没有任何bean的类型和要注入的变量类型匹配，则报错；</p>
@@ -644,7 +644,7 @@ Spring优势：方便解耦，简化开发，AOP变成的支持，声明式事�
 </ul>
 </li>
 <li><p>用于改变作用范围的</p>
-<p>作用与在xml配置文件中的bean标签中<scope>标签实现的功能相同</p>
+<p>作用与在xml配置文件中的bean标签中<scope>标签实现的功能相同</scope></p>
 <ul>
 <li><p>@Scope</p>
 <p>作用：用于指定bean的作用范围</p>
@@ -653,7 +653,7 @@ Spring优势：方便解耦，简化开发，AOP变成的支持，声明式事�
 </ul>
 </li>
 <li><p>与生命周期相关</p>
-<p>作用与在xml配置文件中的bean标签中<init-method>和<destroy-method>标签实现的功能相同</p>
+<p>作用与在xml配置文件中的bean标签中<init-method>和<destroy-method>标签实现的功能相同</destroy-method></init-method></p>
 <ul>
 <li><p>@PreDestroy</p>
 <p>作用：用于指定销毁方法</p>

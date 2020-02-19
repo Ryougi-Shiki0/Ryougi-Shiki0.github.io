@@ -457,7 +457,7 @@ Java堆 最大的一块，涉及各">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-01-14
+                    2020-02-19
                 </div>
                 
 
@@ -477,7 +477,7 @@ Java堆 最大的一块，涉及各">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="自动内存管理机制"><a href="#自动内存管理机制" class="headerlink" title="自动内存管理机制"></a>自动内存管理机制</h2><img src="..\笔记图片\JVM体系结构图.png" alt="JVM体系结构图" style="zoom: 100%;" />
+                <h2 id="自动内存管理机制"><a href="#自动内存管理机制" class="headerlink" title="自动内存管理机制"></a>自动内存管理机制</h2><img src="/2020/02/19/shen-ru-li-jie-jvm/02/19/shen-ru-li-jie-jvm/JVM%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%9B%BE.png" class title="JVM体系结构图">
 
 <p>线程私有的：</p>
 <ul>
@@ -664,10 +664,10 @@ Java堆 最大的一块，涉及各">
 <li><p>初始化</p>
 <p>此阶段开开始真正执行Java字节码</p>
 <ul>
-<li><clinit>()方法收集类中所有的类变量和静态语句块中的语句</li>
-<li>父类的<clinit>()方法先执行，子类的<clinit>()页不需要显式的调用父类的方法</li>
-<li><clinit>()方法仅用于静态变量或静态代码块</li>
-<li>虚拟机负责管理<clinit>()方法的多线程同步问题</li>
+<li><clinit>()方法收集类中所有的类变量和静态语句块中的语句</clinit></li>
+<li>父类的<clinit>()方法先执行，子类的<clinit>()页不需要显式的调用父类的方法</clinit></clinit></li>
+<li><clinit>()方法仅用于静态变量或静态代码块</clinit></li>
+<li>虚拟机负责管理<clinit>()方法的多线程同步问题</clinit></li>
 </ul>
 </li>
 </ul>
@@ -919,7 +919,7 @@ Java堆 最大的一块，涉及各">
 </li>
 <li><p>轻量级锁</p>
 <p>虚拟机对象头MarkWord</p>
-<img src="..\笔记图片\虚拟机对象头MarkWord.png" alt="虚拟机对象头MarkWord">
+
 </li>
 <li><p>偏向锁</p>
 <p>消除数据在无竞争情况下的同步原语，提高运行性能</p>

@@ -448,7 +448,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-01-14
+                    2020-02-19
                 </div>
                 
 
@@ -485,11 +485,13 @@
 </ul>
 </li>
 </ul>
-<p><img src="C:%5CUsers%5Chawk4%5CDesktop%5C%E4%B8%B4%E6%97%B6%5C%E7%AC%94%E8%AE%B0%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5CMESI%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7.png" alt="MESI缓存一致性"></p>
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/MESI%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7.png" class title="MESI缓存一致性">
+
 <h2 id="JMM"><a href="#JMM" class="headerlink" title="JMM"></a>JMM</h2><ul>
 <li>JMM规范：它规定了一个线程如何和何时能够看到由其他线程修改过后的共享变量值以及在必须时如何同步地访问共享变量</li>
 </ul>
-<p><img src="..%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5Cjava%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg" alt="java内存模型"></p>
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg" class title="java内存模型">
+
 <ul>
 <li>同步八种操作<ul>
 <li>lock 作用于主内存的变量，把一个变量标识为一条线程独占状态</li>
@@ -514,7 +516,8 @@
 </ul>
 </li>
 </ul>
-<p><img src="..%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5C%E5%90%8C%E6%AD%A5%E6%93%8D%E4%BD%9C%E4%BA%8E%E8%A7%84%E5%88%99.jpg" alt="同步操作于规则"></p>
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/%E5%90%8C%E6%AD%A5%E6%93%8D%E4%BD%9C%E4%BA%8E%E8%A7%84%E5%88%99.jpg" class title="同步操作于规则">
+
 <h2 id="并发编程与线程安全"><a href="#并发编程与线程安全" class="headerlink" title="并发编程与线程安全"></a>并发编程与线程安全</h2><h3 id="线程安全性"><a href="#线程安全性" class="headerlink" title="线程安全性"></a>线程安全性</h3><ul>
 <li><p>概念：<br>当多个线程访问某个类时，不管运行时环境采用何种调度方式，并且在主调代码中不需要额外的同步，这个类都能表现出正确的行为，那么这个类就是线程安全的</p>
 </li>
@@ -824,7 +827,7 @@ public static void main(String[] args) {
 </ul>
 </li>
 </ul>
-<img src="C:\Users\hawk4\Desktop\临时\笔记\笔记图片\AbstractQueuedSynchronizer.jpg" alt="11" style="zoom:50%;" />
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/AbstractQueuedSynchronizer.jpg" class title="AbstractQueuedSynchronizer">
 
 <ul>
 <li><p>关于AQS里的state状态</p>
@@ -894,7 +897,8 @@ public static void main(String[] args) {
 <li><p>实现方式 CountDownLatch是通过一个计数器来实现的，计数器的初始化值为线程的数量。每当一个线程完成了自己的任务后，计数器的值就相应得减1。当计数器到达0时，表示所有的线程都已完成任务，然后在闭锁上等待的线程就可以恢复执行任务</p>
 </li>
 </ul>
-<p><img src="..%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5CcountDownLatch.png" alt="CountDownLatch"></p>
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/countDownLatch.png" class title="countDownLatch">
+
 <ul>
 <li>CountDownLatch的构造函数源码</li>
 </ul>
@@ -928,13 +932,13 @@ public static void main(String[] args) {
 <p>Semaphore可以用于做流量控制，特别公用资源有限的应用场景，比如数据库连接。假如有一个需求，要读取几万个文件的数据，因为都是IO密集型任务，我们可以启动几十个线程并发的读取，但是如果读到内存后，还需要存储到数据库中，而数据库的连接数只有10个，这时我们必须控制只有十个线程同时获取数据库连接保存数据，否则会报错无法获取数据库连接。这个时候，我们就可以使用Semaphore来做流控。</p>
 </li>
 </ul>
-<img src="C:\Users\hawk4\Desktop\临时\笔记\笔记图片\Semaphore继承关系.png" alt="Semaphore继承关系" style="zoom: 40%;" />
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/Semaphore%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB.png" class title="Semaphore继承关系">
 
 <ul>
 <li><p>常用方法</p>
 <pre class=" language-java"><code class="language-java">semaphore<span class="token punctuation">.</span><span class="token function">Acquire</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 semaphore<span class="token punctuation">.</span><span class="token function">tryAcquire</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
-<img src="..\笔记图片\tryAcquire方法.png" alt="tryAcquire方法" style="zoom:80%;" />
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/tryAcquire%E6%96%B9%E6%B3%95.png" class title="tryAcquire方法">
 </li>
 <li><p>其他常用方法</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> <span class="token function">availablePermits</span><span class="token punctuation">(</span><span class="token punctuation">)</span>             <span class="token comment" spellcheck="true">// 返回此信号量中当前可用的许可证数。</span>
@@ -950,7 +954,7 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 <p>CyclicBarrier默认的构造方法是CyclicBarrier(int parties)，其参数表示屏障拦截的线程数量，每个线程调用await方法告诉CyclicBarrier我已经到达了屏障，然后当前线程被阻塞</p>
 </li>
 </ul>
-<img src="..\笔记图片\CyclicBarrier.png" alt="CyclicBarrier" style="zoom:50%;" />
+<img src="/2020/02/19/java-gao-bing-fa/笔记图片\CyclicBarrier.png" alt="CyclicBarrier" style="zoom:50%;">
 
 <ul>
 <li><p>CyclicBarrier的应用场景</p>
@@ -966,7 +970,7 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 <li><p>CyclicBarrier方法列表</p>
 </li>
 </ul>
-<img src="..\笔记图片\CyclicBarrier方法列表.png" alt="CyclicBarrier方法列表" style="zoom:80%;" />
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/CyclicBarrier%E6%96%B9%E6%B3%95%E5%88%97%E8%A1%A8.png" class title="CyclicBarrier方法列表">
 
 <ul>
 <li>基本使用</li>
@@ -1283,7 +1287,7 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 <ul>
 <li>FutureTask继承图</li>
 </ul>
-<p><img src="..%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5CFutureTask%E7%BB%A7%E6%89%BF%E5%9B%BE.png" alt="FutureTask继承图"></p>
+<p><img src="/2020/02/19/java-gao-bing-fa/..%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5CFutureTask%E7%BB%A7%E6%89%BF%E5%9B%BE.png" alt="FutureTask继承图"></p>
 <p>可以看到，FutureTask实现了RunnableFuture接口，则RunnableFuture接口继承了Runnable接口和Future接口，所以FutureTask既能当做一个Runnable直接被Thread执行，也能作为Future用来得到Callable的计算结果</p>
 <ul>
 <li>使用场景</li>
@@ -1306,7 +1310,7 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 <ul>
 <li>Fork/Join的运行流程图</li>
 </ul>
-<img src="..\笔记图片\ForkJoin的运行流程图.png" alt="ForkJoin的运行流程图" style="zoom: 67%;" />
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/ForkJoin%E7%9A%84%E8%BF%90%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png" class title="ForkJoin的运行流程图">
 
 <ul>
 <li><p>工作窃取算法</p>
@@ -1319,7 +1323,7 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 </ul>
 </li>
 </ul>
-<img src="..\笔记图片\工作窃取运行流程图.png" alt="工作窃取运行流程图" style="zoom: 67%;" />
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/%E5%B7%A5%E4%BD%9C%E7%AA%83%E5%8F%96%E8%BF%90%E8%A1%8C%E6%B5%81%E7%A8%8B%E5%9B%BE.png" class title="工作窃取运行流程图">
 
 <ul>
 <li>Fork/Join框架执行的任务有以下局限性<ul>
@@ -1470,12 +1474,14 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 <li>线程缺乏统一管理，可能无限制的新建线程，相互竞争，常常会出现占用过多的系统资源导致死机或者发生OOM（out of memory 内存溢出），这种问题的原因不是因为单纯的new一个Thread，而是可能因为程序的bug或者设计上的缺陷导致不断new Thread造成的。</li>
 <li>缺少更多功能，如更多执行、定期执行、线程中断等</li>
 </ul>
-<h4 id="threadPool类图"><a href="#threadPool类图" class="headerlink" title="threadPool类图"></a>threadPool类图</h4><img src="..\笔记图片\threadPool类图.png" alt="threadPool类图" style="zoom: 80%;" />
+<h4 id="threadPool类图"><a href="#threadPool类图" class="headerlink" title="threadPool类图"></a>threadPool类图</h4><img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/threadPool%E7%B1%BB%E5%9B%BE.png" class title="threadPool类图">
 
 <p>在类图中，我们最常使用的是ThreadPoolExecutor和Executors，这两个类都可以创建线程池，其中ThreadPoolExecutor是可定制化的去创建线程池，而Executors则属于是工具类，该类中已经封装好了一些创建线程池的方法，直接调用相应的方法即可创建线程</p>
-<p><img src="..%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5C%E9%98%BF%E9%87%8C%E5%85%B3%E4%BA%8EExecutor%E7%9A%84%E8%A7%84%E8%8C%83.png" alt="阿里关于Executor的规范"></p>
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/%E9%98%BF%E9%87%8C%E5%85%B3%E4%BA%8EExecutor%E7%9A%84%E8%A7%84%E8%8C%83.png" class title="阿里关于Executor的规范">
+
 <p>线程池体系里最为核心的类是ThreadPoolExecutor，也是功能最强的，ThreadPoolExecutor共有四个构造函数</p>
-<p><img src="..%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5CThreadPoolExecutor%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.png" alt="ThreadPoolExecutor构造函数"></p>
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/ThreadPoolExecutor%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.png" class title="ThreadPoolExecutor构造函数">
+
 <h4 id="线程池参数"><a href="#线程池参数" class="headerlink" title="线程池参数"></a>线程池参数</h4><ul>
 <li>corePoolSize：核心线程数量</li>
 <li>maximumPoolSize：线程最大线程数</li>
@@ -1490,7 +1496,8 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 <li>如果运行的线程数量小于corePoolSize的时候，直接创建新线程来处理任务。即使线程池中的其他线程是空闲的。如果线程池中的线程数量大于corePoolSize且小于maximumPoolSize时，那么只有当workQueue满的时候才创建新的线程去处理任务。如果corePoolSize与maximumPoolSize是相同的，那么创建的线程池大小是固定的。这时如果有新任务提交，且workQueue未满时，就把请求放入workQueue中，等待空闲线程从workQueue取出任务进行处理。如果需要运行的线程数量大于maximumPoolSize时，并且此时workQueue也满了，那么就使用rejectHandler参数所指定的拒绝策略去进行处理</li>
 </ul>
 <p>拒绝策略的实现类都在ThreadPoolExecutor中</p>
-<p><img src="..%5C%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87%5CThreadPoolExecutor%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5%E7%B1%BB.png" alt="ThreadPoolExecutor拒绝策略类"></p>
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/ThreadPoolExecutor%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5%E7%B1%BB.png" class title="ThreadPoolExecutor拒绝策略类">
+
 <p>workQueue是保存待执行任务的一个阻塞队列，当我们提交一个新的任务到线程池后，线程池会根据当前池中正在运行的线程数量来决定该任务的处理方式，有三种处理方式</p>
 <ul>
 <li>SynchronusQueue</li>
@@ -1499,7 +1506,7 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 </ul>
 <p>分配技巧： 如果想降低资源的消耗包括降低cpu使用率、操作系统资源的消耗、上下文切换的开销等等，可以设置一个较大的队列容量和较小的线程池容量，这样会降低线程池处理任务的吞吐量。如果我们提交的任务经常发生阻塞，我们可以考虑调用相关方法调整maximumPoolSize参数的值。如果我们的队列容量较小，通常需要把线程池的容量设置得大一些，这样cpu的使用率相对来说会高一些。但是如果线程池的容量设置的过大，提高任务的数量过多的时候，并发量会增加，那么线程之间的调度就是一个需要考虑的问题，这样反而可能会降低处理任务的吞吐量</p>
 <h4 id="线程池状态"><a href="#线程池状态" class="headerlink" title="线程池状态"></a>线程池状态</h4><p>线程池有五种状态</p>
-<img src="..\笔记图片\线程池状态.png" alt="线程池状态"  />
+<img src="/2020/02/19/java-gao-bing-fa/02/19/java-gao-bing-fa/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%8A%B6%E6%80%81.png" class title="线程池状态">
 
 <ul>
 <li>running：运行状态，能接受新提交的任务，也能处理阻塞队列中的任务</li>
@@ -1795,9 +1802,10 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            JVM类装载器负责加载class文件，将字节码内容加载到内存中，并将这些内容转换成方法区中的运行时数据结构并且ClassLoader只负责class文件的加载，至于它是否需要运行则由Execution Engine决定
+                            JVM
+类装载器负责加载class文件，将字节码内容加载到内存中，并将这些内容转换成方法区中的运行时数据结构并且ClassLoader只负责class文件的加载，至于它是否需要运行则由Execution Engine决定
 种类
-虚拟机自带的加
+虚拟机自带的
                         
                     </div>
                     <div class="publish-info">

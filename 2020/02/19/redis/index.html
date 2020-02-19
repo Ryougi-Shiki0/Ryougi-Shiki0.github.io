@@ -475,7 +475,7 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 </blockquote>
 <p>特征：可扩容，可伸缩;大数据量下高性能;灵活的数据模型;高可用</p>
 <p>常见Nosql 数据库：Redis;memcache;HBase;MongoDB</p>
-<img src="..\笔记图片\电商解决方案.png" alt="电商解决方案" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/%E7%94%B5%E5%95%86%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88.png" class title="电商解决方案">
 
 <h2 id="Redis基础"><a href="#Redis基础" class="headerlink" title="Redis基础"></a>Redis基础</h2><blockquote>
 <p>Redis (REmote DIctionaryServer) 是用C 语言开发的一个开源的高性能键值对（key-value）数据库。</p>
@@ -1126,7 +1126,7 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 <p>手动启动后台保存操作，但不是立即执行</p>
 </li>
 <li><p>工作原理</p>
-<img src="..\笔记图片\bgsave指令工作原理.png" alt="bgsave指令工作原理" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/bgsave%E6%8C%87%E4%BB%A4%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.png" class title="bgsave指令工作原理">
 </li>
 <li><p>bdsave相关配置</p>
 <ul>
@@ -1163,7 +1163,7 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 <p>save 60 10000</p>
 </li>
 <li><p>原理</p>
-<img src="..\笔记图片\save配置原理.png" alt="save配置原理" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/save%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86.png" class title="save配置原理">
 </li>
 <li><p>注意</p>
 <p>save配置要根据实际业务情况进行设置，频度过高或过低都会出现性能问题，结果可能是灾难性的</p>
@@ -1275,14 +1275,14 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 </ul>
 </li>
 <li><p>AOF重写流程</p>
-<img src="..\笔记图片\AOF重写流程.png" alt="AOF重写流程" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/AOF%E9%87%8D%E5%86%99%E6%B5%81%E7%A8%8B.png" class title="AOF重写流程">
 </li>
 </ul>
 </li>
 </ul>
 </li>
 <li><p>RBD对比AOF</p>
-<img src="..\笔记图片\RBD对比AOF.png" alt="RBD对比AOF" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/RBD%E5%AF%B9%E6%AF%94AOF.png" class title="RBD对比AOF">
 
 <ul>
 <li>对数据非常敏感，建议使用默认的AOF持久化方案<ul>
@@ -1341,7 +1341,7 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 <li><p>事务的工作流程</p>
 </li>
 </ul>
-<img src="..\笔记图片\事务的工作流程.png" alt="事务的工作流程" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png" class title="事务的工作流程">
 
 <ul>
 <li><p>事务的注意事项</p>
@@ -1754,7 +1754,7 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 </ul>
 </li>
 </ol>
-<img src="..\笔记图片\建立连接阶段工作流程.png" alt="建立连接阶段工作流程" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E9%98%B6%E6%AE%B5%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png" class title="建立连接阶段工作流程">
 
 <ol start="2">
 <li><p>状态：</p>
@@ -1767,13 +1767,13 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 <li><p>主从连接</p>
 <ul>
 <li><p>方式一：客户端发送命令</p>
-<p>slaveof <masterip> <masterport></p>
+<p>slaveof <masterip> <masterport></masterport></masterip></p>
 </li>
 <li><p>方式二：启动服务器参数</p>
-<p>redis-server -slaveof <masterip> <masterport></p>
+<p>redis-server -slaveof <masterip> <masterport></masterport></masterip></p>
 </li>
 <li><p>方式三：服务器配置</p>
-<p>slaveof <masterip> <masterport></p>
+<p>slaveof <masterip> <masterport></masterport></masterip></p>
 </li>
 <li><p>slave系统信息</p>
 <p>master_link_down_since_seconds</p>
@@ -1794,20 +1794,20 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 <li><p>授权访问</p>
 <ul>
 <li><p>master客户端发送命令设置密码</p>
-<p>requirepass <password></p>
+<p>requirepass <password></password></p>
 </li>
 <li><p>master配置文件设置密码</p>
-<p>config set requirepass <password></p>
+<p>config set requirepass <password></password></p>
 <p>config get requirepass </p>
 </li>
 <li><p>slave客户端发送命令设置密码</p>
-<p>redis-server–a <password></p>
+<p>redis-server–a <password></password></p>
 </li>
 <li><p>slave配置文件设置密码</p>
-<p>masterauth <password></p>
+<p>masterauth <password></password></p>
 </li>
 <li><p>slave启动服务器设置密码</p>
-<p>auth <password></p>
+<p>auth <password></password></p>
 </li>
 </ul>
 </li>
@@ -1815,7 +1815,7 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 </li>
 <li><p>数据同步阶段工作流程</p>
 <p>在slave初次连接master后，复制master中的所有数据到slave；将slave的数据库状态更新成master当前的数据库状态</p>
-<img src="..\笔记图片\数据同步阶段工作流程.png" alt="数据同步阶段工作流程" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E9%98%B6%E6%AE%B5%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png" class title="数据同步阶段工作流程">
 
 <ul>
 <li>请求同步数据</li>
@@ -1861,7 +1861,7 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 <li><p>命令传播阶段</p>
 <p>当master数据库状态被修改后，导致主从服务器数据库状态不一致，此时需要让主从数据同步到一致的状态，同步的动作称为命令传播</p>
 <p>master将接收到的数据变更命令发送给slave，slave接收命令后执行命令</p>
-<img src="..\笔记图片\命令传播阶段工作流程.png" alt="命令传播阶段工作流程" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/%E5%91%BD%E4%BB%A4%E4%BC%A0%E6%92%AD%E9%98%B6%E6%AE%B5%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.png" class title="命令传播阶段工作流程">
 
 <p>命令传播阶段出现了断网现象</p>
 <ul>
@@ -2051,10 +2051,10 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 </ul>
 </li>
 <li><p>配置哨兵</p>
-<img src="..\笔记图片\配置哨兵.png" alt="配置哨兵" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/%E9%85%8D%E7%BD%AE%E5%93%A8%E5%85%B5.png" class title="配置哨兵">
 </li>
 <li><p>哨兵在进行主从切换过程中经历三个阶段</p>
-<img src="..\笔记图片\监控阶段.png" alt="监控阶段" style="zoom: 40%;" />
+<img src="/2020/02/19/redis/02/19/redis/%E7%9B%91%E6%8E%A7%E9%98%B6%E6%AE%B5.png" class title="监控阶段">
 
 <ul>
 <li><p>监控</p>
@@ -2074,7 +2074,7 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 <li><p>通知</p>
 </li>
 </ul>
-<img src="..\笔记图片\通知阶段.png" alt="通知阶段" style="zoom: 40%;" />
+<img src="/2020/02/19/redis/02/19/redis/%E9%80%9A%E7%9F%A5%E9%98%B6%E6%AE%B5.png" class title="通知阶段">
 
 <ul>
 <li><p>故障转移</p>
@@ -2164,13 +2164,13 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 <p>cluster-enabled yes|no</p>
 </li>
 <li><p>cluster配置文件名，该文件属于自动生成，仅用于快速查找文件并查询文件内容</p>
-<p>cluster-config-file <filename></p>
+<p>cluster-config-file <filename></filename></p>
 </li>
 <li><p>节点服务响应超时时间，用于判定该节点是否下线或切换为从节点</p>
-<p>cluster-migration-barrier <count></p>
+<p>cluster-migration-barrier <count></count></p>
 </li>
 <li><p>master连接的slave最小数量</p>
-<p>cluster-node-timeout <milliseconds></p>
+<p>cluster-node-timeout <milliseconds></milliseconds></p>
 </li>
 </ul>
 </li>
@@ -2180,13 +2180,13 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 <p>cluster nodes</p>
 </li>
 <li><p>进入一个从节点redis，切换其主节点</p>
-<p>cluster replicate <master-id></p>
+<p>cluster replicate <master-id></master-id></p>
 </li>
 <li><p>发现一个新节点，新增主节点</p>
 <p>cluster meet ip:port</p>
 </li>
 <li><p>忽略一个没有solt的节点</p>
-<p>cluster forget <id></p>
+<p>cluster forget <id></id></p>
 </li>
 <li><p>手动故障转移</p>
 <p>cluster failover</p>
@@ -2447,7 +2447,7 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
 </ul>
 </li>
 </ul>
-<img src="..\笔记图片\benchmark命令.png" alt="benchmark命令" style="zoom: 50%;" />
+<img src="/2020/02/19/redis/02/19/redis/benchmark%E5%91%BD%E4%BB%A4.png" class title="benchmark命令">
 </li>
 <li><p>moniter</p>
 <ul>
@@ -2638,9 +2638,10 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            JVM类装载器负责加载class文件，将字节码内容加载到内存中，并将这些内容转换成方法区中的运行时数据结构并且ClassLoader只负责class文件的加载，至于它是否需要运行则由Execution Engine决定
+                            JVM
+类装载器负责加载class文件，将字节码内容加载到内存中，并将这些内容转换成方法区中的运行时数据结构并且ClassLoader只负责class文件的加载，至于它是否需要运行则由Execution Engine决定
 种类
-虚拟机自带的加
+虚拟机自带的
                         
                     </div>
                     <div class="publish-info">
