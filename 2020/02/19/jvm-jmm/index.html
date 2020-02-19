@@ -478,7 +478,7 @@
 </ul>
 <h3 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h3><ul>
 <li>当一个类收到了类加载请求，他首先不会尝试自己去加载这个类，而是把这个请求委派给父类去完成，每一个层次类加载器都是如此，因此所有的加载请求都应该传送到启动类加载其中，只有当父类加载器反馈自己无法完成这个请求的时候（在它的加载路径下没有找到所需加载的Class），子类加载器才会尝试自己去加载</li>
-<li>采用双亲委派的一个好处是比如加载位于 rt.jar 包中的类 java.lang.Object，不管是哪个加载器加载这个类，最终都是委托给顶层的启动类加载器进行加载，这样就保证了使用不同的类加载器最终得到的都是同样一个 Object对象<img src="/2020/02/19/jvm-jmm/02/19/jvm-jmm/JVM%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%9B%BE.png" class title="JVM体系结构图">
+<li>采用双亲委派的一个好处是比如加载位于 rt.jar 包中的类 java.lang.Object，不管是哪个加载器加载这个类，最终都是委托给顶层的启动类加载器进行加载，这样就保证了使用不同的类加载器最终得到的都是同样一个 Object对象<img src="/2020/02/19/jvm-jmm/JVM%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%9B%BE.png" class="" title="JVM体系结构图">
 
 </li>
 </ul>
@@ -516,7 +516,7 @@
 <li><p>如果出现java.lang.OutOfMemoryError: Java heap space异常，说明Java虚拟机的堆内存不够。原因有二：<br>（1）Java虚拟机的堆内存设置不够，可以通过参数-Xms、-Xmx来调整。<br>（2）代码中创建了大量大对象，并且长时间不能被垃圾收集器收集（存在被引用）</p>
 <h3 id="对象的声明周期"><a href="#对象的声明周期" class="headerlink" title="对象的声明周期"></a>对象的声明周期</h3></li>
 <li><p>from区和to区的位置和名分不是固定的，每次GC后会有交换，谁空谁是to</p>
-<img src="/2020/02/19/jvm-jmm/02/19/jvm-jmm/%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E7%BB%93%E6%9E%84%E5%9B%BE.png" class title="内存空间结构图">
+<img src="/2020/02/19/jvm-jmm/%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E7%BB%93%E6%9E%84%E5%9B%BE.png" class="" title="内存空间结构图">
 </li>
 <li><p>MinorGC的过程（复制-&gt;清空-&gt;互换）</p>
 <ul>
