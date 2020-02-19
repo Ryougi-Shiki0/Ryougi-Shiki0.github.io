@@ -1,0 +1,2966 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Redis, Shiki&#39;s Blog">
+    <meta name="description" content="Nosql
+NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数据库的补充。
+作用：应对基于海量用户和海量数据前提下的数据处理问题
+
+特征：可扩容，可伸缩;大数据量下高性能;灵活的数据模型;高可用
+常见Nosql 数">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Redis | Shiki&#39;s Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Shiki's Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Shiki's Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/Ryougi-Shiki0/ryougi-shiki0.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/Ryougi-Shiki0/ryougi-shiki0.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Redis</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-02-19
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2020-02-19
+                </div>
+                
+
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="Nosql"><a href="#Nosql" class="headerlink" title="Nosql"></a>Nosql</h2><blockquote>
+<p>NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数据库的补充。</p>
+<p>作用：应对基于海量用户和海量数据前提下的数据处理问题</p>
+</blockquote>
+<p>特征：可扩容，可伸缩;大数据量下高性能;灵活的数据模型;高可用</p>
+<p>常见Nosql 数据库：Redis;memcache;HBase;MongoDB</p>
+<img src="..\笔记图片\电商解决方案.png" alt="电商解决方案" style="zoom: 50%;" />
+
+<h2 id="Redis基础"><a href="#Redis基础" class="headerlink" title="Redis基础"></a>Redis基础</h2><blockquote>
+<p>Redis (REmote DIctionaryServer) 是用C 语言开发的一个开源的高性能键值对（key-value）数据库。</p>
+</blockquote>
+<ul>
+<li><p>特征：</p>
+<ol>
+<li><p>数据间没有必然的关联关系</p>
+</li>
+<li><p>内部采用单线程机制进行工作</p>
+</li>
+<li><p>高性能。官方提供测试数据，50个并发执行100000 个请求,读的速度是110000 次/s,写的速度是81000次/s。</p>
+</li>
+<li><p>多数据类型支持</p>
+<ul>
+<li>字符串类型string</li>
+<li>列表类型list</li>
+<li>散列类型hash</li>
+<li>集合类型set</li>
+<li>有序集合类型sorted_set</li>
+</ul>
+</li>
+<li><p>持久化支持。可以进行数据灾难恢复</p>
+</li>
+</ol>
+</li>
+<li><p>应用</p>
+<ul>
+<li>为热点数据加速查询（主要场景），如热点商品、热点新闻、热点资讯、推广类等高访问量信息等任务队列，如秒杀、抢购、购票排队等</li>
+<li>即时信息查询，如各位排行榜、各类网站访问统计、公交到站信息、在线人数信息（聊天室、网站）、设备信号等</li>
+<li>时效性信息控制，如验证码控制、投票控制等</li>
+<li>分布式数据共享，如分布式集群架构中的session 分离</li>
+<li>消息队列</li>
+<li>分布式锁</li>
+</ul>
+</li>
+<li><p>核心文件：</p>
+<ul>
+<li>redis-server.exe 服务器启动命令</li>
+<li>redis-cli.exe命令行客户端</li>
+<li>redis.windows.confredis核心配置文件</li>
+<li>redis-benchmark.exe性能测试工具</li>
+<li>redis-check-aof.exe AOF文件修复工具</li>
+<li>redis-check-dump.exe RDB文件检查工具（快照持久化文件）</li>
+</ul>
+</li>
+<li><p>基本操作</p>
+<ul>
+<li><p>功能性命令</p>
+<ul>
+<li><p>信息添加</p>
+<p>set key value</p>
+</li>
+<li><p>信息查询</p>
+<p>get key</p>
+</li>
+</ul>
+</li>
+<li><p>清除屏幕信息</p>
+<p>clear</p>
+</li>
+<li><p>帮助信息查阅</p>
+<p>help  命令名称</p>
+<p>help  @组名</p>
+</li>
+<li><p>退出指令</p>
+<p>quit/exit/&lt;ESC&gt;</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><ul>
+<li><p>string String</p>
+<ul>
+<li><p>存储的数据：单个数据，最简单的数据存储类型，也是最常用的数据存储类型</p>
+</li>
+<li><p>存储数据的格式：一个存储空间保存一个数据</p>
+</li>
+<li><p>存储内容：通常使用字符串，如果字符串以整数的形式展示，可以作为数字操作使用</p>
+</li>
+<li><p>基本操作</p>
+<ul>
+<li>set/get/del</li>
+<li>mset/mget </li>
+<li>strlen</li>
+<li>append 追加信息到原始信息后部（如果原始信息存在就追加，否则新建）</li>
+</ul>
+</li>
+<li><p>扩展操作</p>
+<ol>
+<li><p>设置数值数据增加指定范围的值解决方案</p>
+<p>incr key/ incrby key increment/ incrbyfloat key increment</p>
+</li>
+<li><p>设置数值数据减少指定范围的值</p>
+<p>decr key/ decrby key increment</p>
+</li>
+<li><p>string作为数值操作</p>
+<ul>
+<li>string在redis内部存储默认就是一个字符串，当遇到增减类操作incr，decr时会转成数值型进行计算。</li>
+<li>redis所有的操作都是原子性的，采用单线程处理所有业务，命令是一个一个执行的，因此无需考虑并发带来的数据影响。</li>
+<li>按数值进行操作的数据，如果原始数据不能转成数值，或超越了redis数值上限范围，将报错。9223372036854775807（java中long型数据最大值，Long.MAX_VALUE）</li>
+<li>Tips ：redis用于控制数据库表主键id，为数据库表主键提供生成策略，保障数据库表的主键唯一性此方案适用于所有数据库，且支持数据库集群</li>
+</ul>
+</li>
+<li><p>设置数据具有指定的生命周期</p>
+<p>setex key seconds value/psetex key milliseconds value</p>
+<p>Tips ：redis控制数据的生命周期，通过数据是否失效控制业务行为，适用于所有具有时效性限定控制的操作</p>
+</li>
+</ol>
+</li>
+<li><p>string 类型数据操作的注意事项</p>
+<ul>
+<li><p>数据操作不成功的反馈与数据正常操作之间的差异</p>
+</li>
+<li><p>①表示运行结果是否成功</p>
+<p>(integer) 0  →  false失败</p>
+<p>(integer) 1  →  true成功</p>
+</li>
+<li><p>②表示运行结果值</p>
+<p>(integer) 3→  3 3个</p>
+<p>(integer) 1→  1 1个</p>
+<p>数据未获取到（nil）等同于null</p>
+</li>
+<li><p>数据最大存储量512MB</p>
+</li>
+<li><p>数值计算最大范围（java中的long的最大值）9223372036854775807</p>
+</li>
+<li><p>Tips: redis应用于各种结构型和非结构型高热度数据访问加速，数据库中的热点数据key命名惯例</p>
+<p>表名: 主键名:主键值:字段名    order​ : id : 29438 : name</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>hash HashMap</p>
+<ul>
+<li><p>底层使用哈希表结构实现数据存储</p>
+</li>
+<li><p>hash存储结构优化</p>
+<ul>
+<li>如果field数量较少，存储结构优化为类数组结构</li>
+<li>如果field数量较多，存储结构使用HashMap结构</li>
+</ul>
+</li>
+<li><p>基本操作</p>
+<ul>
+<li>添加修改 hset key field value</li>
+<li>获取数据 hget key field / hgetall key</li>
+<li>删除数据 hdel key field1 (field2)</li>
+<li>添加/修改多个数据 hmset key field1 value1 field2 value2 …</li>
+<li>获取多个数据 hmget key field1 field2 …</li>
+<li>获取哈希表中字段的数量 hlen key</li>
+<li>获取哈希表中是否存在指定的字段 hexists key field</li>
+</ul>
+</li>
+<li><p>扩展操作</p>
+<ul>
+<li><p>获取哈希表中所有的字段名或字段值 hkeys key / hvals key</p>
+</li>
+<li><p>设置指定字段的数值数据增加指定范围的值 </p>
+<p>hincrby key field increment / hincrbyfloat key field increment</p>
+</li>
+</ul>
+</li>
+<li><p>hash类型数据操作的注意事项</p>
+<ul>
+<li>hash类型下的value只能存储字符串，不允许存储其他数据类型，不存在嵌套现象。如果数据未获取到，对应的值为（nil）</li>
+<li>每个hash 可以存储2的32次方-1 个键值对</li>
+<li>hash类型十分贴近对象的数据存储形式，并且可以灵活添加删除对象属性。但hash设计初衷不是为了存储大量对象而设计的，切记不可滥用，更不可以将hash作为对象列表使用</li>
+<li>hgetall操作可以获取全部属性，如果内部field过多，遍历整体数据效率就很会低，有可能成为数据访问瓶颈</li>
+</ul>
+</li>
+<li><p>hash类型应用场景</p>
+<ul>
+<li><p>优化以用户为key的设计</p>
+<p>每条购物车中的商品记录保存成两条field</p>
+<ul>
+<li><p>field1专用于保存购买数量</p>
+<p>命名格式：商品id:nums 保存数据：数值</p>
+</li>
+<li><p>field2专用于保存购物车中显示的信息，包含文字描述，图片地址，所属商家信息等</p>
+<p>命名格式：商品id:info 保存数据：json独立</p>
+</li>
+</ul>
+</li>
+<li><p>hsetnx key field value</p>
+<p>Set the value of a hash field, only if the field does not exist</p>
+</li>
+<li><p>string存储对象（json）与hash存储对象</p>
+</li>
+<li><p>应用于抢购，限购类、限量发放优惠卷、激活码等业务的数据存储设计</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>list LinkedList</p>
+<ul>
+<li><p>数据存储需求：存储多个数据，并对数据进入存储空间的顺序进行区分</p>
+</li>
+<li><p>需要的存储结构：一个存储空间保存多个数据，且通过数据可以体现进入顺序</p>
+</li>
+<li><p>list类型：保存多个数据，底层使用双向链表存储结构实现</p>
+</li>
+<li><p>基本操作</p>
+<ul>
+<li><p>添加/修改数据</p>
+<p>lpushkey value1 [value2] ……</p>
+<p>rpushkey value1 [value2] ……</p>
+</li>
+<li><p>获取数据</p>
+<p>获取范围值（-1代表倒数第一个，-2倒数第二个）lrange key start stop </p>
+<p>获取对应索引的值lindex key index</p>
+<p>获取对应list长度 llen key</p>
+</li>
+<li><p>获取并移除数据</p>
+<p>lpop key </p>
+<p>rpop key</p>
+</li>
+</ul>
+</li>
+<li><p>扩展操作</p>
+<ul>
+<li><p>规定时间内获取并移除数据</p>
+<p>blpop key1 [key2] timeout</p>
+<p>brpop key1[key2] timeout </p>
+<p>brpoplpush source destination timeout</p>
+</li>
+<li><p>移除指定数据</p>
+<p>lrem key count value</p>
+</li>
+</ul>
+</li>
+<li><p>注意事项</p>
+<ul>
+<li>list中保存的数据都是string类型的，数据总容量是有限的，最多2的32次方-1个元素(4294967295)。</li>
+<li>list具有索引的概念，但是操作数据时通常以队列的形式进行入队出队操作，或以栈的形式进行入栈出栈操作<ul>
+<li>获取全部数据操作结束索引设置为-1</li>
+</ul>
+</li>
+<li>list可以对数据进行分页操作，通常第一页的信息来自于list，第2页及更多的信息通过数据库的形式加载</li>
+<li>应用于最新消息展示</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>set HashSet</p>
+<ul>
+<li><p>新的存储需求：存储大量的数据，在查询方面提供更高的效率</p>
+</li>
+<li><p>需要的存储结构：能够保存大量的数据，高效的内部存储机制，便于查询</p>
+</li>
+<li><p>set类型：与hash存储结构完全相同，仅存储键，不存储值（nil），并且值是不允许重复的</p>
+</li>
+<li><p>基本操作</p>
+<ul>
+<li>添加数据 sadd key member1 [member2]</li>
+<li>删除数据 srem key member1 [member2]</li>
+<li>获取全部数据 smembers key </li>
+<li>获取集合数据总量 scard key</li>
+<li>判断集合中是否包含指定数据 sismember key member</li>
+</ul>
+</li>
+<li><p>扩展操作</p>
+<ul>
+<li><p>随机获取集合中指定数量的数据解决方案 srandmember key [count]</p>
+</li>
+<li><p>随机获取集合中的某个数据并将该数据移出集合 spop key [count]</p>
+</li>
+<li><p>应用于随机推荐类信息检索，例如热点歌单推荐，热点新闻推荐，热卖旅游线路，应用APP推荐，大V推荐等</p>
+</li>
+<li><p>求两个集合的交、并、差集</p>
+<p>sinter key1 [key2] </p>
+<p>sunion key1 [key2] </p>
+<p>sdiff key1 [key2]</p>
+</li>
+<li><p>求两个集合的交、并、差集并存储到指定集合中</p>
+<p>sinter store destination key1 [key2] </p>
+<p>sunion store destination key1 [key2] </p>
+<p>sdiff store destination key1 [key2] </p>
+</li>
+<li><p>将指定数据从原始集合中移动到目标集合中</p>
+<p>smove source destination member  </p>
+</li>
+</ul>
+</li>
+<li><p>应用场景</p>
+<ul>
+<li>redis应用于同类型数据的快速去重</li>
+<li>redis应用于基于黑名单与白名单设定的服务控制</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>sorted_set TreeSet</p>
+<ul>
+<li><p>新的存储需求：数据排序有利于数据的有效展示，需要提供一种可以根据自身特征进行排序的方式</p>
+</li>
+<li><p>需要的存储结构：新的存储模型，可以保存可排序的数据</p>
+</li>
+<li><p>sorted_set类型：在set的存储结构基础上添加可排序字段</p>
+</li>
+<li><p>基础操作</p>
+<ul>
+<li><p>添加数据</p>
+<p>zadd key score1 member1 [score2 member2]</p>
+</li>
+<li><p>获取全部数据</p>
+<p>zrange key start stop [WITHSCORES]</p>
+<p>zrevrange key start stop [WITHSCORES]</p>
+</li>
+<li><p>删除数据</p>
+<p>zrem key member [member …]</p>
+</li>
+<li><p>按条件获取数据</p>
+<p>zrangebyscore key min max [WITHSCORES] [LIMIT]</p>
+<p>zrevrangebyscore key max min [WITHSCORES]</p>
+</li>
+<li><p>条件删除数据</p>
+<p>zremrangebyrank key start stop</p>
+<p>zremrangebyscore key min max</p>
+</li>
+<li><p>注意：</p>
+<p>min与max用于限定搜索查询的条件</p>
+<p>start与stop用于限定查询范围，作用于索引，表示开始和结束索引</p>
+<p>offset与count用于限定查询范围，作用于查询结果，表示开始位置和数据总量</p>
+</li>
+<li><p>获取集合数据总量</p>
+<p>zcard key</p>
+<p>zcount key min max</p>
+</li>
+<li><p>集合交、并操作</p>
+<p>zinterstore destination numkeys key [key …]</p>
+<p>ZINTERSTORE destination numkeys key [key …] [WEIGHTS weight] [AGGREGATE SUM|MIN|MAX]</p>
+<p>zunionstore destination numkeys key [key …]</p>
+<p>ZUNIONSTORE destination numkeys key [key …] [WEIGHTS weight] [AGGREGATE SUM|MIN|MAX]</p>
+</li>
+</ul>
+</li>
+<li><p>扩展操作</p>
+<ul>
+<li><p>获取数据对应的索引（排名）</p>
+<p>zrank key member</p>
+<p>zrevrank key member</p>
+</li>
+<li><p>score值获取与修改</p>
+<p>zscorekey member</p>
+<p>zincrbykey increment member</p>
+</li>
+<li><p>Tips：应用于计数器组合排序功能对应的排名</p>
+</li>
+</ul>
+</li>
+<li><p>注意事项</p>
+<ul>
+<li>score保存的数据存储空间是64位，如果是整数范围是-9007199254740992~9007199254740992</li>
+<li>score保存的数据也可以是一个双精度的double值，基于双精度浮点数的特征，可能会丢失精度，使用时候要慎重</li>
+<li>sorted_set底层存储还是基于set结构的，因此数据不能重复，如果重复添加相同的数据，score值将被反复覆盖，保留最后一次修改的结果</li>
+</ul>
+</li>
+<li><p>应用场景</p>
+<ul>
+<li>应用于定时任务执行顺序管理或任务过期管理<ol>
+<li>对于基于时间线限定的任务处理，将处理时间记录为score值，利用排序功能区分处理的先后顺序</li>
+<li>记录下一个要处理的时间，当到期后处理对应任务，移除redis中的记录，并记录下一个要处理的时间</li>
+<li>当新任务加入时，判定并更新当前下一个要处理的任务时间</li>
+<li>为提升sorted_set的性能，通常将任务根据特征存储成若干个sorted_set。例如1小时内，1天内，周内，月内，季内，年度等，操作时逐级提升，将即将操作的若干个任务纳入到1小时内处理的队列中</li>
+<li>获取当前系统时间time</li>
+</ol>
+</li>
+<li>应用于即时任务/消息队列执行管理<ol>
+<li>对于带有权重的任务，优先处理权重高的任务，采用score记录权重即可多条件任务权重设定<ul>
+<li>如果权重条件过多时，需要对排序score值进行处理，保障score值能够兼容2条件或者多条件，例如外贸订单优先于国内订单，总裁订单优先于员工订单，经理订单优先于员工订单</li>
+</ul>
+</li>
+<li>因score长度受限，需要对数据进行截断处理，尤其是时间设置为小时或分钟级即可（折算后）</li>
+<li>先设定订单类别，后设定订单发起角色类别，整体score长度必须是统一的，不足位补0。第一排序规则首位不得是0<ul>
+<li>例如外贸101，国内102，经理004，员工008。</li>
+<li>员工下的外贸单score值为101008（优先）</li>
+<li>经理下的国内单score值为102004</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>案例</p>
+<ul>
+<li><p>redis应用于限时按次结算的服务控制</p>
+<p>人工智能领域的语义识别与自动对话将是未来服务业机器人应答呼叫体系中的重要技术，百度自研用户评价语义识别服务，免费开放给企业试用，同时训练百度自己的模型。现对试用用户的使用行为进行限速，限制每个用户每分钟最多发起10次调用1…10</p>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>设计计数器，记录调用次数，用于控制业务执行次数。以用户id作为key，使用次数作为value</li>
+<li>在调用前获取次数，判断是否超过限定次数不超过次数的情况下，每次调用计数+1业务调用失败，计数-1</li>
+<li>为计数器设置生命周期为指定周期，例如1秒/分钟，自动清空周期内使用次数</li>
+</ul>
+</li>
+<li><p>解决方案优化</p>
+<ul>
+<li>取消最大值的判定，利用incr操作超过Long.Max最大值抛出异常的形式替代每次判断是否大于最大值</li>
+<li>判断是否为nil，如果是，设置为Max-次数如果不是，计数+1业务调用失败，计数-1</li>
+<li>遇到异常即+操作超过上限，视为使用达到上限</li>
+</ul>
+</li>
+<li><p>redis应用于基于时间顺序的数据操作，而不关注具体时间</p>
+<p>使用微信的过程中，当微信接收消息后，会默认将最近接收的消息置顶，当多个好友及关注的订阅号同时发送消息时，该排序会不停的进行交替。同时还可以将重要的会话设置为置顶。一旦用户离线后，再次打开微信时，消息该按照什么样的顺序显示</p>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>依赖list的数据具有顺序的特征对消息进行管理，将list结构作为栈使用</li>
+<li>对置顶与普通会话分别创建独立的list分别管理</li>
+<li>当某个list中接收到用户消息后，将消息发送方的id从list的一侧加入list（此处设定左侧）</li>
+<li>多个相同id发出的消息反复入栈会出现问题，在入栈之前无论是否具有当前id对应的消息，先删除对应id</li>
+<li>推送消息时先推送置顶会话list，再推送普通会话list，推送完成的list清除所有数据</li>
+<li>消息的数量，也就是微信用户对话数量采用计数器的思想另行记录，伴随list操作同步更新</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="通用命令"><a href="#通用命令" class="headerlink" title="通用命令"></a>通用命令</h3><ul>
+<li><p>key通用操作</p>
+<ul>
+<li><p>特征</p>
+<p>key是一个字符串，通过key获取redis中保存的数据</p>
+</li>
+<li><p>基本操作</p>
+<ul>
+<li>获取key是否存在 exists key</li>
+<li>获取key的类型 type key</li>
+<li>删除指定key del key</li>
+</ul>
+</li>
+<li><p>扩展操作</p>
+<ul>
+<li><p>为指定key设置有效期</p>
+<p>expire key seconds</p>
+<p>pexpire key milliseconds</p>
+<p>expireat key timestamp </p>
+<p>pexpireat key milliseconds-timestamp</p>
+</li>
+<li><p>获取key的有效时间</p>
+<p>ttl key 返回-2表示key不存在，返回-1表示key存在，若有有效时间返回有效时间</p>
+<p>pttl key</p>
+</li>
+<li><p>切换key从时效性转换为永久性 persist key</p>
+</li>
+<li><p>查询key pattern key</p>
+<p>*匹配任意数量的任意符号</p>
+<p>? 配合一个任意符号</p>
+<p>[]匹配一个指定符号</p>
+</li>
+</ul>
+</li>
+<li><p>其他操作</p>
+<ul>
+<li><p>改名</p>
+<p>rename key newkey</p>
+<p>renamex key newkey（若newkey不存在才改名</p>
+</li>
+<li><p>排序 sort</p>
+</li>
+<li><p>其他key通用操作 help @generic</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>数据库通用操作</p>
+<ul>
+<li><p>解决key 的重复问题</p>
+<ul>
+<li>redis为每个服务提供有16个数据库，编号从0到15</li>
+<li>每个数据库之间的数据相互独立</li>
+</ul>
+</li>
+<li><p>DB基本操作</p>
+<ul>
+<li><p>切换数据库 select index</p>
+</li>
+<li><p>其他操作</p>
+<p>quit    ping测试连通    echo输出控制台</p>
+</li>
+</ul>
+</li>
+<li><p>DB相关操作</p>
+<ul>
+<li>数据移动 move key db</li>
+<li>数据清除 dbsize flushdb flushall</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Jedis"><a href="#Jedis" class="headerlink" title="Jedis"></a>Jedis</h3><ul>
+<li><p>基于连接池获取连接</p>
+<ul>
+<li>JedisPool：Jedis提供的连接池技术</li>
+<li>poolConfig:连接池配置对象</li>
+<li>host:redis服务地址</li>
+<li>port:redis服务端口号</li>
+</ul>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">JedisPool</span><span class="token punctuation">(</span>GenericObjectPoolConfig poolConfig<span class="token punctuation">,</span> String host<span class="token punctuation">,</span> <span class="token keyword">int</span> port<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">(</span>poolConfig<span class="token punctuation">,</span> host<span class="token punctuation">,</span> port<span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>String<span class="token punctuation">)</span>null<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>String<span class="token punctuation">)</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<ul>
+<li><p>jedis.properties</p>
+<ul>
+<li>jedis.host=localhost</li>
+<li>jedis.port=6379</li>
+<li>jedis.maxTotal=30</li>
+<li>jedis.maxIdle=10</li>
+</ul>
+</li>
+<li><p>静态代码块初始化资源</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">static</span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//读取配置文件获得参数值</span>
+    ResourceBundle rb <span class="token operator">=</span> ResourceBundle<span class="token punctuation">.</span><span class="token function">getBundle</span><span class="token punctuation">(</span><span class="token string">"jedis"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    host <span class="token operator">=</span> rb<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"jedis.host"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    port <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>rb<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"jedis.port"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    maxTotal <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>rb<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"jedis.maxTotal"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    maxIdle <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>rb<span class="token punctuation">.</span><span class="token function">getString</span><span class="token punctuation">(</span><span class="token string">"jedis.maxIdle"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    poolConfig <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">JedisPoolConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>poolConfig<span class="token punctuation">.</span><span class="token function">setMaxTotal</span><span class="token punctuation">(</span>maxTotal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    poolConfig<span class="token punctuation">.</span><span class="token function">setMaxIdle</span><span class="token punctuation">(</span>maxIdle<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    jedisPool <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">JedisPool</span><span class="token punctuation">(</span>poolConfig<span class="token punctuation">,</span>host<span class="token punctuation">,</span>port<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>对外访问接口，提供jedis连接对象，连接从连接池获取</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> Jedis <span class="token function">getJedis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    Jedis jedis <span class="token operator">=</span> jedisPool<span class="token punctuation">.</span><span class="token function">getResource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token keyword">return</span> jedis<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Redis高级"><a href="#Redis高级" class="headerlink" title="Redis高级"></a>Redis高级</h2><h3 id="Redis安装"><a href="#Redis安装" class="headerlink" title="Redis安装"></a>Redis安装</h3><ul>
+<li><p>基于Center OS7安装Redis</p>
+<ul>
+<li>下载安装包wget<a href="http://download.redis.io/releases/redis-?.?.?.tar.gz" target="_blank" rel="noopener">http://download.redis.io/releases/redis-?.?.?.tar.gz</a></li>
+<li>解压tar –xvf文件名.tar.gz</li>
+<li>编译make</li>
+<li>安装make install [destdir=/目录]</li>
+</ul>
+</li>
+<li><p>Redis基础环境设置</p>
+<ul>
+<li><p>创建软链接ln -s 原始目录名快速访问目录名</p>
+</li>
+<li><p>创建配置文件管理目录</p>
+<p>mkdir conf / mkdir config</p>
+</li>
+<li><p>创建数据文件管理目录mkdirdata</p>
+</li>
+</ul>
+</li>
+<li><p>Redis服务启动</p>
+<ul>
+<li><p>默认配置启动</p>
+<p>redis-serverredis-server  –-port 6379</p>
+<p>redis-server  –-port 6380 ……</p>
+</li>
+<li><p>指定配置文件启动</p>
+<p>redis-server  redis.conf</p>
+<p>redis-server  redis-6379.conf</p>
+<p>redis-server  redis-6380.conf ……</p>
+<p>redis-server  conf/redis-6379.conf</p>
+<p>redis-server  config/redis-6380.conf ……</p>
+</li>
+<li><p>Redis客户端连接</p>
+<ul>
+<li><p>默认连接</p>
+<p>redis-cli</p>
+</li>
+<li><p>连接指定服务器</p>
+<p>redis-cli  -h  127.0.0.1</p>
+<p>redis-cli  –port  6379</p>
+<p>redis-cli  -h  127.0.0.1  –port   6379</p>
+</li>
+</ul>
+</li>
+<li><p>Redis服务端配置</p>
+</li>
+<li><p>基本配置</p>
+<ul>
+<li><p>daemonize yes</p>
+<p>以守护进程方式启动，使用本启动方式，redis将以服务的形式存在，日志将不再打印到命令窗口中</p>
+</li>
+<li><p>port  6***</p>
+<p>设定当前服务启动端口号</p>
+</li>
+<li><p>dir“/自定义目录/redis/data“</p>
+<p>设定当前服务文件保存位置，包含日志文件、持久化文件（后面详细讲解）等</p>
+</li>
+<li><p>logfile”6***.log“</p>
+<p>设定日志文件名，便于查阅</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h3><ul>
+<li><p>简介</p>
+<ul>
+<li><p>概念</p>
+<p>利用永久性存储介质将数据进行保存，在特定的时间将保存的数据进行恢复的工作机制称为持久化</p>
+</li>
+<li><p>意义</p>
+<p>防止数据的意外丢失，确保数据安全性</p>
+</li>
+<li><p>两种方式</p>
+<ul>
+<li>RDB将当前数据状态进行保存，快照形式，存储数据结果，存储格式简单，关注点在数据</li>
+<li>AOF将数据的操作过程进行保存，日志形式，存储操作过程，存储格式复杂，关注点在数据的操作过程</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>RDB</p>
+<ul>
+<li><p>启动方式save</p>
+<p>手动执行一次保存</p>
+</li>
+<li><p>save指令相关配置</p>
+<ul>
+<li><p>dbfilename dump.rdb</p>
+<p>说明：设置本地数据库文件名，默认值为dump.rdb</p>
+<p>经验：通常设置为dump-端口号.rdb</p>
+</li>
+<li><p>dir</p>
+<p>说明：设置存储.rdb文件的路径</p>
+<p>经验：通常设置成存储空间较大的目录中，目录名称data</p>
+</li>
+<li><p>rdbcompression yes</p>
+<p>说明：设置存储至本地数据库时是否压缩数据，默认为yes，采用LZF 压缩</p>
+<p>经验：通常默认为开启状态，如果设置为no，可以节省CPU 运行时间，但会使存储的文件变大（巨大）</p>
+</li>
+<li><p>rdbchecksum yes</p>
+<p>说明：设置是否进行RDB文件格式校验，该校验过程在写文件和读文件过程均进行</p>
+<p>经验：通常默认为开启状态，如果设置为no，可以节约读写性过程约10%时间消耗，但是存储一定的数据损坏风险</p>
+</li>
+</ul>
+</li>
+<li><p>启动方式bgsave</p>
+<p>手动启动后台保存操作，但不是立即执行</p>
+</li>
+<li><p>工作原理</p>
+<img src="..\笔记图片\bgsave指令工作原理.png" alt="bgsave指令工作原理" style="zoom: 50%;" />
+</li>
+<li><p>bdsave相关配置</p>
+<ul>
+<li><p>dbfilename dump.rdb</p>
+</li>
+<li><p>dir</p>
+</li>
+<li><p>rdbcompression yes</p>
+</li>
+<li><p>rdbchecksum yes</p>
+</li>
+<li><p>stop-writes-on-bgsave-error yes</p>
+<p>说明：后台存储过程中如果出现错误现象，是否停止保存操作</p>
+<p>经验：通常默认为开启状态</p>
+</li>
+</ul>
+</li>
+<li><p>save配置</p>
+<ul>
+<li><p>配置</p>
+<p>save second changes </p>
+</li>
+<li><p>作用</p>
+<p>满足限定时间范围内key的变化数量达到指定数量即进行持久化</p>
+</li>
+<li><p>参数</p>
+<p>second：监控时间范围</p>
+<p>changes：监控key的变化量</p>
+<p>位置在conf文件中进行配置</p>
+</li>
+<li><p>范例</p>
+<p>save 900 1 </p>
+<p>save 300 10</p>
+<p>save 60 10000</p>
+</li>
+<li><p>原理</p>
+<img src="..\笔记图片\save配置原理.png" alt="save配置原理" style="zoom: 50%;" />
+</li>
+<li><p>注意</p>
+<p>save配置要根据实际业务情况进行设置，频度过高或过低都会出现性能问题，结果可能是灾难性的</p>
+<p>save配置中对于second与changes设置通常具有互补对应关系，尽量不要设置成包含性关系</p>
+<p>save配置启动后执行的是bgsave操作</p>
+</li>
+</ul>
+</li>
+<li><p>rdb特殊启动形式</p>
+<ul>
+<li><p>全量复制</p>
+</li>
+<li><p>服务器运行过程中重启</p>
+<p>debug reload</p>
+</li>
+<li><p>关闭服务器时指定保存数据</p>
+<p>shutdown save</p>
+</li>
+</ul>
+</li>
+<li><p>优劣</p>
+<ul>
+<li><p>优势</p>
+<p>RDB是一个紧凑压缩的二进制文件，存储效率较高</p>
+<p>RDB内部存储的是redis在某个时间点的数据快照，非常适合用于数据备份，全量复制等场景</p>
+<p>RDB恢复数据的速度要比AOF快很多</p>
+<p>应用：服务器中每X小时执行bgsave备份，并将RDB文件拷贝到远程机器中，用于灾难恢复。</p>
+</li>
+<li><p>劣势</p>
+<p>RDB方式无论是执行指令还是利用配置，无法做到实时持久化，具有较大的可能性丢失数据</p>
+<p>bgsave指令每次运行要执行fork操作创建子进程，要牺牲掉一些性能</p>
+<p>Redis的众多版本中未进行RDB文件格式的版本统一，有可能出现各版本服务之间数据格式无法兼容现象</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>AOF</p>
+<ul>
+<li><p>简介</p>
+<ul>
+<li>AOF(append only file)持久化：以独立日志的方式记录每次写命令，重启时再重新执行AOF文件中命令达到恢复数据的目的。与RDB相比可以简单描述为改记录数据为记录数据产生的过程</li>
+<li>AOF的主要作用是解决了数据持久化的实时性，目前已经是Redis持久化的主流方式</li>
+</ul>
+</li>
+<li><p>写数据的策略</p>
+<ul>
+<li>always(每次）每次写入操作均同步到AOF文件中，数据零误差，性能较低，不建议使用。</li>
+<li>everysec（每秒）每秒将缓冲区中的指令同步到AOF文件中，数据准确性较高，性能较高，建议使用，也是默认配置在系统突然宕机的情况下丢失1秒内的数据</li>
+<li>no（系统控制）由操作系统控制每次同步到AOF文件的周期，整体过程不可控</li>
+</ul>
+</li>
+<li><p>AOF功能开启</p>
+<ul>
+<li><p>配置 appendonly yes|no</p>
+<p>作用 是否开启AOF持久化功能，默认为不开启状态</p>
+</li>
+<li><p>配置 appendfsync always|everysec|no </p>
+<p>作用 AOF 写数据策略</p>
+</li>
+<li><p>配置 appendfilename filename</p>
+<p>作用  AOF持久化文件名，默认文件名未appendonly.aof，建议配置为 appendonly-端口号.aof</p>
+</li>
+<li><p>配置 dir</p>
+<p>作用 AOF持久化文件保存路径，与RDB持久化文件保持一致即可</p>
+</li>
+</ul>
+</li>
+<li><p>AOF重写</p>
+<p>随着命令不断写入AOF，文件会越来越大，为了解决这个问题，Redis引入了AOF重写机制压缩文件体积。AOF文件重写是将Redis进程内的数据转化为写命令同步到新AOF文件的过程。简单说就是将对同一个数据的若干个条命令执行结果转化成最终结果数据对应的指令进行记录。</p>
+<ul>
+<li><p>作用</p>
+<p>降低磁盘占用量，提高磁盘利用率</p>
+<p>提高持久化效率，降低持久化写时间，提高IO性能</p>
+<p>降低数据恢复用时，提高数据恢复效率</p>
+</li>
+<li><p>AOF重写规则</p>
+<ol>
+<li>进程内已超时的数据不再写入文件</li>
+<li>忽略无效指令，重写时使用进程内数据直接生成，这样新的AOF文件只保留最终数据的写入命令如del key1、hdelkey2、sremkey3、set key4 111、set key4 222等</li>
+<li>对同一数据的多条写命令合并为一条命令如lpushlist1 a、lpushlist1 b、lpushlist1 c 可以转化为：lpushlist1 a b c。为防止数据量过大造成客户端缓冲区溢出，对list、set、hash、zset等类型，每条指令最多写入64个元素</li>
+</ol>
+</li>
+<li><p>AOF重写方式</p>
+<ul>
+<li><p>手动重写 </p>
+<p>bgrewriteaof </p>
+</li>
+<li><p>自动重写 </p>
+<p>auto-aof-rewrite-min-size size </p>
+<p>auto-aof-rewrite-percentage percentage</p>
+</li>
+</ul>
+</li>
+<li><p>自动重写方式</p>
+<ul>
+<li><p>自动重写触发条件设置</p>
+<p>auto-aof-rewrite-min-size size</p>
+<p>auto-aof-rewrite-percentage percent</p>
+</li>
+<li><p>自动重写触发比对参数（运行指令info Persistence获取具体信息）</p>
+<p>aof_current_size</p>
+<p>aof_base_size</p>
+</li>
+<li><p>自动重写触发条件</p>
+<p>aof_current_size&gt;=auto-aof-rewrite-min-size</p>
+<p>(aof_current_size-aof_base_size/aof_base_size)&gt;=auto-aof-rewrite-percentage</p>
+</li>
+</ul>
+</li>
+<li><p>AOF重写流程</p>
+<img src="..\笔记图片\AOF重写流程.png" alt="AOF重写流程" style="zoom: 50%;" />
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>RBD对比AOF</p>
+<img src="..\笔记图片\RBD对比AOF.png" alt="RBD对比AOF" style="zoom: 50%;" />
+
+<ul>
+<li>对数据非常敏感，建议使用默认的AOF持久化方案<ul>
+<li>AOF持久化策略使用everysecond，每秒钟fsync一次。该策略redis仍可以保持很好的处理性能，当出现问题时，最多丢失0-1秒内的数据。</li>
+<li>注意：由于AOF文件存储体积较大，且恢复速度较慢</li>
+</ul>
+</li>
+<li>数据呈现阶段有效性，建议使用RDB持久化方案<ul>
+<li>数据可以良好的做到阶段内无丢失（该阶段是开发者或运维人员手工维护的），且恢复速度较快，阶段点数据恢复通常采用RDB方案</li>
+<li>注意：利用RDB实现紧凑的数据持久化会使Redis降的很低，慎重</li>
+</ul>
+</li>
+<li>综合比对<ul>
+<li>RDB与AOF的选择实际上是在做一种权衡，每种都有利有弊</li>
+<li>如不能承受数分钟以内的数据丢失，对业务数据非常敏感，选用AOF</li>
+<li>如能承受数分钟以内的数据丢失，且追求大数据集的恢复速度，选用RDB</li>
+<li>灾难恢复选用RDB</li>
+<li>双保险策略，同时开启RDB 和AOF，重启后，Redis优先使用AOF 来恢复数据，降低丢失数据的量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>应用场景</p>
+<p>以下可考虑使用</p>
+<ul>
+<li>应用于抢购，限购类、限量发放优惠卷、激活码等业务的数据存储设计</li>
+<li>应用于具有操作先后顺序的数据控制</li>
+<li>应用于最新消息展示</li>
+<li>应用于基于黑名单与白名单设定的服务控制</li>
+<li>应用于计数器组合排序功能对应的排名</li>
+</ul>
+</li>
+</ul>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><ul>
+<li><p>简介</p>
+<p>redis事务就是一个命令执行的队列，将一系列预定义命令包装成一个整体（一个队列）。当执行时，一次性按照添加顺序依次执行，中间不会被打断或者干扰</p>
+<p>一个队列中，一次性、顺序性、排他性的执行一系列命令</p>
+</li>
+<li><p>事务的基本操作</p>
+<ul>
+<li>开启事务 mutli<ul>
+<li>作用 设定事务的开启位置，此指令执行后，后续的所有指令均加入到事务中</li>
+</ul>
+</li>
+<li>执行事务 exec<ul>
+<li>作用 设定事务的结束位置，同时执行事务。与multi成对出现，成对使用</li>
+</ul>
+</li>
+<li>注意：加入事务的命令暂时进入到任务队列中，并没有立即执行，只有执行exec命令才开始执行</li>
+<li>取消事务 discard<ul>
+<li>作用 终止当前事务的定义，发生在multi之后，exec之前</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>事务的工作流程</p>
+</li>
+</ul>
+<img src="..\笔记图片\事务的工作流程.png" alt="事务的工作流程" style="zoom: 50%;" />
+
+<ul>
+<li><p>事务的注意事项</p>
+<ul>
+<li><p>定义事务的过程中，命令格式输入错误</p>
+<ul>
+<li><p>处理结果</p>
+<p>如果定义的事务中所包含的命令存在语法错误，整体事务中所有命令均不会执行。包括那些语法正确的命令。</p>
+</li>
+</ul>
+</li>
+<li><p>定义事务的过程中，命令执行出现错误怎么办？</p>
+<p>运行错误指命令格式正确，但是无法正确的执行。例如对list进行incr操作</p>
+<ul>
+<li><p>处理结果</p>
+<p>能够正确运行的命令会执行，运行错误的命令不会被执行</p>
+</li>
+</ul>
+</li>
+<li><p>注意：已经执行完毕的命令对应的数据不会自动回滚，需要程序员自己在代码中实现回滚。</p>
+</li>
+<li><p>手动进行事务回滚</p>
+<ul>
+<li>记录操作过程中被影响的数据之前的状态<ol>
+<li>单数据：string</li>
+<li>多数据：hash、list、set、zset</li>
+</ol>
+</li>
+<li>设置指令恢复所有的被修改的项<ol>
+<li>单数据：直接set（注意周边属性，例如时效）</li>
+<li>多数据：修改对应值或整体克隆复制</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>锁</p>
+<ul>
+<li><p>对key 添加监视锁，在执行exec前如果key发生了变化，终止事务执行</p>
+<p>watch key1 [key2……]</p>
+</li>
+<li><p>取消对所有key 的监视</p>
+<p>unwatch</p>
+</li>
+<li><p>应用基于状态控制的批量任务执行</p>
+</li>
+</ul>
+</li>
+<li><p>应用基于分布式锁对应的场景控制</p>
+<ul>
+<li><p>业务场景</p>
+<p>天猫双11热卖过程中，对已经售罄的货物追加补货，且补货完成。客户购买热情高涨，3秒内将所有商品购买完毕。本次补货已经将库存全部清空，如何避免最后一件商品不被多人同时购买？【超卖问题】</p>
+</li>
+<li><p>分析</p>
+<p>使用watch监控一个key有没有改变已经不能解决问题，此处要监控的是具体数据</p>
+<p>虽然redis是单线程的，但是多个客户端对同一数据同时进行操作时，如何避免不被同时修改</p>
+</li>
+<li><p>方案</p>
+<ul>
+<li><p>使用setnx设置一个公共锁利用 setnx lock-key value</p>
+<p>setnx命令的返回值特征，有值则返回设置失败，无值则返回设置成功</p>
+</li>
+<li><p>对于返回设置成功的，拥有控制权，进行下一步的具体业务操作</p>
+</li>
+<li><p>对于返回设置失败的，不具有控制权，排队或等待操作完毕通过del操作释放锁</p>
+</li>
+<li><p>注意：上述解决方案是一种设计概念，依赖规范保障，具有风险性</p>
+</li>
+</ul>
+</li>
+<li><p>改良</p>
+<ul>
+<li><p>使用expire为锁key添加时间限定，到时不释放，放弃锁</p>
+<p>expire lock-key second </p>
+<p>pexpire lock-key milliseconds</p>
+</li>
+<li><p>由于操作通常都是微秒或毫秒级，因此该锁定时间不宜设置过大。具体时间需要业务测试后确认。</p>
+<p>例如：持有锁的操作最长执行时间127ms，最短执行时间7ms。</p>
+<p>测试百万次最长执行时间对应命令的最大耗时，测试百万次网络延迟平均耗时</p>
+<p>锁时间设定推荐：最大耗时<em>120%+平均网络延迟</em>110%</p>
+<p>如果业务最大耗时&lt;&lt;网络平均延迟，通常为2个数量级，取其中单个耗时较长即可</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Redis删除策略"><a href="#Redis删除策略" class="headerlink" title="Redis删除策略"></a>Redis删除策略</h3><ul>
+<li><p>过期数据</p>
+<ul>
+<li>Redis是一种内存级数据库，所有数据均存放在内存中，内存中的数据可以通过TTL指令获取其状态<ul>
+<li>XX：具有时效性的数据</li>
+<li>-1：永久有效的数据</li>
+<li>-2：已经过期的数据或被删除的数据或未定义的数据Redis中的数据特征</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>数据删除策略</p>
+<ol>
+<li><p>定时删除</p>
+<ul>
+<li>创建一个定时器，当key设置有过期时间，且过期时间到达时，由定时器任务立即执行对键的删除操作</li>
+<li>优点：节约内存，到时就删除，快速释放掉不必要的内存占用</li>
+<li>缺点：CPU压力很大，无论CPU此时负载量多高，均占用CPU，会影响redis服务器响应时间和指令吞吐量</li>
+<li>总结：用处理器性能换取存储空间（拿时间换空间）</li>
+</ul>
+</li>
+<li><p>惰性删除</p>
+<ul>
+<li>数据到达过期时间，不做处理。等下次访问该数据时如果未过期，返回数据，发现已过期，删除，返回不存在</li>
+<li>优点：节约CPU性能，发现必须删除的时候才删除</li>
+<li>缺点：内存压力很大，出现长期占用内存的数据</li>
+<li>总结：用存储空间换取处理器性能 expireIfNeeded()（拿时间换空间）</li>
+</ul>
+</li>
+<li><p>定期删除</p>
+<p>周期性轮询redis库中的时效性数据，采用随机抽取的策略，利用过期数据占比的方式控制删除频度</p>
+<ul>
+<li><p>Redis启动服务器初始化时，读取配置server.hz的值，默认为10</p>
+</li>
+<li><p>每秒钟执行server.hz次serverCron()-&gt;databasesCron()-&gt;activeExpireCycle()</p>
+</li>
+<li><p>activeExpireCycle()对每个expires[<em>]逐一进行检测，每次执行250ms/server.hz</em></p>
+</li>
+<li><p>对某个expires[*]检测时，随机挑选W个key检测</p>
+<ol>
+<li>如果key超时，删除key</li>
+<li>如果一轮中删除的key的数量&gt;W<em>25%，循环该过程</em></li>
+<li>如果一轮中删除的key的数量≤W*25%，检查下一个expires[*]，0-15循环</li>
+<li>W取值=ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP属性值</li>
+</ol>
+</li>
+<li><p>参数current_db用于记录activeExpireCycle()进入哪个expires[*]执行</p>
+</li>
+<li><p>如果activeExpireCycle()执行时间到期，下次从current_db继续向下执行</p>
+</li>
+<li><p>特点：</p>
+<p>CPU性能占用设置有峰值，检测频度可自定义设置</p>
+<p>内存压力不是很大，长期占用内存的冷数据会被持续清理</p>
+</li>
+</ul>
+</li>
+<li><p>对比</p>
+<ul>
+<li><p>定时删除</p>
+<p>节约内存，无占用 不分时段占用CPU资源，频度高 拿时间换空间</p>
+</li>
+<li><p>惰性删除</p>
+<p>内存占用严重 延时执行，CPU利用率高 拿空间换时间</p>
+</li>
+<li><p>定期删除</p>
+<p>内存定期随机清理 每秒花费固定的CPU资源维护内存 随机抽查，重点抽查</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>逐出算法</p>
+<ul>
+<li><p>新数据进入检测</p>
+<ul>
+<li>Redis使用内存存储数据，在执行每一个命令前，会调用freeMemoryIfNeeded()检测内存是否充足。如果内存不满足新加入数据的最低存储要求，redis要临时删除一些数据为当前指令清理存储空间。清理数据的策略称为逐出算法。</li>
+<li>注意：逐出数据的过程不是100%能够清理出足够的可使用的内存空间，如果不成功则反复执行。当对所有数据尝试完毕后，如果不能达到内存清理的要求，将出现错误信息</li>
+</ul>
+</li>
+<li><p>影响数据逐出的相关配置</p>
+<ul>
+<li><p>最大可使用内存 maxmemory</p>
+<p>占用物理内存的比例，默认值为0，表示不限制。生产环境中根据需求设定，通常设置在50%以上。</p>
+</li>
+<li><p>每次选取待删除数据的个数 maxmemory-samples</p>
+<p>选取数据时并不会全库扫描，导致严重的性能消耗，降低读写性能。因此采用随机获取数据的方式作为待检测删除数据</p>
+</li>
+<li><p>删除策略 maxmemory-policy</p>
+<p>达到最大内存后的，对被挑选出来的数据进行删除的策略</p>
+</li>
+</ul>
+</li>
+<li><p>影响数据逐出的相关配置</p>
+<ul>
+<li><p>检测易失数据（可能会过期的数据集server.db[i].expires ）</p>
+<p>①volatile-lru：挑选最近最少使用的数据淘汰</p>
+<p>②volatile-lfu：挑选最近使用次数最少的数据淘汰</p>
+<p>③volatile-ttl：挑选将要过期的数据淘汰</p>
+<p>④volatile-random：任意选择数据淘汰</p>
+</li>
+<li><p>检测全库数据（所有数据集server.db[i].dict）</p>
+<p>⑤allkeys-lru：挑选最近最少使用的数据淘汰</p>
+<p>⑥allkeys-lfu：挑选最近使用次数最少的数据淘汰</p>
+<p>⑦allkeys-random：任意选择数据淘汰</p>
+</li>
+<li><p>放弃数据驱逐</p>
+<p>⑧no-enviction（驱逐）：禁止驱逐数据（redis4.0中默认策略），会引发错误OOM（Out Of Memory）</p>
+</li>
+</ul>
+</li>
+<li><p>数据逐出策略配置依据</p>
+<p>使用INFO命令输出监控信息，查询缓存hit 和miss 的次数，根据业务需求调优Redis配置</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Redis核心配置"><a href="#Redis核心配置" class="headerlink" title="Redis核心配置"></a>Redis核心配置</h3><ul>
+<li><p>服务器基础配置</p>
+<ul>
+<li><p>服务器端设定</p>
+<ul>
+<li><p>设置服务器以守护进程的方式运行</p>
+<p>daemonize yes|no</p>
+</li>
+<li><p>绑定主机地址</p>
+<p>bind 127.0.0.1</p>
+</li>
+<li><p>设置服务器端口号</p>
+<p>port 6379</p>
+</li>
+<li><p>设置数据库数量</p>
+<p>databases 16</p>
+</li>
+</ul>
+</li>
+<li><p>日志配置</p>
+<ul>
+<li><p>设置服务器以指定日志记录级别</p>
+<p>loglevel debug|verbose|notice|warning</p>
+</li>
+<li><p>日志记录文件名</p>
+<p>logfile 端口号.log</p>
+</li>
+<li><p>注意：日志级别开发期设置为verbose即可，生产环境中配置为notice，简化日志输出量，降低写日志IO的频度</p>
+</li>
+</ul>
+</li>
+<li><p>客户端配置</p>
+<ul>
+<li><p>设置同一时间最大客户端连接数，默认无限制。当客户端连接到达上限，Redis会关闭新的连接</p>
+<p>maxclients 0（设置为0表示不作限制</p>
+</li>
+<li><p>客户端闲置等待最大时长，达到最大值后关闭连接。如需关闭该功能，设置为0</p>
+<p>timeout 300</p>
+</li>
+</ul>
+</li>
+<li><p>多服务器快捷配置</p>
+<ul>
+<li>导入并加载指定配置文件信息，用于快速创建redis公共配置较多的redis实例配置文件，便于维护include/path/server-端口号.conf</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="高级数据类型"><a href="#高级数据类型" class="headerlink" title="高级数据类型"></a>高级数据类型</h3><ul>
+<li><p>Bitmaps</p>
+<ul>
+<li><p>基础操作</p>
+<ul>
+<li><p>获取指定key对应偏移量上的bit值</p>
+<p>getbitkey offset</p>
+</li>
+<li><p>设置指定key对应偏移量上的bit值，value只能是1或0</p>
+<p>setbit key offset value</p>
+</li>
+</ul>
+</li>
+<li><p>扩展操作</p>
+<ul>
+<li><p>业务场景</p>
+<ol>
+<li>统计每天某一部电影是否被点播</li>
+<li>统计每天有多少部电影被点播</li>
+<li>统计每周/月/年有多少部电影被点播</li>
+<li>统计年度哪部电影没有被点播</li>
+</ol>
+</li>
+<li><p>对指定key按位进行交、并、非、异或操作，并将结果保存到destKey中</p>
+<p>bitop op destKey key1 [key2…]</p>
+<p>and 交 or 并 not 非 xo 异或</p>
+</li>
+<li><p>统计指定key中1的数量</p>
+<p>bitcount key [start end]</p>
+</li>
+</ul>
+</li>
+<li><p>Tips ：redis应用于信息状态统计</p>
+</li>
+</ul>
+</li>
+<li><p>Hyperloglog</p>
+<ul>
+<li><p>统计独立UV</p>
+<ul>
+<li>原始方案：set 存储每个用户的id（字符串）</li>
+<li>改进方案：Bitmaps 存储每个用户状态（bit）</li>
+<li>全新的方案：Hyperloglog</li>
+</ul>
+</li>
+<li><p>基数</p>
+<ul>
+<li>基数是数据集去重后元素个数</li>
+<li>HyperLogLog是用来做基数统计的，运用了LogLog的算法</li>
+</ul>
+</li>
+<li><p>基本操作</p>
+<ul>
+<li><p>添加数据</p>
+<p>pfadd key element [element …]</p>
+</li>
+<li><p>统计数据</p>
+<p>pfcount key [key …]</p>
+</li>
+<li><p>合并数据</p>
+<p>pfmerge destkey sourcekey [sourcekey…]</p>
+</li>
+</ul>
+</li>
+<li><p>相关说明</p>
+<ul>
+<li>用于进行基数统计，不是集合，不保存数据，只记录数量而不是具体数据</li>
+<li>核心是基数估算算法，最终数值存在一定误差</li>
+<li>误差范围：基数估计的结果是一个带有0.81% 标准错误的近似值</li>
+<li>耗空间极小，每个hyperloglogkey占用了12K的内存用于标记基数</li>
+<li>pfadd命令不是一次性分配12K内存使用，会随着基数的增加内存逐渐增大</li>
+<li>Pfmerge命令合并后占用的存储空间为12K，无论合并之前数据量多少</li>
+</ul>
+</li>
+<li><p>redis应用于独立信息统计</p>
+</li>
+</ul>
+</li>
+<li><p>GEO</p>
+<ul>
+<li><p>redis应用于地理位置计算</p>
+</li>
+<li><p>基本操作</p>
+<ul>
+<li><p>添加坐标点</p>
+<p>geoaddkey longitude latitude member [longitude latitude member …]</p>
+</li>
+<li><p>获取坐标点</p>
+<p>geoposkey member [member …]</p>
+</li>
+<li><p>计算坐标点距离</p>
+<p>geodistkey member1 member2 [unit]</p>
+</li>
+<li><p>添加坐标点</p>
+<p>georadiuskey longitude latitude radius m|km|ft|mi [withcoord] [withdist] [withhash] [count count]</p>
+</li>
+<li><p>获取坐标点</p>
+<p>georadiusbymemberkey member radius m|km|ft|mi [withcoord] [withdist] [withhash] [count count]</p>
+</li>
+<li><p>计算经纬度</p>
+<p>geohashkey member [member …]</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Redis集群"><a href="#Redis集群" class="headerlink" title="Redis集群"></a>Redis集群</h2><h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><ul>
+<li><p>简介</p>
+<ul>
+<li><p>多台服务器连接</p>
+<ul>
+<li>提供数据方：master主服务器，主节点，主库主客户端</li>
+<li>接收数据方：slave从服务器，从节点，从库从客户端</li>
+<li>需要解决的问题：数据同步</li>
+<li>核心工作：master的数据复制到slave中</li>
+</ul>
+</li>
+<li><p>概念</p>
+<ul>
+<li>主从复制即将master中的数据即时、有效的复制到slave中</li>
+</ul>
+</li>
+<li><p>特征：一个master可以拥有多个slave，一个slave只对应一个master</p>
+</li>
+<li><p>职责：</p>
+<ul>
+<li><p>master：</p>
+<p>写数据；执行写操作时，将出现变化的数据自动同步到slave；读数据（可忽略）；</p>
+</li>
+<li><p>slave:</p>
+<p>读数据;写数据（禁止）</p>
+</li>
+</ul>
+</li>
+<li><p>作用</p>
+<ul>
+<li>读写分离：master写、slave读，提高服务器的读写负载能力</li>
+<li>负载均衡：基于主从结构，配合读写分离，由slave分担master负载，并根据需求的变化，改变slave的数量，通过多个从节点分担数据读取负载，大大提高Redis服务器并发量与数据吞吐量</li>
+<li>故障恢复：当master出现问题时，由slave提供服务，实现快速的故障恢复</li>
+<li>数据冗余：实现数据热备份，是持久化之外的一种数据冗余方式</li>
+<li>高可用基石：基于主从复制，构建哨兵模式与集群，实现Redis的高可用方案</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>工作流程</p>
+<ol>
+<li><p>建立连接阶段</p>
+<ol>
+<li>建立slave到master的连接，使master能够识别slave，并保存slave端口号<ul>
+<li>设置master的地址和端口，保存master信息</li>
+<li>建立socket连接</li>
+<li>发送ping命令（定时器任务）</li>
+<li>身份验证</li>
+<li>发送slave端口信息至此，主从连接成功！</li>
+</ul>
+</li>
+</ol>
+<img src="..\笔记图片\建立连接阶段工作流程.png" alt="建立连接阶段工作流程" style="zoom: 50%;" />
+
+<ol start="2">
+<li><p>状态：</p>
+<ul>
+<li>slave：保存master的地址与端口</li>
+<li>master：保存slave的端口</li>
+<li>总体：之间创建了连接的socket</li>
+</ul>
+</li>
+<li><p>主从连接</p>
+<ul>
+<li><p>方式一：客户端发送命令</p>
+<p>slaveof <masterip> <masterport></p>
+</li>
+<li><p>方式二：启动服务器参数</p>
+<p>redis-server -slaveof <masterip> <masterport></p>
+</li>
+<li><p>方式三：服务器配置</p>
+<p>slaveof <masterip> <masterport></p>
+</li>
+<li><p>slave系统信息</p>
+<p>master_link_down_since_seconds</p>
+<p>masterhost</p>
+<p>masterport</p>
+</li>
+<li><p>master系统信息</p>
+<p>slave_listening_port(多个)</p>
+</li>
+</ul>
+</li>
+<li><p>主从断开连接</p>
+<ul>
+<li>客户端发送命令slaveof no one</li>
+<li>说明：slave断开连接后，不会删除已有数据，只是不再接受master发送的数据</li>
+</ul>
+</li>
+<li><p>授权访问</p>
+<ul>
+<li><p>master客户端发送命令设置密码</p>
+<p>requirepass <password></p>
+</li>
+<li><p>master配置文件设置密码</p>
+<p>config set requirepass <password></p>
+<p>config get requirepass </p>
+</li>
+<li><p>slave客户端发送命令设置密码</p>
+<p>redis-server–a <password></p>
+</li>
+<li><p>slave配置文件设置密码</p>
+<p>masterauth <password></p>
+</li>
+<li><p>slave启动服务器设置密码</p>
+<p>auth <password></p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>数据同步阶段工作流程</p>
+<p>在slave初次连接master后，复制master中的所有数据到slave；将slave的数据库状态更新成master当前的数据库状态</p>
+<img src="..\笔记图片\数据同步阶段工作流程.png" alt="数据同步阶段工作流程" style="zoom: 50%;" />
+
+<ul>
+<li>请求同步数据</li>
+<li>创建RDB同步数据</li>
+<li>恢复RDB同步数据</li>
+<li>请求部分同步数据</li>
+<li>恢复部分同步数据</li>
+</ul>
+<p>状态：</p>
+<ul>
+<li>slave：具有master端全部数据，包含RDB过程接收的数据</li>
+<li>master：保存slave当前数据同步的位置</li>
+<li>总体：之间完成了数据克隆</li>
+</ul>
+<p>说明</p>
+<ul>
+<li><p>master</p>
+<ol>
+<li><p>如果master数据量巨大，数据同步阶段应避开流量高峰期，避免造成master阻塞，影响业务正常执行</p>
+</li>
+<li><p>复制缓冲区大小设定不合理，会导致数据溢出。如进行全量复制周期太长，进行部分复制时发现数据已经存在丢失的情况，必须进行第二次全量复制，致使slave陷入死循环状态。</p>
+<p>默认 repl-backlog-size 1mb</p>
+</li>
+<li><p>master单机内存占用主机内存的比例不应过大，建议使用50%-70%的内存，留下30%-50%的内存用于执行bgsave命令和创建复制缓冲区</p>
+</li>
+</ol>
+</li>
+<li><p>slave</p>
+<ol>
+<li><p>为避免slave进行全量复制、部分复制时服务器响应阻塞或数据不同步，建议关闭此期间的对外服务</p>
+<p>slave-serve-stale-data yes|no</p>
+</li>
+<li><p>数据同步阶段，master发送给slave信息可以理解master是slave的一个客户端，主动向slave发送命令</p>
+</li>
+<li><p>多个slave同时对master请求数据同步，master发送的RDB文件增多，会对带宽造成巨大冲击，如果master带宽不足，因此数据同步需要根据业务需求，适量错峰</p>
+</li>
+<li><p>slave过多时，建议调整拓扑结构，由一主多从结构变为树状结构，中间的节点既是master，也是slave。注意使用树状结构时，由于层级深度，导致深度越高的slave与最顶层master间数据同步延迟较大，数据一致性变差，应谨慎选择</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>命令传播阶段</p>
+<p>当master数据库状态被修改后，导致主从服务器数据库状态不一致，此时需要让主从数据同步到一致的状态，同步的动作称为命令传播</p>
+<p>master将接收到的数据变更命令发送给slave，slave接收命令后执行命令</p>
+<img src="..\笔记图片\命令传播阶段工作流程.png" alt="命令传播阶段工作流程" style="zoom: 50%;" />
+
+<p>命令传播阶段出现了断网现象</p>
+<ul>
+<li>网络闪断闪连 忽略</li>
+<li>短时间网络中断 部分复制</li>
+<li>长时间网络中断 全量复制</li>
+</ul>
+<p>部分复制的三个核心要素</p>
+<ul>
+<li><p>服务器的运行id（run id）</p>
+<p>概念：服务器运行ID是每一台服务器每次运行的身份识别码，一台服务器多次运行可以生成多个运行id</p>
+<p>组成：运行id由40位字符组成，是一个随机的十六进制字符例如：fdc9ff13b9bbaab28db42b3d50f852bb5e3fcdce</p>
+<p>作用：运行id被用于在服务器间进行传输，识别身份如果想两次操作均对同一台服务器进行，必须每次操作携带对应的运行id，用于对方识别</p>
+<p>实现方式：运行id在每台服务器启动时自动生成的，master在首次连接slave时，会将自己的运行ID发送给slave，slave保存此ID，通过info Server命令，可以查看节点的runid</p>
+</li>
+<li><p>主服务器的复制积压缓冲区</p>
+<p>概念：复制缓冲区，又名复制积压缓冲区，是一个先进先出（FIFO）的队列，用于存储服务器执行过的命令，每次传播命令，master都会将传播的命令记录下来，并存储在复制缓冲区</p>
+<ul>
+<li>复制缓冲区默认数据存储空间大小是1M，由于存储空间大小是固定的，当入队元素的数量大于队列长度时，最先入队的元素会被弹出，而新元素会被放入队列</li>
+</ul>
+<p>由来：每台服务器启动时，如果开启有AOF或被连接成为master节点，即创建复制缓冲区</p>
+<p>作用：用于保存master收到的所有指令（仅影响数据变更的指令，例如set，select）</p>
+<p>数据来源：当master接收到主客户端的指令时，除了将指令执行，会将该指令存储到缓冲区中</p>
+<p>原理：通过offset区分不同的slave当前数据传播的差异；master记录已发送的信息对应的offset；slave记录已接收的信息对应的offset</p>
+</li>
+<li><p>主从服务器的复制偏移量</p>
+<p>概念：一个数字，描述复制缓冲区中的指令字节位置</p>
+<p>分类：</p>
+<ul>
+<li>master复制偏移量：记录发送给所有slave的指令字节对应的位置（多个）</li>
+<li>slave复制偏移量：记录slave接收master发送过来的指令字节对应的位置（一个）</li>
+</ul>
+<p>数据来源：</p>
+<ul>
+<li>master端：发送一次记录一次</li>
+<li>slave端：接收一次记录一次</li>
+</ul>
+<p>作用：同步信息，比对master与slave的差异，当slave断线后，恢复数据使用</p>
+</li>
+</ul>
+</li>
+<li><p>心跳机制</p>
+<ul>
+<li><p>进入命令传播阶段候，master与slave间需要进行信息交换，使用心跳机制进行维护，实现双方连接保持在线</p>
+<p>master心跳：</p>
+<ul>
+<li>指令：PING</li>
+<li>周期：由repl-ping-slave-period决定，默认10秒</li>
+<li>作用：判断slave是否在线</li>
+<li>查询：INFO replication获取slave最后一次连接时间间隔，lag项维持在0或1视为正常</li>
+</ul>
+<p>slave心跳任务</p>
+<ul>
+<li>指令：REPLCONF ACK {offset}</li>
+<li>周期：1秒</li>
+<li>作用1：汇报slave自己的复制偏移量，获取最新的数据变更指令</li>
+<li>作用2：判断master是否在线</li>
+</ul>
+</li>
+<li><p>注意事项</p>
+<p>当slave多数掉线，或延迟过高时，master为保障数据稳定性，将拒绝所有信息同步操作</p>
+<ul>
+<li><p>min-slaves-to-write 2    </p>
+</li>
+<li><p>min-slaves-max-lag 8</p>
+<p>slave数量少于2个，或者所有slave的延迟都大于等于10秒时，强制关闭master写功能，停止数据同步</p>
+</li>
+</ul>
+<p>slave数量及延迟由slave发送REPLCONF ACK命令做确认</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>常见问题</p>
+<ul>
+<li><p>伴随着系统的运行，master的数据量会越来越大，一旦master重启，runid将发生变化，会导致全部slave的全量复制操作内部优化调整方案：</p>
+<ol>
+<li>master内部创建master_replid变量，使用runid相同的策略生成，长度41位，并发送给所有slave</li>
+<li>在master关闭时执行命令shutdown save，进行RDB持久化,将runid与offset保存到RDB文件中<ul>
+<li>repl-id repl-offset</li>
+<li>通过redis-check-rdb命令可以查看该信息</li>
+</ul>
+</li>
+<li>master重启后加载RDB文件，恢复数据重启后，将RDB文件中保存的repl-id与repl-offset加载到内存中<ul>
+<li>master_repl_id= repl master_repl_offset= repl-offset</li>
+<li>通过info命令可以查看该信息作用：本机保存上次runid，重启后恢复该值，使所有slave认为还是之前的master</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>网络环境不佳，出现网络中断，slave不提供服务</p>
+<ul>
+<li><p>问题原因</p>
+<p>复制缓冲区过小，断网后slave的offset越界，触发全量复制</p>
+</li>
+<li><p>最终结果</p>
+<p>slave反复进行全量复制</p>
+</li>
+<li><p>解决方案</p>
+<p>修改复制缓冲区大小</p>
+</li>
+<li><p>建议设置如下：</p>
+<ol>
+<li>测算从master到slave的重连平均时长second</li>
+<li>获取master平均每秒产生写命令数据总量write_size_per_second</li>
+<li>最优复制缓冲区空间= 2 * second * write_size_per_secondrepl-backlog-size</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>master的CPU占用过高或slave频繁断开连接</p>
+<ul>
+<li><p>问题原因</p>
+<ul>
+<li>slave每1秒发送REPLCONF ACK命令到master</li>
+<li>当slave接到了慢查询时（keys * ，hgetall等），会大量占用CPU性能</li>
+<li>master每1秒调用复制定时函数replicationCron()，比对slave发现长时间没有进行响应</li>
+</ul>
+</li>
+<li><p>最终结果</p>
+<p>master各种资源（输出缓冲区、带宽、连接等）被严重占用</p>
+</li>
+<li><p>解决方案</p>
+<p>通过设置合理的超时时间，确认是否释放</p>
+<p>slave slaverepl-timeout 该参数定义了超时时间的阈值（默认60秒），超过该值，释放 </p>
+</li>
+</ul>
+</li>
+<li><p>slave与master连接断开</p>
+<ul>
+<li><p>问题原因</p>
+<ul>
+<li>master发送ping指令频度较低</li>
+<li>master设定超时时间较短</li>
+<li>ping指令在网络中存在丢包</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<p>提高ping指令发送的频度</p>
+<p>repl-ping-slave-period超时时间repl-time的时间至少是ping指令频度的5到10倍，否则slave很容易判定超时</p>
+</li>
+</ul>
+</li>
+<li><p>多个slave获取相同数据不同步</p>
+<ul>
+<li><p>问题原因</p>
+<p>网络信息不同步，数据发送有延迟</p>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>优化主从间的网络环境，通常放置在同一个机房部署，如使用阿里云等云服务器时要注意此现象</li>
+<li>监控主从节点延迟（通过offset）判断，如果slave延迟过大，暂时屏蔽程序对该slave的数据访问slave-serve-stale-datayes|no 开启后仅响应info、slaveof等少数命令（慎用，除非对数据一致性要求很高）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h3><ul>
+<li><p>简介</p>
+<ul>
+<li><p>概念</p>
+<p>哨兵(sentinel) 是一个分布式系统，用于对主从结构中的每台服务器进行监控，当出现故障时通过投票机制选择新的master并将所有slave连接到新的master</p>
+</li>
+<li><p>作用</p>
+<ul>
+<li><p>监控</p>
+<p>不断的检查master和slave是否正常运行。master存活检测、master与slave运行情况检测</p>
+</li>
+<li><p>通知（提醒）</p>
+<p>当被监控的服务器出现问题时，向其他（哨兵间，客户端）发送通知。</p>
+</li>
+<li><p>自动故障转移</p>
+<p>断开master与slave连接，选取一个slave作为master，将其他slave连接到新的master，并告知客户端新的服务器地址</p>
+</li>
+<li><p>注意：哨兵也是一台redis服务器，只是不提供数据服务通常哨兵配置数量为单数</p>
+</li>
+</ul>
+</li>
+<li><p>启用哨兵模式</p>
+<ul>
+<li>配置一拖二的主从结构</li>
+<li>配置三个哨兵（配置相同，端口不同）参看sentinel.conf</li>
+<li>启动哨兵 redis-sentinel sentinel-端口号.conf</li>
+</ul>
+</li>
+<li><p>配置哨兵</p>
+<img src="..\笔记图片\配置哨兵.png" alt="配置哨兵" style="zoom: 50%;" />
+</li>
+<li><p>哨兵在进行主从切换过程中经历三个阶段</p>
+<img src="..\笔记图片\监控阶段.png" alt="监控阶段" style="zoom: 40%;" />
+
+<ul>
+<li><p>监控</p>
+<p>用于同步各个节点的状态信息</p>
+<ul>
+<li><p>获取各个sentinel的状态（是否在线）</p>
+</li>
+<li><p>获取master的状态  </p>
+<p>master属性：runid role</p>
+<p>各个slave的详细信息</p>
+</li>
+<li><p>获取所有slave的状态（根据master中的slave信息）</p>
+<p>slave属性：runid、role、master_host、master_port、offset、……</p>
+</li>
+</ul>
+</li>
+<li><p>通知</p>
+</li>
+</ul>
+<img src="..\笔记图片\通知阶段.png" alt="通知阶段" style="zoom: 40%;" />
+
+<ul>
+<li><p>故障转移</p>
+<p>服务器列表中挑选备选master</p>
+<ul>
+<li><p>在线的</p>
+</li>
+<li><p>响应快的</p>
+</li>
+<li><p>与原master断开时间短的</p>
+</li>
+<li><p>优先原则</p>
+<p>优先级、offset、runid</p>
+</li>
+</ul>
+<p>发送指令（sentinel ）</p>
+<ul>
+<li>向新的master发送slaveof no one</li>
+<li>向其他slave发送slave of 新masterIP端口 </li>
+</ul>
+</li>
+<li><p>总结</p>
+<ol>
+<li><p>监控</p>
+<p>同步信息</p>
+</li>
+<li><p>通知</p>
+<p>保持联通</p>
+</li>
+<li><p>故障转移</p>
+<p>发现问题</p>
+<p>竞选负责人</p>
+<p>优选新master</p>
+<p>新master上任，其他slave切换master，原master作为slave故障回复后连接</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h3><ul>
+<li><p>概念</p>
+<p>集群就是使用网络将若干台计算机联通起来，并提供统一的管理方式，使其对外呈现单机的服务效果</p>
+</li>
+<li><p>作用</p>
+<ul>
+<li>分散单台服务器的访问压力，实现负载均衡</li>
+<li>分散单台服务器的存储压力，实现可扩展性</li>
+<li>降低单台服务器宕机带来的业务灾难</li>
+</ul>
+</li>
+<li><p>数据存储设计</p>
+<ul>
+<li><p>通过算法设计，计算出key应该保存的位置</p>
+</li>
+<li><p>将所有的存储空间计划切割成16384份，每台主机保存一部分</p>
+<p>每份代表的是一个存储空间，不是一个key的保存空间</p>
+</li>
+<li><p>将key按照计算出的结果放到对应的存储空间</p>
+</li>
+</ul>
+</li>
+<li><p>集群内部通讯设计</p>
+<ul>
+<li>各个数据库相互通信，保存各个库中槽的编号数据</li>
+<li>一次命中，直接返回</li>
+<li>一次未命中，告知具体位置</li>
+</ul>
+</li>
+<li><p>搭建方式</p>
+<ul>
+<li>原生安装（单条命令）<ul>
+<li>配置服务器（3主3从）</li>
+<li>建立通信（Meet）</li>
+<li>分槽（Slot）</li>
+<li>搭建主从（master-slave）</li>
+</ul>
+</li>
+<li>工具安装（批处理）</li>
+</ul>
+</li>
+<li><p>Cluster配置</p>
+<ul>
+<li><p>添加节点</p>
+<p>cluster-enabled yes|no</p>
+</li>
+<li><p>cluster配置文件名，该文件属于自动生成，仅用于快速查找文件并查询文件内容</p>
+<p>cluster-config-file <filename></p>
+</li>
+<li><p>节点服务响应超时时间，用于判定该节点是否下线或切换为从节点</p>
+<p>cluster-migration-barrier <count></p>
+</li>
+<li><p>master连接的slave最小数量</p>
+<p>cluster-node-timeout <milliseconds></p>
+</li>
+</ul>
+</li>
+<li><p>Cluster节点操作命令</p>
+<ul>
+<li><p>查看集群节点信息</p>
+<p>cluster nodes</p>
+</li>
+<li><p>进入一个从节点redis，切换其主节点</p>
+<p>cluster replicate <master-id></p>
+</li>
+<li><p>发现一个新节点，新增主节点</p>
+<p>cluster meet ip:port</p>
+</li>
+<li><p>忽略一个没有solt的节点</p>
+<p>cluster forget <id></p>
+</li>
+<li><p>手动故障转移</p>
+<p>cluster failover</p>
+</li>
+</ul>
+</li>
+<li><p>redis-trib命令</p>
+<ul>
+<li><p>添加节点</p>
+<p>redis-trib.rb add-node</p>
+</li>
+<li><p>删除节点</p>
+<p>redis-trib.rb del-node</p>
+</li>
+<li><p>重新分片</p>
+<p>redis-trib.rb reshard</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="企业级解决方案"><a href="#企业级解决方案" class="headerlink" title="企业级解决方案"></a>企业级解决方案</h2><h3 id="缓存预热"><a href="#缓存预热" class="headerlink" title="缓存预热"></a>缓存预热</h3><ul>
+<li><p>宕机</p>
+<ul>
+<li>请求数量较高</li>
+<li>主从之间数据吞吐量较大，数据同步操作频度较高</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>前置准备工作：<ol>
+<li>日常例行统计数据访问记录，统计访问频度较高的热点数据</li>
+<li>利用LRU数据删除策略，构建数据留存队列例如：storm与kafka配合</li>
+</ol>
+</li>
+<li>准备工作：<ol>
+<li>将统计结果中的数据分类，根据级别，redis优先加载级别较高的热点数据</li>
+<li>利用分布式多服务器同时进行数据读取，提速数据加载过程</li>
+<li>热点数据主从同时</li>
+</ol>
+</li>
+<li>预热实施：<ol>
+<li>使用脚本程序固定触发数据预热过程</li>
+<li>如果条件允许，使用了CDN（内容分发网络），效果会更好</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>总结</p>
+<p>缓存预热就是系统启动前，提前将相关的缓存数据直接加载到缓存系统。避免在用户请求的时候，先查询数据库，然后再将数据缓存的问题！用户直接查询事先被预热的缓存数据</p>
+</li>
+</ul>
+<h3 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h3><ul>
+<li>数据库服务器崩溃<ol>
+<li>系统平稳运行过程中，忽然数据库连接量激增</li>
+<li>应用服务器无法及时处理请求</li>
+<li>大量408，500错误页面出现</li>
+<li>客户反复刷新页面获取数据</li>
+<li>数据库崩溃</li>
+<li>应用服务器崩溃</li>
+<li>重启应用服务器无效</li>
+<li>Redis服务器崩溃</li>
+<li>Redis集群崩溃</li>
+<li>重启数据库后再次被瞬间流量放倒</li>
+</ol>
+</li>
+<li>问题排查<ol>
+<li>在一个较短的时间内，缓存中较多的key集中过期</li>
+<li>此周期内请求访问过期的数据，redis未命中，redis向数据库获取数据</li>
+<li>数据库同时接收到大量的请求无法及时处理</li>
+<li>Redis大量请求被积压，开始出现超时现象</li>
+<li>数据库流量激增，数据库崩溃</li>
+<li>重启后仍然面对缓存中无数据可用</li>
+<li>Redis服务器资源被严重占用，Redis服务器崩溃</li>
+<li>Redis集群呈现崩塌，集群瓦解</li>
+<li>应用服务器无法及时得到数据响应请求，来自客户端的请求数量越来越多，应用服务器崩溃</li>
+<li>应用服务器，redis，数据库全部重启，效果不理想</li>
+</ol>
+</li>
+<li>分析<ul>
+<li>短时间范围内大量key集中过期</li>
+</ul>
+</li>
+<li>解决方案思路<ol>
+<li>更多的页面静态化处理</li>
+<li>构建多级缓存架构Nginx缓存+redis缓存+ehcache缓存</li>
+<li>检测Mysql严重耗时业务进行优化对数据库的瓶颈排查：例如超时查询、耗时较高事务等</li>
+<li>灾难预警机制监控redis服务器性能指标<ul>
+<li>CPU占用、CPU使用率</li>
+<li>内存容量</li>
+<li>查询平均响应时间</li>
+<li>线程数</li>
+</ul>
+</li>
+<li>限流、降级短时间范围内牺牲一些客户体验，限制一部分请求访问，降低应用服务器压力，待业务低速运转后再逐步放开访问</li>
+</ol>
+</li>
+<li>解决方式<ol>
+<li>LRU与LFU切换</li>
+<li>数据有效期策略调整<ul>
+<li>根据业务数据有效期进行分类错峰，A类90分钟，B类80分钟，C类70分钟</li>
+<li>过期时间使用固定时间+随机值的形式，稀释集中到期的key的数量</li>
+</ul>
+</li>
+<li>超热数据使用永久key</li>
+<li>定期维护（自动+人工）对即将过期数据做访问量分析，确认是否延时，配合访问量统计，做热点数据的延时</li>
+<li>加锁慎用！</li>
+</ol>
+</li>
+</ul>
+<h3 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h3><ul>
+<li><p>数据库服务器崩溃</p>
+<ol>
+<li>系统平稳运行过程中</li>
+<li>数据库连接量瞬间激增</li>
+<li>Redis服务器无大量key过期</li>
+<li>Redis内存平稳，无波动</li>
+<li>Redis服务器CPU正常</li>
+<li>数据库崩溃</li>
+</ol>
+</li>
+<li><p>问题排查</p>
+<ol>
+<li>Redis中某个key过期，该key访问量巨大</li>
+<li>多个数据请求从服务器直接压到Redis后，均未命中</li>
+<li>Redis在短时间内发起了大量对数据库中同一数据的访问</li>
+</ol>
+</li>
+<li><p>分析</p>
+<ul>
+<li>单个高热数据key过期</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ol>
+<li>预先设定以电商为例，每个商家根据店铺等级，指定若干款主打商品，在购物节期间，加大此类信息key的过期时长注意：购物节不仅仅指当天，以及后续若干天，访问峰值呈现逐渐降低的趋势</li>
+<li>现场调整监控访问量，对自然流量激增的数据延长过期时间或设置为永久性key</li>
+<li>后台刷新数据启动定时任务，高峰期来临之前，刷新数据有效期，确保不丢失</li>
+<li>二级缓存设置不同的失效时间，保障不会被同时淘汰就行</li>
+<li>加锁分布式锁，防止被击穿，但是要注意也是性能瓶颈，慎重！</li>
+</ol>
+</li>
+<li><p>总结</p>
+<p>缓存击穿就是单个高热数据过期的瞬间，数据访问量较大，未命中redis后，发起了大量对同一数据的数据库访问，导致对数据库服务器造成压力。应对策略应该在业务数据分析与预防方面进行，配合运行监控测试与即时调整策略，毕竟单个key的过期监控难度较高，配合雪崩处理策略即可</p>
+</li>
+</ul>
+<h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><ul>
+<li><p>现象</p>
+<ol>
+<li>系统平稳运行过程中</li>
+<li>应用服务器流量随时间增量较大</li>
+<li>Redis服务器命中率随时间逐步降低</li>
+<li>Redis内存平稳，内存无压力</li>
+<li>Redis服务器CPU占用激增</li>
+<li>数据库服务器压力激增</li>
+<li>数据库崩溃</li>
+</ol>
+</li>
+<li><p>问题排查</p>
+<ol>
+<li>Redis中大面积出现未命中</li>
+<li>出现非正常URL访问</li>
+</ol>
+</li>
+<li><p>分析</p>
+<ul>
+<li>获取的数据在数据库中也不存在，数据库查询未得到对应数据</li>
+<li>Redis获取到null数据未进行持久化，直接返回</li>
+<li>下次此类数据到达重复上述过程</li>
+<li>出现黑客攻击服务器</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ol>
+<li>缓存null对查询结果为null的数据进行缓存（长期使用，定期清理），设定短时限，例如30-60秒，最高5分钟</li>
+<li>白名单策略<ul>
+<li>提前预热各种分类数据id对应的bitmaps，id作为bitmaps的offset，相当于设置了数据白名单。当加载正常数据时，放行，加载异常数据时直接拦截（效率偏低）</li>
+<li>使用布隆过滤器（有关布隆过滤器的命中问题对当前状况可以忽略）</li>
+</ul>
+</li>
+<li>实施监控实时监控redis命中率（业务正常范围时，通常会有一个波动值）与null数据的占比<ul>
+<li>非活动时段波动：通常检测3-5倍，超过5倍纳入重点排查对象</li>
+<li>活动时段波动：通常检测10-50倍，超过50倍纳入重点排查对象根据倍数不同，启动不同的排查流程。然后使用黑名单进行防控（运营）</li>
+</ul>
+</li>
+<li>key加密问题出现后，临时启动防灾业务key，对key进行业务层传输加密服务，设定校验程序，过来的key校验例如每天随机分配60个加密串，挑选2到3个，混淆到页面数据id中，发现访问key不满足规则，驳回数据访问</li>
+</ol>
+</li>
+<li><p>总结</p>
+<p>缓存击穿访问了不存在的数据，跳过了合法数据的redis数据缓存阶段，每次访问数据库，导致对数据库服务器造成压力。通常此类数据的出现量是一个较低的值，当出现此类情况以毒攻毒，并及时报警。应对策略应该在临时预案防范方面多做文章。无论是黑名单还是白名单，都是对整体系统的压力，警报解除后尽快移除。</p>
+</li>
+</ul>
+<h3 id="性能指标监控"><a href="#性能指标监控" class="headerlink" title="性能指标监控"></a>性能指标监控</h3><ul>
+<li>性能指标：Performance<ul>
+<li>latency：Redis响应一个请求的时间</li>
+<li>instantaneous_ops_per_sec：平均每秒处理请求总数</li>
+<li>hit rate(calculated)：缓存命中率</li>
+</ul>
+</li>
+<li>内存指标：Memory<ul>
+<li>used_memory：Redis分配器分配的内存量，也就是实际存储数据的内存总量</li>
+<li>mem_fragmentation_ratio：used_memory_rss /used_memory比值，表示内存碎片率</li>
+<li>evicted_keys：由于maxmemory限制，而被回收内存的key的总数</li>
+<li>blocked_clients：由于阻塞调用(BLPOP、BRPOP、BRPOPLPUSH)而等待的客户端的数量</li>
+</ul>
+</li>
+<li>基本活动指标：Basic activity<ul>
+<li>connected_clients：客户端连接数</li>
+<li>connected_slaves：Slave数量</li>
+<li>master_last_io_seconds_ago：最近一次主从交互之后的秒数</li>
+<li>keyspace：数据库中的key值总数</li>
+</ul>
+</li>
+<li>持久性指标：Persistence<ul>
+<li>rdb_last_save_time：最后一次持久化保存到磁盘的Unix时间戳</li>
+<li>rdb_changes_since_last_save：自最后一次持久化以来数据库的更改数</li>
+</ul>
+</li>
+<li>错误指标：Error<ul>
+<li>rejected_connections：由于maxclients限制而拒绝的连接数量</li>
+<li>keyspace_misses：keyspace未命中次数</li>
+<li>master_link_down_since_seconds：主从断开的持续时间</li>
+</ul>
+</li>
+</ul>
+<h3 id="监控方式"><a href="#监控方式" class="headerlink" title="监控方式"></a>监控方式</h3><ul>
+<li><p>工具</p>
+<ul>
+<li>Cloud Insight Redis</li>
+<li>Prometheus</li>
+<li>Redis-stat</li>
+<li>Redis-faina</li>
+<li>RedisLive</li>
+<li>zabbix</li>
+</ul>
+</li>
+<li><p>命令</p>
+<ul>
+<li>benchmark</li>
+<li>rediscli</li>
+<li>monitor</li>
+<li>slowlogs</li>
+</ul>
+</li>
+<li><p>benchmark</p>
+<ul>
+<li>命令<ul>
+<li>redis-benchmark [-h ] [-p ] [-c ] [-n &lt;requests]&gt; [-k ]</li>
+</ul>
+</li>
+<li>范例1<ul>
+<li>redis-benchmark</li>
+<li>说明：50个连接，10000次请求对应的性能</li>
+</ul>
+</li>
+<li>范例2<ul>
+<li>redis-benchmark -c 100 -n 5000</li>
+<li>说明：100个连接，5000次请求对应的性能</li>
+</ul>
+</li>
+</ul>
+<img src="..\笔记图片\benchmark命令.png" alt="benchmark命令" style="zoom: 50%;" />
+</li>
+<li><p>moniter</p>
+<ul>
+<li>命令打印服务器调试信息</li>
+</ul>
+</li>
+<li><p>slowlog</p>
+<ul>
+<li><p>命令</p>
+<p>slowlog[operator]</p>
+<ul>
+<li>get ：获取慢查询日志</li>
+<li>len：获取慢查询日志条目数</li>
+<li>reset ：重置慢查询日志</li>
+</ul>
+</li>
+<li><p>相关配置</p>
+<ul>
+<li>slowlog-log-slower-than 1000 #设置慢查询的时间下线，单位：ms</li>
+<li>slowlog-max-len 100          #设置慢查询命令对应的日志显示长度，单位：命令数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://ryougishiki0.gitee.io/2020/02/19/redis/">https://ryougishiki0.gitee.io/2020/02/19/redis/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2020/02/19/mysql-gao-ji/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="MySQL高级">
+                        
+                        <span class="card-title">MySQL高级</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            MySQL高级https://www.cnblogs.com/lyjun/p/11371851.html
+数据库架构
+大表的影响 
+
+慢查询
+建立索引需要很长时间
+修改表结构需要长时间锁表
+
+
+处理数据库中的大表
+
+分库分表把一张大表分成多
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-02-19
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Ryougi-Shiki
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/02/19/jvm-jmm/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="JVM&JMM">
+                        
+                        <span class="card-title">JVM&JMM</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            JVM类装载器负责加载class文件，将字节码内容加载到内存中，并将这些内容转换成方法区中的运行时数据结构并且ClassLoader只负责class文件的加载，至于它是否需要运行则由Execution Engine决定
+种类
+虚拟机自带的加
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-19
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Ryougi-Shiki
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="574616642"
+                   fixed='true'
+                   autoplay='false'
+                   theme:='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.1'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/Ryougi-Shiki0" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:2497641289@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2497641289" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2497641289" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

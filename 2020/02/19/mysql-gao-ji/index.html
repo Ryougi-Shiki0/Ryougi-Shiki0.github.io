@@ -1,0 +1,2136 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="MySQL高级, Shiki&#39;s Blog">
+    <meta name="description" content="MySQL高级https://www.cnblogs.com/lyjun/p/11371851.html
+数据库架构
+大表的影响 
+
+慢查询
+建立索引需要很长时间
+修改表结构需要长时间锁表
+
+
+处理数据库中的大表
+
+分库分表把一张大表分成多">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>MySQL高级 | Shiki&#39;s Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Shiki's Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Shiki's Blog</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/Ryougi-Shiki0/ryougi-shiki0.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/Ryougi-Shiki0/ryougi-shiki0.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">MySQL高级</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-02-19
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2020-01-14
+                </div>
+                
+
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="MySQL高级"><a href="#MySQL高级" class="headerlink" title="MySQL高级"></a>MySQL高级</h1><p><a href="https://www.cnblogs.com/lyjun/p/11371851.html" target="_blank" rel="noopener">https://www.cnblogs.com/lyjun/p/11371851.html</a></p>
+<h1 id="数据库架构"><a href="#数据库架构" class="headerlink" title="数据库架构"></a>数据库架构</h1><ul>
+<li><p>大表的影响 </p>
+<ul>
+<li>慢查询</li>
+<li>建立索引需要很长时间</li>
+<li>修改表结构需要长时间锁表</li>
+</ul>
+</li>
+<li><p>处理数据库中的大表</p>
+<ul>
+<li>分库分表把一张大表分成多个小表<ul>
+<li>分表主键的选择</li>
+<li>分表后跨分区数据的查询和统计</li>
+</ul>
+</li>
+<li>大表的历史数据归档 减少前后端业务的影响<ul>
+<li>归档时间点的选择</li>
+<li>如何进行归档</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>事务</p>
+<blockquote>
+<p>事务时数据库系统区别于其他一切文件系统的重要特性之一</p>
+</blockquote>
+<ul>
+<li><p>原子性</p>
+<p>一个事务必须被视为一个不可分割的最小工作单元，整个事务中的所有操作要么全部提交成功，要么全部失败，对于一个事务来说，不可能只执行其中的一部分操作</p>
+</li>
+<li><p>一致性</p>
+<p>一致性是指事务将数据库从一种一致性状态转换到另外一种一致性状态，在事务开始之前和事务结束之后数据库中的数据完整性没有被破坏</p>
+</li>
+<li><p>隔离性</p>
+<p>隔离性要求一个事务对数据库中数据的修改，在未提交完成前对于其它事务是不可见的</p>
+<ul>
+<li>未提交读(READ UNCOMMITED)（脏读）</li>
+<li>已提交读(READ COMMITED) 一般的SQL数据库的级别 （这就是不可重复读）</li>
+<li>可重复读(REPEATABLE READ)</li>
+<li>可串行化(SERIALIZABLE) 很少用，因为容易锁</li>
+</ul>
+</li>
+<li><p>持久性</p>
+<p>一旦事务提交，这其所作的修改就会永久保存到数据库中。此时即使系统崩溃，已经提交的修改数据也不会丢失。</p>
+</li>
+</ul>
+</li>
+<li><p>大事务 运行时间比较长，操作的数据比较多的事务</p>
+<ul>
+<li>锁定太多的数据，造成大量的阻塞和锁超时</li>
+<li>回滚时所需的时间比较长</li>
+<li>执行时间长，容易造成主从延迟</li>
+</ul>
+</li>
+</ul>
+<h2 id="影响性能的几个方面"><a href="#影响性能的几个方面" class="headerlink" title="影响性能的几个方面"></a>影响性能的几个方面</h2><ul>
+<li><p>硬件</p>
+</li>
+<li><p>操作系统</p>
+<ul>
+<li><p>CentOS 系统参数优化</p>
+<p>影响重大的a tiile优化参数</p>
+<ul>
+<li><p>增加连接数</p>
+<pre><code>+ net.core.somaxconn=65535
++ net.core.netdev_max_backlog=65535
++ net.ipv4.tcp_max_syn_backlog=65535</code></pre></li>
+<li><p>加快TCP回收效率</p>
+<pre><code>+ net.ipv4.tcp_fin_timeout=10
++ net.ipv4.tcp_tw_reuse=1
++ net.ipv4.tcp_tw_recycle=1</code></pre></li>
+<li><p>缓冲区接受的默认值和最大值</p>
+<pre><code>+ net.core.wmem_default=87380
++ net.core.wmem_max=16777216
++ net.core.rmem_default=87380
++ net.core.rmem_max=16777216</code></pre></li>
+<li><p>失效连接所占用TCP系统资源，加快系统回收的效率</p>
+<pre><code>+ net.ipv4.tcp_keepalive_time=120
++ net.ipv4.tcp_keepalive_intvl=30
++ net.ipv4.tcp_keepalive_probes=3</code></pre></li>
+<li><p>内存相关的参数</p>
+<pre><code>+ kernel.shmmax=4294967295
+
+Linux 内核参数中最重要的参数之一，用于定义单个共享内存段的最大值。
+
+&gt; 注意：
+
+    1. 这个参数应该设置的足够大，以便能在一个共享内存段下容纳下整个
+
+    的Innodb缓冲池的大小。
+
+    2. 这个值的大小对于64位linux系统，可取的最大值为物理内存值-1byte，
+
+    建议值为大于物理内存的一半，一半取值大于Innodb 缓着冲池的大小即可，
+
+    可以去物理内存-1byte。
+
++ vm.swappiness=0
+
+这个参数当内存不足时会对性能参数比较明显的影响
+
+Linux系统内存交换区:
+
+    在Linux系统安装时都会有一个特殊的磁盘分区，称之为系统交换分区。
+
+    使用 free -m 在系统中可以看到类似下面内容其中swap就是交换分区。
+
+    当操作系统因为没有足够内存时就会将一些&lt;font color=&quot;red&quot;&gt;虚拟内存
+
+    &lt;/font&gt;写到&lt;font color=&quot;red&quot;&gt;磁盘的交换区&lt;/font&gt;中这样就会发生
+
+    内存交换
+
+在MySQL服务器上是否要使用交换分区有一些争议:
+
+    在MySQL服务所在的Linux系统上完全禁用交换分区。
+
+    带来的风险：
+
+      1. 降低操作系统的性能
+
+      2. 容易造成内存溢出、崩溃，或都被操作系统Kill掉
+
+结论：
+
+    在MySQL服务器上保留交换区还是很必要的，但是要控制何时使用交换分区
+
+vm.swappiness=0就是告诉Linux内核除非虚拟内存完全满了，否则不要使用交换区。</code></pre></li>
+<li><p>增加资源限制(/etc/security/limit.conf)</p>
+<pre><code>这个文件实际上是Linux PAM 也就是插入式认证模块的配置文件。
+
+  打开文件数的限制。
+
+  * soft nofile 65535
+
+  * hard nofile 65535
+
+  加到limit.conf 文件末尾就可以了
+
+  *      表示对所有用户有效
+
+  soft    指的是当前系统生效的设置
+
+  hard    表明系统中能设定的最大值
+
+  nofile  表示所限制的资源是打开文件的最大数目
+
+  65535  就是限制的数量
+
+  结论：
+
+    把可打开的文件数量增加到了65535个以保证可以打开足够多的文件句柄。
+
+  注意：
+
+    这个文件的修改需要重启系统才可以生效。</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>* 磁盘调度策略(/sys/block/devname/queue/scheduler)
+
+  ```
+  cat /sys/block/sda/queue/scheduler
+
+  noop anticipatory deadline [cfq]
+
+  noop(电梯式调度策略)
+
+      NOOP实现了一个FIFO队列，它像电梯的工作方法一样对I/O请求进行组织，当
+
+      有一个新的请求到来时，它将强求合并最近的请求之后，以此来保证请求同一
+
+      介质。NOOP倾向饿死读而利于写，因此NOOP对于闪存设备、RAM及嵌入式系统
+
+      是最好的选择。
+
+  deadline(截止时间调度策略) 
+
+      Deadline确保了再一个截止时间内服务请求，这个截止时间是可调整的，而
+
+      默认读期限短语写期限。这样就防止了写操作因为不能被读取而饿死的现象，
+
+      Deadline对数据库类应用是最好的选择。
+
+  anticipatory(预料I/O调度策略)
+
+      本质上与Deadline一样，但在最后一次读操作后，要等6ms，才能继续进行对
+
+      其它I/O请求进行调度。他会在每个6ms中插入行的I/O操作，而会将一些小写
+
+      入流合并成一个大写入流，用写入延时换区最大的写入吞吐量。AS适合于*写
+
+      入较多的环境*，比如文件服务器，AS对数据库环境表现很差。
+  ```</code></pre><ul>
+<li><p>数据库存储引擎的选择</p>
+</li>
+<li><p><strong>数据库参数配置</strong></p>
+</li>
+<li><p>数据库结构设计和SQL语句</p>
+</li>
+</ul>
+<h2 id="MySQL体系结构"><a href="#MySQL体系结构" class="headerlink" title="MySQL体系结构"></a>MySQL体系结构</h2><img src="C:\Users\hawk4\Desktop\临时\笔记\MySQL体系结构.png" alt="MySQL体系结构" style="zoom: 33%;" />
+
+<ul>
+<li><p>客户端</p>
+<ul>
+<li>PHP\JAVA\C API\.Net\ODBC\JDBC</li>
+</ul>
+</li>
+<li><p>存储引擎</p>
+<ul>
+<li>InnoDB\MyISAM\CSV\Memory\ARCHIVE\xtraDB</li>
+</ul>
+</li>
+</ul>
+<h4 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h4><ul>
+<li>特性<ul>
+<li>并发性与锁级别（表锁）（读写的话并发性支持不好，只读可以）</li>
+<li>表损坏修复（因为不是修复事务，可能会造成数据丢失）</li>
+<li>MyISAM表支持的索引类型<ul>
+<li>Btree + 全文索引</li>
+</ul>
+</li>
+<li>MyISAM表支持数据压缩<ul>
+<li>命令行：myisampack 且压缩表只读</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>限制<ul>
+<li>版本&lt; MySQL5.0默认表大小为4G</li>
+<li>如存储大表则要修改MAX_Rows 和 AVG_ROW_LENGTH</li>
+<li>版本&gt; MySQL5.0时默认支持为256TB</li>
+</ul>
+</li>
+<li>使用场景<ul>
+<li>非事务型应用</li>
+<li>只读类应用</li>
+<li>空间类应用</li>
+</ul>
+</li>
+</ul>
+<h4 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h4><ul>
+<li><p>MySQL5.5.8及以后的版本默认存储引擎</p>
+</li>
+<li><p>Innodb 使用表空间进行 数据存储</p>
+<pre class=" language-css"><code class="language-css">innodb_file_per_table 参数
+<span class="token property">ON</span><span class="token punctuation">:</span>独立表空间：tablename <span class="token number">.</span>ibd
+<span class="token property">OFF</span><span class="token punctuation">:</span>系统表空间<span class="token punctuation">:</span> ibdataX</code></pre>
+</li>
+</ul>
+<ul>
+<li><p>系统表和独立表空间要如何选择 推荐使用独立表空间</p>
+<ul>
+<li><p>比较</p>
+<ul>
+<li><p>系统表空间无法简单的收缩文件大小<br>独立表空间可以通过optimeize table命令收缩系统文件</p>
+</li>
+<li><p>系统表空间会产生IO瓶颈<br>独立表空间可以同时向多个文件刷新数据</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>把原来存在于系统表空间中的表转移到独立表空间的方法</p>
+<ol>
+<li>使用mysqldump导出所有数据库表数据</li>
+</ol>
+</li>
+</ul>
+<ol start="2">
+<li>停止MySQL服务，修改参数，并删除InnoDB相关文件<ol start="3">
+<li>重启MySQL服务，重建Innodb系统表空间</li>
+<li>重新导入数据</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li><p>特性</p>
+<ul>
+<li>Innodb是一种事务性存储引擎</li>
+<li>完全支持事务的ACID特性（原子 一致 隔离 持久）</li>
+<li>Redo Log（持久性） 和 Undo Log</li>
+<li>Innodb支持行级锁</li>
+<li>行级锁可以最大程度的支持并发</li>
+<li>行级锁是由存储引擎层实现的</li>
+</ul>
+</li>
+<li><p>适用场景</p>
+<ul>
+<li>Innodb适合于大多数的OLTP应用</li>
+<li>5.7版本之后支持全文索引和空间函数</li>
+</ul>
+</li>
+</ul>
+<h4 id="CSV"><a href="#CSV" class="headerlink" title="CSV"></a>CSV</h4><ul>
+<li>文件系统<ul>
+<li>数据以文本方式存储在文件中</li>
+<li>.CSV文件存储表内容</li>
+<li>.CSM文件存储表的元数据如表状态和数据量</li>
+<li>.frm文件存储表结构信息</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>以CSV格式进行数据存储</li>
+<li>所有列必须都是不能为NULL</li>
+<li>不支持索引，不适合大表，不适合在线处理</li>
+<li>可以对数据文件直接编辑 保存文本文件内容</li>
+</ul>
+</li>
+<li>适用场景<ul>
+<li>适合做为数据交换的中间表<ul>
+<li>excel-&gt;CSV文件-&gt;MySQL数据目录</li>
+<li>数据-&gt;CSV文件-&gt;其他web程序</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Archive"><a href="#Archive" class="headerlink" title="Archive"></a>Archive</h4><ul>
+<li>文件系统<ul>
+<li>以zlib对表数据进行压缩，磁盘I/O更少</li>
+<li>数据存储在ARZ为后缀的文件中</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>只支持insert和select操作</li>
+<li>只允许在自增ID列上加索引</li>
+</ul>
+</li>
+<li>适用场景<ul>
+<li>日志和数据采集类应用</li>
+</ul>
+</li>
+</ul>
+<h4 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h4><ul>
+<li>文件系统<ul>
+<li>也称为HEAP存储引擎，所以数据保存在内存中</li>
+<li>重启后表数据丢失，表结构会保留</li>
+</ul>
+</li>
+<li>特点<ul>
+<li>支持HASH索引和BTree索引<ul>
+<li>等值查找用HASH</li>
+<li>范围查找用BTree</li>
+</ul>
+</li>
+<li>所有字段都为固定长度<ul>
+<li>计算使用varchar(10) 也等于 char(10)</li>
+</ul>
+</li>
+<li>不支持BLOG和TEXT等大字段</li>
+<li>Memory存储引擎使用表级锁</li>
+<li>最大大小由max_heap_table_size参数决定</li>
+</ul>
+</li>
+<li>适用场景<ul>
+<li>用于查找或者是映射表，例如邮编和地区的对应表</li>
+<li>用于保存数据分析中产生的中间表</li>
+<li>用于缓存周期性聚合数据的结果表</li>
+</ul>
+</li>
+<li>与临时表的差别<ul>
+<li>临时表<ul>
+<li>系统使用的临时表<ul>
+<li>超过限制使用myisam临时表</li>
+<li>未超限制使用Memory表</li>
+</ul>
+</li>
+<li>create temporary table 建立的临时表</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Federated"><a href="#Federated" class="headerlink" title="Federated"></a>Federated</h4><ul>
+<li><p>特点</p>
+<ul>
+<li>提供了访问远程MySQL服务器上表的方法</li>
+<li>本地不存储数据，数据全部放到远程服务器上</li>
+<li>本地需要保存表结构和远程服务器的连接信息</li>
+</ul>
+</li>
+<li><p>默认禁止，启用需要在启动时增加federated参数</p>
+<blockquote>
+<pre class=" language-shell"><code class="language-shell">mysql://username[:password]@host_name[:port_num]/db_name/tbl_name</code></pre>
+</blockquote>
+</li>
+<li><p>适用场景</p>
+<ul>
+<li>偶尔的统计分析及手工查询</li>
+</ul>
+</li>
+</ul>
+<h4 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h4><p>锁对主要作用是管理共享资源的并发访问，用于实现事务的隔离性</p>
+<table>
+<thead>
+<tr>
+<th>写锁</th>
+<th>读锁</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>写锁（独占锁</td>
+<td>不兼容</td>
+<td>不兼容</td>
+</tr>
+<tr>
+<td>读锁（共享锁</td>
+<td>不兼容</td>
+<td>兼容</td>
+</tr>
+</tbody></table>
+<ul>
+<li>表级锁（并发支持不好）</li>
+<li>行级锁（开销大）</li>
+</ul>
+<h3 id="MySQL服务器参数"><a href="#MySQL服务器参数" class="headerlink" title="MySQL服务器参数"></a>MySQL服务器参数</h3><ul>
+<li><p>MySQL获取配置信息路径</p>
+<ul>
+<li><p>命令行参数</p>
+<p>mysqlid_safe – datadir=/data/sql_data</p>
+</li>
+<li><p>配置文件</p>
+<p>mysqlid –help –verbose | grep -A 1 ‘Default options’</p>
+<p>/etc/my.cnf /etc/mysql/my.cnf /home/mysql/my.cnf ~/.my.cnf</p>
+</li>
+</ul>
+</li>
+<li><p>MySQL配置参数的作用域</p>
+<ul>
+<li><p>全局参数</p>
+<p>set global 参数名=参数值</p>
+<p>set @@global.参数名:=参数值</p>
+</li>
+<li><p>会话参数</p>
+<p>set[session]参数名=参数值</p>
+<p>set @@session.参数名:=参数值</p>
+</li>
+</ul>
+</li>
+<li><p>内存配置相关参数</p>
+<ul>
+<li><p>确定可以使用的内存上限</p>
+</li>
+<li><p>确定MySQL的<strong>每个连接</strong>使用的内存</p>
+<ul>
+<li>排序缓存区的尺寸    sort_buffer_size</li>
+<li>每个线程使用连接缓冲区的大小    join_buffer_size</li>
+<li>MYISAM表进行全表扫描时,所分配的读缓存池的大小    read_buffer_size</li>
+<li>控制的是索引缓冲区的大小    read_rnd_buffer_size</li>
+</ul>
+</li>
+<li><p>确定需要为操作系统保存多少内存</p>
+</li>
+<li><p>如何为缓存池分配内存</p>
+<p>总内存 - (每个线程所需要的内存*连接数) - 系统保留内存</p>
+<ul>
+<li>innodb所使用的缓冲池的大小    Innodb_buffer_pool_size</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>I/O相关配置参数</p>
+<ul>
+<li><p>Innodb_log_file_size</p>
+</li>
+<li><p>Innodb_log_files_in_group</p>
+</li>
+<li><p>事务日志总大小 = Innodb_log_files_in_group*Innodb_log_file_size</p>
+</li>
+<li><p>Innodb_log_buffer_size</p>
+</li>
+<li><p>Innodb_flush_log_at_trx_commit</p>
+<ul>
+<li>0：每秒钟进行一次log写入到操作系统cache,并刷新log到磁盘</li>
+<li>1[默认]：每次在事务提交的时候呢,都会执行log写入操作系统cache,并刷新操作系统cache log到磁盘文件持久化的存储的操作</li>
+<li>2[建议]：表示事务提交后,执行log数据写入到操作系统cache的这个操作,并且每秒钟执行一次从操作系统的cache刷新到磁盘文件的log操作</li>
+</ul>
+</li>
+<li><p>Innodb刷新的方式 Innodb_flush_method=O_DIRECT</p>
+<p>这个设置会通知操作系统,不要缓存数据,也不要预读,也就是说,这个选项完全关闭了操作系统的缓存,并且使所有读和写呢,都直接通过存储设备,来完成,避免了Innodb和操作系统,对于数据的双重缓存</p>
+</li>
+<li><p>控制Innodb如何使用表空间 Innodb_file_per_table=1</p>
+<p>为每一个表建立一个单独的表空间,否则就会把所有的Innodb表的数据呢,存储到系统表空间中</p>
+</li>
+<li><p>控制innodb是否双写缓存 Innodb_doublewrite=1</p>
+<p>避免没有写完整所导致的数据损坏</p>
+</li>
+</ul>
+</li>
+<li><p>安全相关配置参数</p>
+</li>
+<li><p>其他常用配置参数</p>
+</li>
+</ul>
+<h3 id="数据库设计对性能的影响"><a href="#数据库设计对性能的影响" class="headerlink" title="数据库设计对性能的影响"></a>数据库设计对性能的影响</h3><ul>
+<li>过份的反范式化为表建立太多的列</li>
+<li>过份的范式化造成太多的表关联</li>
+<li>在OLTP环境中使用不恰当的分区表</li>
+<li>使用外键保证数据的完整性</li>
+</ul>
+<h3 id="性能优化顺序"><a href="#性能优化顺序" class="headerlink" title="性能优化顺序"></a>性能优化顺序</h3><ul>
+<li>数据库结构设计和SQL语句</li>
+<li>数据库存储引擎的选择和参数配置</li>
+<li>系统选择及优化</li>
+<li>硬件升级</li>
+</ul>
+<h2 id="基准测试"><a href="#基准测试" class="headerlink" title="基准测试"></a>基准测试</h2><blockquote>
+<p>基准测试是一种测量和评估软件性能指标的活动用于建立某个时刻的性能基准，以便当系统发生软硬件变化时重新进行基准测试以评估变化对性能的影响</p>
+</blockquote>
+<ul>
+<li><p>对比</p>
+<ul>
+<li>基准测试    直接、简单、易于比较 ，用于评估服务器的处理能力</li>
+<li>压力测试    对真实的业务数据进行测试，获得真实系统所能承受的压力</li>
+</ul>
+</li>
+<li><p>目的</p>
+<ul>
+<li>建立MySQL服务器的性能基准线<br>确定当前MySQL服务器运行情况</li>
+<li>模拟比当前系统更高的负载，以找出系统的扩展瓶颈</li>
+<li>测试不同的硬件、软件和操作系统配置</li>
+<li>证明新的硬件设备是否配置正确</li>
+</ul>
+</li>
+<li><p>常用指标</p>
+<ul>
+<li><p>单位时间内所处理的事务数（TPS）</p>
+</li>
+<li><p>单位时间内所处理的查询数（QPS）</p>
+</li>
+<li><p>响应时间</p>
+<blockquote>
+<p>平均响应时间、最小响应时间、最大响应时间、各时间所占百分比</p>
+</blockquote>
+</li>
+<li><p>并发量：同时处理的查询请求的数量</p>
+<blockquote>
+<p>并发量不等于连接数</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据库结构优化"><a href="#数据库结构优化" class="headerlink" title="数据库结构优化"></a>数据库结构优化</h2><ul>
+<li>目的<ul>
+<li>减少数据冗余</li>
+<li>尽量避免数据维护中出现更新，插入和删除异常<ul>
+<li>插入异常：如果表中的某个实体随着另一个实体而存在</li>
+<li>更新异常：如果更改表中的某个实体的单独属性时，需要对多行进行更新</li>
+<li>删除异常：如果删除表中某一实体则会导致其他实体的消失</li>
+</ul>
+</li>
+<li>节约数据存储空间</li>
+<li>节省数据查询效率</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据库结构设计的步骤"><a href="#数据库结构设计的步骤" class="headerlink" title="数据库结构设计的步骤"></a>数据库结构设计的步骤</h3><ul>
+<li>需求分析：全面了解产品设计的存储需求<ul>
+<li>存储需求</li>
+<li>数据处理需求</li>
+<li>数据的安全性和完整性</li>
+</ul>
+</li>
+<li>逻辑设计：设计数据的逻辑存储结构<ul>
+<li>数据实体之间的逻辑关系，解决数据冗余和数据维护异常</li>
+</ul>
+</li>
+<li>物理设计：根据所使用的数据库特点进行表结构设计<ul>
+<li>关系型数据库：Oralce，SQLServer，MySQL，postgresSQL</li>
+<li>非关系型数据库： mongo,Redis,Hadoop</li>
+</ul>
+</li>
+<li>维护优化：根据实际情况对索引、存储结构等进行优化</li>
+</ul>
+<h4 id="数据库设计的第一范式"><a href="#数据库设计的第一范式" class="headerlink" title="数据库设计的第一范式"></a>数据库设计的第一范式</h4><ul>
+<li>数据库表中的所有字段都只具有单一属性</li>
+<li>单一属性的列是由基本的数据类型所构成的</li>
+<li>设计出来的表都是简单的二维表</li>
+</ul>
+<h4 id="数据库设计的第二范式"><a href="#数据库设计的第二范式" class="headerlink" title="数据库设计的第二范式"></a>数据库设计的第二范式</h4><ul>
+<li><p>要求一个表中只有具有一个业务主键</p>
+<blockquote>
+<p>也就是说符合第二范式的表中不能存在非主键列对只对部分主键的依赖关系</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="数据库设计的第三范式"><a href="#数据库设计的第三范式" class="headerlink" title="数据库设计的第三范式"></a>数据库设计的第三范式</h4><ul>
+<li><p>每一个非主属性既不部分依赖于也不传递依赖于业务主键</p>
+<blockquote>
+<p>也就是在第二范式的基础上消除了非主属性对主键的传递依赖</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="需求分析及逻辑设计"><a href="#需求分析及逻辑设计" class="headerlink" title="需求分析及逻辑设计"></a>需求分析及逻辑设计</h3><h4 id="范式化设计"><a href="#范式化设计" class="headerlink" title="范式化设计"></a>范式化设计</h4><ul>
+<li><p>需求</p>
+<ul>
+<li>本网站只销售图书类商品</li>
+<li>需要具有以下功能<ul>
+<li>用户登录</li>
+<li>用户管理</li>
+<li>商品展示</li>
+<li>商品管理</li>
+<li>供应商管理</li>
+<li>在线销售</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>用户登录及用户管理功能</p>
+<ul>
+<li><p>用户必须注册并登录系统才能进行网上交易</p>
+<p> 用户名作为业务主键</p>
+</li>
+<li><p>同一时间一个用户只能在一个地方登录</p>
+</li>
+<li><p>用户属性：{用户名，密码，手机号，姓名，注册日期，在线状态，出生日期} 用户名为主键</p>
+<blockquote>
+<p>只有一个业务主键，一定是符合第二范式<br> 没有属性和业务主键存在传递依赖关系，符合第三范式</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>商品展示和商品管理功能</p>
+<ul>
+<li><p>商品信息:{商品名称，分类名称，出版社名称，图书价格，图书描述，作者}</p>
+<blockquote>
+<p>商户名称和分类名称为主键 不满足第二范式</p>
+</blockquote>
+<ul>
+<li>商品信息：{商品名称，出版社名称，图书价格，图书描述，作者}</li>
+<li>分类信息：{分类名称，分类描述}</li>
+<li>商品分类（对应关系表）：{商品名称，分类名称}</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>供应商管理功能</p>
+<ul>
+<li>供应商信息：{出版社名称，地址，电话，联系人，银行账号} 出版社信息PERMARY KEY</li>
+</ul>
+</li>
+<li><p>在线销售功能</p>
+<ul>
+<li><p>在线销售：{订单编号，下单用户名，下单日期，订单金额，订单商品分类，订单商品名，订单商品单价，订单商品数量，支付金额，物流单号}</p>
+<ol>
+<li>只有一个业务主键，符合第二范式</li>
+<li>订单商品单价，订单商品数量，订单编号 存在着传递关系，不符合第三范式</li>
+<li>数据冗余=&gt;订单商品信息和订单信息表中的数据</li>
+</ol>
+</li>
+<li><p>拆分</p>
+<ul>
+<li>订单表：{订单编号，下单用户名，下单日期，支付金额，物流单号}</li>
+<li>订单商品关联表：{订单编号，订单商品分类，订单商品名，商品数量}</li>
+</ul>
+</li>
+<li><p>编写SQL查询出每一个用户的订单总金额</p>
+<pre class=" language-mysql"><code class="language-mysql">
+select 下单用户名,sum(d.商品价格*b.商品数量) 
+from 订单表 a 
+join 订单商品关联表 b on a.订单编号=b.订单编号 
+join 商品分类关联表 c on c.商品名称=b.商品名称 
+and c.分类名称=b.订单商品分类 
+join 商品信息表 d on d.商品名称=c.商品名称 
+group by 下单用户名</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="反范式化设计"><a href="#反范式化设计" class="headerlink" title="反范式化设计"></a>反范式化设计</h4><blockquote>
+<p>反范式化是针对范式化而言的，在前面介绍了数据库设计的范式，所谓的反范式化就是为了性能和读取效率的考虑而适当的对数据库设计范式的要求进行违反，而允许存在少量的数据冗余，换句话来说反范式化就是使用空间来换取时间</p>
+</blockquote>
+<ul>
+<li><p>原来的表：</p>
+<ul>
+<li>商品信息：{商品名称，出版社名称，图书价格，图书描述，作者}</li>
+<li>分类信息：{分类名称，分类描述}</li>
+<li>商品分类关系：{商品名称，分类名称}</li>
+</ul>
+</li>
+<li><p>改造后的表</p>
+<ul>
+<li>商品信息：{商品名称，分类名称，出版社名称，图书价格，图书描述，作者}</li>
+<li>分类信息：{分类名称，分类描述}</li>
+</ul>
+</li>
+<li><p>原来的表：</p>
+<ul>
+<li>订单表：{订单编号，下单用户名，下单日期，支付金额，物流单号}</li>
+<li>订单商品关联表：{订单编号，订单商品分类，订单商品名，商品数量}</li>
+</ul>
+</li>
+<li><p>改造后的表：</p>
+<ul>
+<li>订单表：{订单编号，下单用户名，手机号，下单日期，支付金额，物流单号，订单金额}</li>
+<li>订单商品关联表：{订单编号，订单商品分类，订单商品名，商品数量，商品单价}</li>
+</ul>
+</li>
+<li><p>编写SQL查询出每一个用户的订单总金额</p>
+<pre class=" language-mysql"><code class="language-mysql">select 下单用户名,sum(订单金额) 
+from 订单表 group by 下单用户名</code></pre>
+</li>
+</ul>
+<ul>
+<li><p>编写SQL查询出下单用户和订单详情</p>
+<pre class=" language-mysql"><code class="language-mysql">select a.订单编号, a.用户名, a.手机号, b.商品名称, b.商品单价, b.商品数量 
+from 订单表 a join 订单商品</code></pre>
+</li>
+</ul>
+<ul>
+<li>总结<ul>
+<li>不能完全按照范式化的要求进行设计</li>
+<li>考虑以后如何使用表</li>
+</ul>
+</li>
+</ul>
+<h4 id="范式化与反范式化对比"><a href="#范式化与反范式化对比" class="headerlink" title="范式化与反范式化对比"></a>范式化与反范式化对比</h4><ul>
+<li>范式化<ul>
+<li>优点：<ul>
+<li>可以尽量的减少数据冗余,数据表更新快体积小</li>
+<li>范式化的更新操作比反范式化更快</li>
+<li>范式化的表通常比反范式化更小</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>对于查询需要对多个表进行关联</li>
+<li>更难进行索引优化</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>反范式化<ul>
+<li>优点：<ul>
+<li>可以减少表的关联</li>
+<li>可以更好的进行索引优化</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>存在数据冗余及数据维护异常</li>
+<li>对数据的修改需要更多的成本</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="物理设计"><a href="#物理设计" class="headerlink" title="物理设计"></a>物理设计</h3><h4 id="物理设计的内容"><a href="#物理设计的内容" class="headerlink" title="物理设计的内容"></a>物理设计的内容</h4><ul>
+<li><p>定义数据库、表及字段的命名规范</p>
+<ul>
+<li>数据库、表及字段的命名要遵守<strong>可读性</strong>原则</li>
+<li>数据库、表及字段的命名要遵守<strong>表意性</strong>原则</li>
+<li>数据库、表及字段的命名要遵守<strong>长名</strong>原则</li>
+</ul>
+</li>
+<li><p>选择合适的存储引擎</p>
+<table>
+<thead>
+<tr>
+<th>存储引擎</th>
+<th>事务</th>
+<th>锁粒度</th>
+<th>主要应用</th>
+<th>忌用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MyISAM</td>
+<td>不支持</td>
+<td>支持并发插入的表级锁</td>
+<td>SELECT,INSERT</td>
+<td>读写操作频繁</td>
+</tr>
+<tr>
+<td>MRG_MYISAM</td>
+<td>不支持</td>
+<td>支持并发插入的表级锁</td>
+<td>分段归档，数据仓库</td>
+<td>全局查找过多的场景</td>
+</tr>
+<tr>
+<td>Innodb</td>
+<td>支持</td>
+<td>支持MVCC的行级锁</td>
+<td>事务处理</td>
+<td>无</td>
+</tr>
+<tr>
+<td>Archive</td>
+<td>不支持</td>
+<td>行级锁</td>
+<td>日志记录，只支持insert，select</td>
+<td>需要随机读取，更新，删除</td>
+</tr>
+<tr>
+<td>Ndb</td>
+<td>支持</td>
+<td>行级锁</td>
+<td>高可用性</td>
+<td>大部分应用</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>为表中的字段选择合适的数据类型</p>
+<ul>
+<li><p>为表中的字段选择合适的数据类型</p>
+<ul>
+<li>当一个列可以选择多种数据类型时，应该优先考虑素质类型</li>
+<li>其次是日期或二进制类型，最后是支付类型</li>
+<li>对于相同级别的数据类型，应该优先选择占用空间小的数据类型</li>
+</ul>
+</li>
+<li><p>选择合适的整数类型</p>
+<table>
+<thead>
+<tr>
+<th>列类型</th>
+<th>存储空间</th>
+<th>SINGED</th>
+<th>UNSINGED</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tinyint</td>
+<td>1字节</td>
+<td>-128<del>127 (-27</del>(27)-1)</td>
+<td>0~255 ((2^8)-1)</td>
+</tr>
+<tr>
+<td>smallint</td>
+<td>2字节</td>
+<td>-32768~32767 (-2^15 ~ (2^15)-1)</td>
+<td>0~65535 ((2^16)-1)</td>
+</tr>
+<tr>
+<td>mediumint</td>
+<td>3字节</td>
+<td>-8388608~8388607 (-2^23 ~ (2^23)-1)</td>
+<td>0~16777215 ((2^24)-1)</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4字节</td>
+<td>-2147483648~2147483647 (-2^31 ~ (2^31)-1)</td>
+<td>0~4294967295 ((2^32)-1))</td>
+</tr>
+<tr>
+<td>bigint</td>
+<td>8字节</td>
+<td>-9223372036854775808  ~ 9223372036854775807 (-2^63 ~ (2^63)-1)</td>
+<td>0 ~18446744073709551615 ((2^64)-1)</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>选择合适的实数类型</p>
+<table>
+<thead>
+<tr>
+<th>列类型</th>
+<th>存储空间</th>
+<th>是否精确类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FLOAT</td>
+<td>4个字节</td>
+<td>否</td>
+</tr>
+<tr>
+<td>DOUBLE</td>
+<td>8个字节</td>
+<td>否</td>
+</tr>
+<tr>
+<td>DECIMAL</td>
+<td>每4个字节存9个数字，小数点占一个字节</td>
+<td>是</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>VARCHAR与CHAR类型的选择</p>
+<ul>
+<li>varchar类型的存储特点<ol>
+<li>varchar用于存储边长字符串，只占必要的存储空间</li>
+<li>列的最大长度小于255则只占用一个额外字节用于记录字符串长度</li>
+<li>列的最大长度大于255这要占用两个额外字节用于记录字符串长度</li>
+<li>正因为两个字节记录字符串长度，varchar最大长度为 65535，最大存储字符数量(defalut null 则 65535-2-1=65532，not null 则 65535-2=65533)</li>
+</ol>
+</li>
+<li>varchar长度选择<ol>
+<li>使用最小的符合需求的长度</li>
+<li>varchar(5)和varchar(200)存储 ‘MySQL’ 字符串性能不同</li>
+</ol>
+</li>
+<li>varchar适用场景<ol>
+<li>字符串列的最大长度比平均长度大很多</li>
+<li>字符串列很少被更新</li>
+<li>使用了多字节字符集存储字符串</li>
+</ol>
+</li>
+<li>char类型存储特点<ol>
+<li>CHAR类型是定长的</li>
+<li>字符串存储在CHAR类型的列中会删除末尾的空格</li>
+<li>CHAR类型的最大宽度为255</li>
+</ol>
+</li>
+<li>char类型适用场景<ol>
+<li>CHAR类型适合存储所长度近似的值</li>
+<li>CHAR类型适合存储短字符串</li>
+<li>CHAR类型适合存储经常更新的字符串列</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>选择合适的日期类型</p>
+<ul>
+<li><p>DATETIME类型</p>
+<blockquote>
+<p>以YYYY-MM-DD HH:MM:SS[.fraction] 格式存储日期时间</p>
+<p> datetime = YYYY-MM-DD HH:MM:SS</p>
+<p> datetime(6) = YYYY-MM-DD HH:MM:SS.fraction(微秒需要datetime(6))</p>
+<p> DATETIME类型与时区无关，占用8个字节的存储空间</p>
+<p> 时间范围1000-01-01 00:00:00到9999-12-31 23:59:59</p>
+</blockquote>
+</li>
+<li><p>TIMESTAMP类型</p>
+<blockquote>
+<p>存储了由格林尼治时间1970年1月1日到当前时间的秒数</p>
+<p> 以YYYY-MM-DD HH:MM:SS.[fraction]的格式显示，占用4个字节(timestamp(6))</p>
+<p> 时间范围1970-01-01到2038-01-19</p>
+</blockquote>
+<p>timestamp类型显示依赖于所指定的时区</p>
+<p>在行的数据修改时可以自动修改timestamp列的值</p>
+</li>
+<li><p>DATE类型的优点</p>
+<ol>
+<li><p>占用的字节数比使用字符串（8字节）、datetime（8字节）、int（4字节）存储要少，使用date类型只需要3个字节</p>
+</li>
+<li><p>使用Date类型还可以利用日期时间函数进行日期之间的计算</p>
+<p>date类型用于保存1000-01-01到9999-12-31之间的日期</p>
+</li>
+</ol>
+</li>
+<li><p>TIME类型</p>
+<p>time类型用于存储时间数据，格式为HH:MM:SS</p>
+</li>
+</ul>
+</li>
+<li><p>注意事项</p>
+<ul>
+<li><p>不要使用字符串类型来存储日期时间数据</p>
+<p> 日期时间类型通常比字符串占用的存储空间小</p>
+<p> 日期时间类型在进行查找过滤时可以利用日期来进行对比</p>
+<p> 日期时间类型还有丰富的处理函数，可以方便的对时期类型进行日期计算</p>
+</li>
+<li><p>使用INT存储日期时间不如使用TIMESTAMP类型（<strong>存疑待研究</strong>）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>总结</p>
+<ul>
+<li>没有特殊要求推荐使用INNODB</li>
+<li>为表中的每个列选择合适的类型</li>
+<li>如何选择表的主键<ul>
+<li>主键应该尽可能的小</li>
+<li>主键应该是顺序增长的</li>
+</ul>
+</li>
+<li>增加数据的插入效率<ul>
+<li>Innodb的主键和业务主键可以不同（为了业务主键的唯一性，可以使用唯一索引）</li>
+</ul>
+</li>
+<li>数据库结构<ul>
+<li>查询性能要求</li>
+<li>范式化要求</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>建立数据库架构</p>
+</li>
+</ul>
+<h3 id="数据库索引优化"><a href="#数据库索引优化" class="headerlink" title="数据库索引优化"></a>数据库索引优化</h3><h4 id="B-Tree索引"><a href="#B-Tree索引" class="headerlink" title="B-Tree索引"></a>B-Tree索引</h4><ul>
+<li><p>优势</p>
+<ul>
+<li>因为文件与数据库都是需要较大的存储——不可能全部存储在内存中，故要存储到磁盘上</li>
+</ul>
+<ol start="2">
+<li>所谓索引，即是快速定位与查找，那么索引的结构组织要尽量减少查找过程中磁盘I/O的存取次数(B+树相比B树，其非叶子节点占用更小的空间，可以有更多非叶子节点存放在再内存中，减少大量的IO)</li>
+<li>局部性原理与磁盘预读，预读的长度一般为页(page)的整倍数，(在许多操作系统中，页得大小通常为4k)</li>
+<li>数据库系统巧妙利用了磁盘预读原理，将一个节点的大小设为等于一个页，这样每个节点只需要一次I/O就可以完全载入，(由于节点中有两个数组，所以地址连续)。而红黑树这种结构，h明显要深的多。由于逻辑上很近的节点(父子)物理上可能很远，无法利用局部性</li>
+</ol>
+<ul>
+<li>B+树还有一个最大的好处，方便扫库，B树必须用中序遍历的方法按序扫库，而B+树直接从叶子结点挨个扫一遍就完了，B+树支持range-query非常方便，而B树不支持。这是数据库选用B+树的最主要原因</li>
+</ul>
+</li>
+<li><p>特点</p>
+<ul>
+<li>B-tree索引以B+树的结构存储数据</li>
+<li>B-tree索引能够加快数据的查询速度</li>
+<li>B-tree索引更适合进行范围查找</li>
+</ul>
+</li>
+<li><p>用到B-Tree索引的情况</p>
+<ul>
+<li>全值匹配的查询<ul>
+<li>order_sn=’9876432119900’</li>
+</ul>
+</li>
+<li>匹配最左前缀的查询<ul>
+<li>联合索引的最左侧的字段有用到就可以用到，索引 index(a,b,c), 当查询条件where a=’xxx’  时就可以用到，顺序很重要 where a=’xxx’ and b=’yyy’也可以用到，但 where b=’xxx’ and c=’yyy’ and a=’zzz’ 就用不了了</li>
+</ul>
+</li>
+<li>匹配列前缀查询<ul>
+<li>order_sn like ‘9876%’</li>
+</ul>
+</li>
+<li>匹配范围值的查询<ul>
+<li>order_sn&gt;’9876432119900’ and order_sn &lt;’9876432119999’</li>
+</ul>
+</li>
+<li>精确匹配左前列并范围匹配另外一列</li>
+<li>只访问索引的查询</li>
+</ul>
+</li>
+</ul>
+<h4 id="Hash索引"><a href="#Hash索引" class="headerlink" title="Hash索引"></a>Hash索引</h4><ul>
+<li><p>特点</p>
+<ul>
+<li><p>Hash 索引时基于Hash表实现的，只有查询条件精确匹配Hash索引中的所有列时，才能够使用到Hash索引。</p>
+<p>对于Hash索引中的所有列，存储引擎都会为每一行计算一个Hash码，Hash索引中存储的就是Hash码。</p>
+</li>
+</ul>
+</li>
+<li><p>限制</p>
+<ul>
+<li>如果不是按照索引最左列开始查找，则无法使用索引</li>
+<li>使用索引时不能跳过索引中的列</li>
+<li>NOT IN 和 &lt;&gt; 操作无法使用索引</li>
+<li>如果查询中有某个列的范围查询，则其右边所有列都无法使用索引</li>
+</ul>
+</li>
+</ul>
+<h4 id="索引优劣"><a href="#索引优劣" class="headerlink" title="索引优劣"></a>索引优劣</h4><ul>
+<li>优势<ul>
+<li>索引大大减少了存储引擎需要扫描的数据量</li>
+<li>索引可以帮助我们进行排序以避免使用临时表</li>
+<li>索引可以把随机I/O变为顺序I/O</li>
+</ul>
+</li>
+<li>劣势<ul>
+<li>索引会增加写操作的成本</li>
+<li>太多索引会增加查询优化器的选择时间</li>
+</ul>
+</li>
+</ul>
+<h4 id="索引优化策略"><a href="#索引优化策略" class="headerlink" title="索引优化策略"></a>索引优化策略</h4><ul>
+<li><p>索引列上不能使用表达式或函数</p>
+</li>
+<li><p>前缀索引和索引列的选择性</p>
+<pre class=" language-mysql"><code class="language-mysql">CREATE INDEX index_name ON table(col_name(n));
+# 索引的选择性是不重复的索引值和表的记录数的比值</code></pre>
+</li>
+<li><p>联合索引</p>
+<ul>
+<li>如何选择索引列的顺序<ul>
+<li>经常会被使用到的列优先</li>
+<li>选择性高的列优先</li>
+<li>宽度小的列优先</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>覆盖索引</p>
+<ul>
+<li>优点：<ul>
+<li>可以优化缓存，减少磁盘IO操作</li>
+<li>可以减少随机IO，变随机IO操作变为顺序IO操作</li>
+<li>可以避免对Innodb主键索引的二次查询</li>
+<li>可以避免MyISAM表进行系统调用</li>
+</ul>
+</li>
+<li>无法使用覆盖索引的情况<ul>
+<li>存储引擎不支持覆盖索引</li>
+<li>查询中使用了太多的列</li>
+<li>使用了双%%号的like查询</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>使用索引扫描来优化排序</p>
+<ul>
+<li>通过排序操作</li>
+<li>按照索引顺序扫描数据</li>
+<li>索引的列顺序和Order By子句的顺序完全一致</li>
+<li>索引中所有列的放行（升序，降序）和Order by子句完全一致</li>
+<li>Order by中的字段全部在关联表中的第一张表中</li>
+</ul>
+</li>
+<li><p>使用索引优化锁</p>
+<ul>
+<li>索引可以减少锁定的行数</li>
+<li>索引可以加快处理速度，同时也加快了锁的释放</li>
+</ul>
+</li>
+<li><p>索引的维护和优化</p>
+<ul>
+<li>删除重复和冗余的索引<ul>
+<li>primary key(id),unique key(id),index(id) -&gt; primary key(id)</li>
+<li>index(a),index(a,b) -&gt; index(a,b)</li>
+<li>primary key(id),index(a,id) -&gt; primary key(id),index(a)</li>
+</ul>
+</li>
+<li>pt-duplicate-key-checker h=127.0.0.1 查询是否有冗余索引</li>
+<li>查找未被使用过的索引</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>更新索引统计信息及减少索引碎片<ul>
+<li>analyze table table_name</li>
+<li>optimize table table_name</li>
+</ul>
+</li>
+</ul>
+<h3 id="SQL查询优化"><a href="#SQL查询优化" class="headerlink" title="SQL查询优化"></a>SQL查询优化</h3><h4 id="获取有性能问题的SQL"><a href="#获取有性能问题的SQL" class="headerlink" title="获取有性能问题的SQL"></a>获取有性能问题的SQL</h4><ul>
+<li>通过用户反馈获取存在性能问题的SQL（比较被动）</li>
+<li>通过慢查日志获取存在性能问题的SQL</li>
+<li>实时获取存在性能问题的SQL</li>
+</ul>
+<h4 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h4><ul>
+<li>开销<ul>
+<li>磁盘IO<ul>
+<li>顺序写入的，对大部分情况来说可以忽略不计</li>
+</ul>
+</li>
+<li>存储日志所需要的磁盘空间<ul>
+<li>主要要考虑存储日志所需要的大量的磁盘空间</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>语句<ul>
+<li>slow_query_log 启动停止记录慢查日志<ul>
+<li>ON为开启</li>
+<li>set global</li>
+<li>可以通过脚本定时开关参数</li>
+</ul>
+</li>
+<li>slow_query_log_file 制定慢查日志的存储路径及文件<ul>
+<li>默认情况下保存在MySQL的数据目录中</li>
+<li>日志存储和数据存储分开存储</li>
+</ul>
+</li>
+<li>long_query_time 制定记录慢查日志SQL执行时间的伐值<ul>
+<li>默认值为10秒，最低到微秒，如果是100微秒 则要表达为 0.0001</li>
+<li>一般设置为0.001秒 ，一毫秒比较合适</li>
+</ul>
+</li>
+<li>log_queries_not_using_indexes 是否记录未使用索引的SQL</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://ryougishiki0.gitee.io/2020/02/19/mysql-gao-ji/">https://ryougishiki0.gitee.io/2020/02/19/mysql-gao-ji/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2020/02/19/mysql-jin-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="MySQL进阶">
+                        
+                        <span class="card-title">MySQL进阶</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            MySQL进阶笔记主要来自https://www.cnblogs.com/lyjun/p/11371851.html,原课程来自Bilibili
+完整的mysql优化需要很深的功底，大公司甚至有专门的DBA写上述
+
+mysql内核
+sql优
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-02-19
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Ryougi-Shiki
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/02/19/redis/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Redis">
+                        
+                        <span class="card-title">Redis</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Nosql
+NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数据库的补充。
+作用：应对基于海量用户和海量数据前提下的数据处理问题
+
+特征：可扩容，可伸缩;大数据量下高性能;灵活的数据模型;高可用
+常见Nosql 数
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-19
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Ryougi-Shiki
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="574616642"
+                   fixed='true'
+                   autoplay='false'
+                   theme:='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.1'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/Ryougi-Shiki0" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:2497641289@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2497641289" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2497641289" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
