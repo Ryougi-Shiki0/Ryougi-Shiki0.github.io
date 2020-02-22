@@ -6,10 +6,11 @@
     <meta charset="utf-8">
     <meta name="keywords" content="java并发编程, Shiki&#39;s Blog">
     <meta name="description" content="JUC笔记源课程：java并发编程与高并发解决方案
-文档主要转载摘录自blog：https://blog.51cto.com/zero01/
 概述
 并发：多个线程操作相同的资源，保证线程安全，合理使用资源
-高并发：服务能同时处理很多请求，提">
+高并发：服务能同时处理很多请求，提高程序性能
+CPU多级缓存：缓解CPU和内存之间速度的不匹配问题
+缓存一致性MESI 保证">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -465,7 +466,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-02-19
+                    2020-02-23
                 </div>
                 
 
@@ -486,7 +487,6 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1 id="JUC"><a href="#JUC" class="headerlink" title="JUC"></a>JUC</h1><p>笔记源课程：java并发编程与高并发解决方案</p>
-<p>文档主要转载摘录自blog：<a href="https://blog.51cto.com/zero01/" target="_blank" rel="noopener">https://blog.51cto.com/zero01/</a></p>
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
 <li>并发：多个线程操作相同的资源，保证线程安全，合理使用资源</li>
 <li>高并发：服务能同时处理很多请求，提高程序性能</li>
@@ -1701,7 +1701,8 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 </li>
 </ul>
 <p>Spring没有对bean的多线程安全问题做出任何保证与措施。对于每个bean的线程安全问题，根本原因是每个bean自身的设计没有在bean中声明任何有状态的实例变量或类变量，如果必须如此，那么就使用ThreadLocal把变量变为线程私有的，如果bean的实例变量或类变量需要在多个线程之间共享，那么就只能使用synchronized、lock、CAS等这些实现线程同步的方法</p>
-<h4 id="Hashmap与ConcurrentHashMap"><a href="#Hashmap与ConcurrentHashMap" class="headerlink" title="Hashmap与ConcurrentHashMap"></a>Hashmap与ConcurrentHashMap</h4><p><a href="https://blog.51cto.com/zero01/2307070" target="_blank" rel="noopener">https://blog.51cto.com/zero01/2307070</a></p>
+<h4 id="Hashmap与ConcurrentHashMap"><a href="#Hashmap与ConcurrentHashMap" class="headerlink" title="Hashmap与ConcurrentHashMap"></a>Hashmap与ConcurrentHashMap</h4><p>文档主要转载摘录自blog：<a href="https://blog.51cto.com/zero01/" target="_blank" rel="noopener">https://blog.51cto.com/zero01/</a></p>
+<p><a href="https://blog.51cto.com/zero01/2307070" target="_blank" rel="noopener">https://blog.51cto.com/zero01/2307070</a></p>
 <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
 <script>
 L2Dwidget.init({ "model": { jsonPath:
@@ -1731,7 +1732,7 @@ L2Dwidget.init({ "model": { jsonPath:
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://ryougi-shiki0.github.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -1741,7 +1742,7 @@ L2Dwidget.init({ "model": { jsonPath:
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://ryougi-shiki0.github.io/2019/12/12/java-gao-bing-fa/">http://ryougi-shiki0.github.io/2019/12/12/java-gao-bing-fa/</a>
+                    <a href="https://ryougishiki0.gitee.io/2019/12/12/java-gao-bing-fa/">https://ryougishiki0.gitee.io/2019/12/12/java-gao-bing-fa/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1754,7 +1755,7 @@ L2Dwidget.init({ "model": { jsonPath:
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
+                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
                     !
                 </span>
             </div>
@@ -2079,36 +2080,11 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
     <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server="netease"
-                   type="playlist"
-                   id="574616642"
-                   fixed='true'
-                   autoplay='false'
-                   theme:='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.1'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-
-    
     <div class="container row center-align" style="margin-bottom: 0px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
+            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
