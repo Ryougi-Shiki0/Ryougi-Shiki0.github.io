@@ -466,7 +466,7 @@ CPU多级缓存：缓解CPU和内存之间速度的不匹配问题
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-02-23
+                    2020-02-24
                 </div>
                 
 
@@ -1701,8 +1701,7 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 </li>
 </ul>
 <p>Spring没有对bean的多线程安全问题做出任何保证与措施。对于每个bean的线程安全问题，根本原因是每个bean自身的设计没有在bean中声明任何有状态的实例变量或类变量，如果必须如此，那么就使用ThreadLocal把变量变为线程私有的，如果bean的实例变量或类变量需要在多个线程之间共享，那么就只能使用synchronized、lock、CAS等这些实现线程同步的方法</p>
-<h4 id="Hashmap与ConcurrentHashMap"><a href="#Hashmap与ConcurrentHashMap" class="headerlink" title="Hashmap与ConcurrentHashMap"></a>Hashmap与ConcurrentHashMap</h4><p>文档主要转载摘录自blog：<a href="https://blog.51cto.com/zero01/" target="_blank" rel="noopener">https://blog.51cto.com/zero01/</a></p>
-<p><a href="https://blog.51cto.com/zero01/2307070" target="_blank" rel="noopener">https://blog.51cto.com/zero01/2307070</a></p>
+<h4 id="Hashmap与ConcurrentHashMap"><a href="#Hashmap与ConcurrentHashMap" class="headerlink" title="Hashmap与ConcurrentHashMap"></a>Hashmap与ConcurrentHashMap</h4><p>该笔记内容主要来源与博客<a href="https://blog.51cto.com/zero01/2307070，个人进行增删补充" target="_blank" rel="noopener">https://blog.51cto.com/zero01/2307070，个人进行增删补充</a></p>
 <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
 <script>
 L2Dwidget.init({ "model": { jsonPath:
@@ -1718,6 +1717,8 @@ L2Dwidget.init({ "model": { jsonPath:
 "hOffset": 0, "vOffset": -20 }, "mobile": { "show": true, "scale": 0.5 },
 "react": { "opacityDefault": 0.7, "opacityOnHover": 0.2 } });
 </script>
+
+
             </div>
             <hr/>
 
