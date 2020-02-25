@@ -5,20 +5,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="深入理解JVM, Shiki&#39;s Blog">
-    <meta name="description" content="自动内存管理机制
+    <meta name="description" content="自动内存管理机制Java内存区域与内存溢出异常
 
+运行时数据区域
 线程私有的：
 
 程序计数器  不会抛OOM
+通过改变计数器的值执行分支、循环、跳转、线程恢复等基础功能
+
+
 虚拟机栈（局部变量表部分
-执行时创建栈帧储存局部变量表、操作栈、动态链接、方法出口等
-
-
-本地方法栈 主要是Native方法相关
-
-线程共享的
-
-Java堆 最大的一块，涉及各">
+执行时创建栈帧储存局部变量表、操作栈、动">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -482,7 +479,7 @@ Java堆 最大的一块，涉及各">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-02-23
+                    2020-02-25
                 </div>
                 
 
@@ -502,32 +499,82 @@ Java堆 最大的一块，涉及各">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="自动内存管理机制"><a href="#自动内存管理机制" class="headerlink" title="自动内存管理机制"></a>自动内存管理机制</h2><img src="/2019/12/26/shen-ru-li-jie-jvm/JVM%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%9B%BE.png" class="" title="JVM体系结构图">
+                <h2 id="自动内存管理机制"><a href="#自动内存管理机制" class="headerlink" title="自动内存管理机制"></a>自动内存管理机制</h2><h3 id="Java内存区域与内存溢出异常"><a href="#Java内存区域与内存溢出异常" class="headerlink" title="Java内存区域与内存溢出异常"></a>Java内存区域与内存溢出异常</h3><img src="/2019/12/26/shen-ru-li-jie-jvm/JVM%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E5%9B%BE.png" class="" title="JVM体系结构图">
 
-<p>线程私有的：</p>
+<h4 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h4><ul>
+<li><p>线程私有的：</p>
 <ul>
-<li>程序计数器  不会抛OOM</li>
+<li>程序计数器  不会抛OOM<ul>
+<li>通过改变计数器的值执行分支、循环、跳转、线程恢复等基础功能</li>
+</ul>
+</li>
 <li>虚拟机栈（局部变量表部分<ul>
 <li>执行时创建栈帧储存局部变量表、操作栈、动态链接、方法出口等</li>
 </ul>
 </li>
 <li>本地方法栈 主要是Native方法相关</li>
 </ul>
-<p>线程共享的</p>
+</li>
+<li><p>线程共享的</p>
 <ul>
 <li><p>Java堆 最大的一块，涉及各类GC算法</p>
+<ul>
+<li><p>新生代</p>
+<p>Eden、From Survivor、To survivor</p>
+</li>
+<li><p>老年代</p>
+</li>
+</ul>
 </li>
 <li><p>方法区 储存虚拟机加载的类信息、常量、静态方法、即时编译器编译后的代码等</p>
 <ul>
+<li><p>JDK1.7后，字符串常量池从方法区移出</p>
+</li>
 <li><p>低版本HotSpot虚拟机未对此区域进行完全的回收导致过内存泄漏</p>
 </li>
-<li><p>运行时常量池属于方法区的一部分，Class文件除了有类的版本、字段、方法、接口等信息外还有常量池</p>
+<li><p>运行时常量池属于方法区的一部分，编译期生成的字面量和符号引用将在类加载后放入方法区的运行时常量池中，同时运行时也可以向常量池中添加常量，如String类中的intern()方法</p>
 </li>
 </ul>
 </li>
 </ul>
-<p>直接内存：不属于JVM运行时数据区，也不属于JVM规定的JMM</p>
-<h2 id="垃圾回收与内存分配策略"><a href="#垃圾回收与内存分配策略" class="headerlink" title="垃圾回收与内存分配策略"></a>垃圾回收与内存分配策略</h2><h3 id="判断对象已“死”的方法"><a href="#判断对象已“死”的方法" class="headerlink" title="判断对象已“死”的方法"></a>判断对象已“死”的方法</h3><ul>
+</li>
+<li><p>直接内存：不属于JVM运行时数据区，也不属于JVM规定的JMM</p>
+</li>
+<li><p>Hotspot</p>
+<ul>
+<li><p>对象内存布局</p>
+<ul>
+<li><p>对象头</p>
+<ol>
+<li><p>储存对象自身的运行时数据</p>
+<p>如HashCode，GC分代年龄，锁状态标志，线程持有的锁，偏向线程ID，偏向时间戳</p>
+</li>
+<li><p>类型指针</p>
+<p>指向对象对应的类型</p>
+</li>
+</ol>
+</li>
+<li><p>实例数据</p>
+<p>储存程序代码中所定义的各种类型的字段内容</p>
+</li>
+<li><p>对齐填充</p>
+</li>
+</ul>
+</li>
+<li><p>对象的访问定位</p>
+<ul>
+<li><p>使用句柄</p>
+<p>在堆中建立句柄池，存储对象实例数据地址和类型数据地址</p>
+</li>
+<li><p>直接指针</p>
+<p>在堆中对象放置访问类型数据的指针</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="垃圾回收与内存分配策略"><a href="#垃圾回收与内存分配策略" class="headerlink" title="垃圾回收与内存分配策略"></a>垃圾回收与内存分配策略</h3><h4 id="判断对象已“死”的方法"><a href="#判断对象已“死”的方法" class="headerlink" title="判断对象已“死”的方法"></a>判断对象已“死”的方法</h4><ul>
 <li><p>引用计数法</p>
 </li>
 <li><p>根搜索算法：（Java C#都在使用</p>
@@ -1122,12 +1169,12 @@ Java堆 最大的一块，涉及各">
                         <span class="chip bg-color">MySQL</span>
                     </a>
                     
-                    <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                        <span class="chip bg-color">关系型数据库</span>
-                    </a>
-                    
                     <a href="/tags/MySQL%E4%BC%98%E5%8C%96/">
                         <span class="chip bg-color">MySQL优化</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                        <span class="chip bg-color">关系型数据库</span>
                     </a>
                     
                 </div>
