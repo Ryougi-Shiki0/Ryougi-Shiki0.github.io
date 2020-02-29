@@ -475,7 +475,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-02-26
+                    2020-02-27
                 </div>
                 
 
@@ -712,6 +712,9 @@
 </li>
 <li><p>G1过程中的Write Barrier</p>
 <p>非并发编程中的同名概念，此处为JVM在每次在对象映射赋值操作时记录指针变化的一段代码，每次引用变化都将DirtyCard加入到DirtyCardQueue中，queue标记为白绿黄红，白色未标记区域时不采取操作，绿色时启用优化线程开始更新到RememberSet，黄色启用全部优化线程更新到RememberSet，红色则加入应用线程参与更新任务（降低了应用线程修改的频率</p>
+</li>
+<li><p>Humongous区域</p>
+<p>在G1中，还有一种特殊的区域，叫Humongous区域。如果一个对象占用的空间达到或者超过了分区容量50%以上，G1收集器就认为这是一个巨型对象。这些巨型对象，默认直接会被分配在老年代，但是如果它是一个短期存在的巨型对象，就会对垃圾收集器造成负面影响。为了解决这个问题，G1划分了一个Humongous区，它用来专门存放巨型对象。如果一个H区装不下一个巨型对象，那么G1会寻找连续的H分区来存储。为了能找到连续的H区，有时候不得不启动Full GC。</p>
 </li>
 </ul>
 </li>
