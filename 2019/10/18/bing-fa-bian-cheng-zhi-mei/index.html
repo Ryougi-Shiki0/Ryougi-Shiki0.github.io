@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="并发编程之美, Shiki&#39;s Blog">
+    <meta name="keywords" content="并发编程之美笔记, Shiki&#39;s Blog">
     <meta name="description" content="并发编程之美基础篇1.线程基础线程
 概念  CPU分配的基本单位
 
@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>并发编程之美 | Shiki&#39;s Blog</title>
+    <title>并发编程之美笔记 | Shiki&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">并发编程之美</h1>
+                    <h1 class="description center-align post-title">并发编程之美笔记</h1>
                 </div>
             </div>
         </div>
@@ -468,7 +468,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-02-25
+                    2020-03-01
                 </div>
                 
 
@@ -688,7 +688,45 @@
 </ul>
 </li>
 </ul>
-<h2 id="高级篇"><a href="#高级篇" class="headerlink" title="高级篇"></a>高级篇</h2><h2 id="实践篇"><a href="#实践篇" class="headerlink" title="实践篇"></a>实践篇</h2>
+<h2 id="高级篇"><a href="#高级篇" class="headerlink" title="高级篇"></a>高级篇</h2><h3 id="3-ThreadLocalRandom类原理剖析"><a href="#3-ThreadLocalRandom类原理剖析" class="headerlink" title="3.ThreadLocalRandom类原理剖析"></a>3.ThreadLocalRandom类原理剖析</h3><h4 id="Random类的并发"><a href="#Random类的并发" class="headerlink" title="Random类的并发"></a>Random类的并发</h4><ul>
+<li>单个Random实例在多线程下生成随机数时，多个线程同时计算随机数来计算新的种子时，多个线程会竞争同一个原子变量的更新，由于CAS操作，只有一个线程会成功，其他线程自旋重试，降低了并发性能</li>
+</ul>
+<h4 id="ThreadLocalRandom"><a href="#ThreadLocalRandom" class="headerlink" title="ThreadLocalRandom"></a>ThreadLocalRandom</h4><ul>
+<li>每个线程生成随机数时根据自己老的种子计算新的种子，在根据自己新的种子计算随机数，提高了并发性能</li>
+</ul>
+<h4 id="ThreadLocalRandom源码"><a href="#ThreadLocalRandom源码" class="headerlink" title="ThreadLocalRandom源码"></a>ThreadLocalRandom源码</h4><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//Random类nextInt()中调用的next()</span>
+<span class="token keyword">do</span> <span class="token punctuation">{</span>
+    oldseed <span class="token operator">=</span> seed<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    nextseed <span class="token operator">=</span> <span class="token punctuation">(</span>oldseed <span class="token operator">*</span> multiplier <span class="token operator">+</span> addend<span class="token punctuation">)</span> <span class="token operator">&amp;</span> mask<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>seed<span class="token punctuation">.</span><span class="token function">compareAndSet</span><span class="token punctuation">(</span>oldseed<span class="token punctuation">,</span> nextseed<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//ThreadLocalRandom类nextInt()中调用的nextSeed()</span>
+Thread t<span class="token punctuation">;</span> <span class="token keyword">long</span> r<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// read and update per-thread seed</span>
+UNSAFE<span class="token punctuation">.</span><span class="token function">putLong</span><span class="token punctuation">(</span>t <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> SEED<span class="token punctuation">,</span>
+               r <span class="token operator">=</span> UNSAFE<span class="token punctuation">.</span><span class="token function">getLong</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> SEED<span class="token punctuation">)</span> <span class="token operator">+</span> GAMMA<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> r<span class="token punctuation">;</span></code></pre>
+<p>其中ThreadLocalRandom的current()初始化自己的种子，避免了并发请求种子</p>
+<h3 id="4-并发包中原子操作类"><a href="#4-并发包中原子操作类" class="headerlink" title="4.并发包中原子操作类"></a>4.并发包中原子操作类</h3><h4 id="原子变量操作类"><a href="#原子变量操作类" class="headerlink" title="原子变量操作类"></a>原子变量操作类</h4><ul>
+<li>AtomicLong<ul>
+<li>提供自增自减的原子操作<ul>
+<li>通过调用Unsafe类的CompareAndSwapLong</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>AtomicReference</li>
+<li>LongAdder<ul>
+<li>使用cell数组，对每个数组元素进行操作再计算统计结果</li>
+<li>使用了Contended注解避免伪共享</li>
+<li>cell数组操作时通过线程随机数计算访问的Cell元素下标，没有竞争则base基值，为null则扩容，通过cas操作volatile修饰的cellbusy变量确定是否可以操作</li>
+</ul>
+</li>
+<li>LongAccumulator<ul>
+<li>LongAdder的功能增强版。LongAdder的API只有对数值的加减，而LongAccumulator提供了自定义的函数操作</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-并发List"><a href="#5-并发List" class="headerlink" title="5.并发List"></a>5.并发List</h3><h2 id="实践篇"><a href="#实践篇" class="headerlink" title="实践篇"></a>实践篇</h2>
             </div>
             <hr/>
 
@@ -864,34 +902,40 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/10/18/bing-fa-bian-cheng-zhi-mei/">
+                <a href="/2019/06/20/java-ji-chu/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="并发编程之美">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Java基础">
                         
-                        <span class="card-title">并发编程之美</span>
+                        <span class="card-title">Java基础</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            并发编程之美基础篇1.线程基础线程
-概念  CPU分配的基本单位
+                            JavaJava基础1.数据类型
+基本数据类型
+byte/8
+char/16
+short/16
+int/32
+float/32
+long/64
+double/64
+boolean/？
 
-线程启动的三种方式
-继承Thread
-实现runnable
-使用FutureTask
-自定义CallerTask类实现Callable接口，放入FutureTask队列中n
+
+缓存池
+new Integer(123)与 Inte
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-18
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-06-20
                             </span>
                         <span class="publish-author">
                             
@@ -905,7 +949,6 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -913,8 +956,8 @@
                         <span class="chip bg-color">Java</span>
                     </a>
                     
-                    <a href="/tags/Java%E5%B9%B6%E5%8F%91/">
-                        <span class="chip bg-color">Java并发</span>
+                    <a href="/tags/Java%E5%9F%BA%E7%A1%80/">
+                        <span class="chip bg-color">Java基础</span>
                     </a>
                     
                 </div>
