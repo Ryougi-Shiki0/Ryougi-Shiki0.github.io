@@ -1721,19 +1721,86 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 </tr>
 </tbody></table>
 <ul>
-<li>说明<ul>
+<li><p>说明</p>
+<ul>
 <li>Throws Exceptions ：如果不能立即执行就抛出异常</li>
 <li>Special Value：如果不能立即执行就返回一个特殊的值（null 或 true/false，取决于具体的操作</li>
 <li>Blocks：如果不能立即执行就阻塞等待此操作，直到这个操作成功</li>
 <li>Times Out：如果不能立即执行就阻塞一段时间，直到成功或者超时指定时间</li>
 </ul>
 </li>
-<li>BlockingQueue 的实现类<ul>
-<li>ArrayBlockingQueue：它是一个有界的阻塞队列，内部实现是数组，需在初始化时指定容量大小，一旦指定大小就不能再变。采用FIFO方式存储元素</li>
-<li>DelayQueue：阻塞内部元素，DelayQueue内部元素必须实现Delayed接口，Delayed接口又继承了Comparable接口，原因在于DelayQueue内部元素需要排序，一般情况下按元素过期时间优先级排序，DelayQueue内部采用PriorityQueue与ReentrantLock实现</li>
-<li>LinkedBlockingQueue：使用独占锁实现的阻塞队列，大小配置可选，如果初始化时指定了大小，那么它就是有边界的。不指定就无边界（最大整型值）。内部实现是链表，采用FIFO形式保存数据。</li>
-<li>PriorityBlockingQueue：带优先级的阻塞队列，无边界队列，允许插入null。插入的对象必须实现Comparator接口，队列优先级的排序规则就是按照我们对Comparable接口的实现来指定的。我们可以从PriorityBlockingQueue中获取一个迭代器，但这个迭代器并不保证能按照优先级的顺序进行迭代</li>
-<li>SynchronousQueue：同步阻塞队列，只能插入一个元素，×××非缓存队列，不存储元素。其内部并没有数据缓存空间，你不能调用peek()方法来看队列中是否有数据元素，当然遍历这个队列的操作也是不允许的</li>
+<li><p>BlockingQueue 的实现类</p>
+<ul>
+<li><p>BlockingQueue 的实现类：</p>
+</li>
+<li><p>ArrayBlockingQueue：它是一个有界的阻塞队列，内部实现是数组，需在初始化时指定容量大小，一旦指定大小就不能再变。采用FIFO方式存储元素：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token keyword">extends</span> <span class="token class-name">AbstractQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span>
+        <span class="token keyword">implements</span> <span class="token class-name">BlockingQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">,</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Serializable <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/** The queued items */</span>
+    <span class="token keyword">final</span> Object<span class="token punctuation">[</span><span class="token punctuation">]</span> items<span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>            </code></pre>
+</li>
+<li><p>DelayQueue：阻塞内部元素，DelayQueue内部元素必须实现Delayed接口，Delayed接口又继承了Comparable接口，原因在于DelayQueue内部元素需要排序，一般情况下按元素过期时间优先级排序：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Delayed</span> <span class="token keyword">extends</span> <span class="token class-name">Comparable</span><span class="token operator">&lt;</span>Delayed<span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> <span class="token function">getDelay</span><span class="token punctuation">(</span>TimeUnit unit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>DalayQueue内部采用PriorityQueue与ReentrantLock实现：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DelayQueue</span><span class="token operator">&lt;</span>E <span class="token keyword">extends</span> <span class="token class-name">Delayed</span><span class="token operator">></span> <span class="token keyword">extends</span> <span class="token class-name">AbstractQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span>
+    <span class="token keyword">implements</span> <span class="token class-name">BlockingQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">transient</span> ReentrantLock lock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReentrantLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> PriorityQueue<span class="token operator">&lt;</span>E<span class="token operator">></span> q <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PriorityQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>LinkedBlockingQueue：使用独占锁实现的阻塞队列，大小配置可选，如果初始化时指定了大小，那么它就是有边界的。不指定就无边界（最大整型值）。内部实现是链表，采用FIFO形式保存数据。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">LinkedBlockingQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 不指定大小，无边界采用默认值，最大整型值</span>
+    <span class="token keyword">this</span><span class="token punctuation">(</span>Integer<span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>PriorityBlockingQueue：带优先级的×××阻塞队列，无边界队列，允许插入null。插入的对象必须实现Comparator接口，队列优先级的排序规则就是按照我们对Comparable接口的实现来指定的。我们可以从PriorityBlockingQueue中获取一个迭代器，但这个迭代器并不保证能按照优先级的顺序进行迭代：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PriorityBlockingQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token keyword">extends</span> <span class="token class-name">AbstractQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span>
+    <span class="token keyword">implements</span> <span class="token class-name">BlockingQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">,</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Serializable <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">add</span><span class="token punctuation">(</span>E e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token function">offer</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">offer</span><span class="token punctuation">(</span>E e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token operator">==</span> null<span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NullPointerException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">final</span> ReentrantLock lock <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>lock<span class="token punctuation">;</span>
+        lock<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> n<span class="token punctuation">,</span> cap<span class="token punctuation">;</span>
+        Object<span class="token punctuation">[</span><span class="token punctuation">]</span> es<span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>n <span class="token operator">=</span> size<span class="token punctuation">)</span> <span class="token operator">>=</span> <span class="token punctuation">(</span>cap <span class="token operator">=</span> <span class="token punctuation">(</span>es <span class="token operator">=</span> queue<span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token function">tryGrow</span><span class="token punctuation">(</span>es<span class="token punctuation">,</span> cap<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//必须实现Comparator接口</span>
+            <span class="token keyword">final</span> Comparator<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> E<span class="token operator">></span> cmp<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>cmp <span class="token operator">=</span> comparator<span class="token punctuation">)</span> <span class="token operator">==</span> null<span class="token punctuation">)</span>
+                <span class="token function">siftUpComparable</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> e<span class="token punctuation">,</span> es<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">else</span>
+                <span class="token function">siftUpUsingComparator</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> e<span class="token punctuation">,</span> es<span class="token punctuation">,</span> cmp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            size <span class="token operator">=</span> n <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+            notEmpty<span class="token punctuation">.</span><span class="token function">signal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+            lock<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>        </code></pre>
+</li>
+<li><p>SynchronousQueue：同步阻塞队列，只能插入一个元素，×××非缓存队列，不存储元素。其内部并没有数据缓存空间，你不能调用peek()方法来看队列中是否有数据元素，当然遍历这个队列的操作也是不允许的：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SynchronousQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token keyword">extends</span> <span class="token class-name">AbstractQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span>
+    <span class="token keyword">implements</span> <span class="token class-name">BlockingQueue</span><span class="token operator">&lt;</span>E<span class="token operator">></span><span class="token punctuation">,</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Serializable <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>    </code></pre>
+</li>
 </ul>
 </li>
 </ul>
@@ -1765,8 +1832,19 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 </ul>
 <p>corePoolSize、maximumPoolSize、workQueue 这三个参数的关系</p>
 <ul>
-<li>如果运行的线程数量小于corePoolSize的时候，直接创建新线程来处理任务。即使线程池中的其他线程是空闲的。如果线程池中的线程数量大于corePoolSize且小于maximumPoolSize时，那么只有当workQueue满的时候才创建新的线程去处理任务。如果corePoolSize与maximumPoolSize是相同的，那么创建的线程池大小是固定的。这时如果有新任务提交，且workQueue未满时，就把请求放入workQueue中，等待空闲线程从workQueue取出任务进行处理。如果需要运行的线程数量大于maximumPoolSize时，并且此时workQueue也满了，那么就使用rejectHandler参数所指定的拒绝策略去进行处理</li>
+<li><p>如果运行的线程数量小于corePoolSize的时候，直接创建新线程来处理任务。即使线程池中的其他线程是空闲的。如果线程池中的线程数量大于corePoolSize且小于maximumPoolSize时，那么只有当workQueue满的时候才创建新的线程去处理任务。如果corePoolSize与maximumPoolSize是相同的，那么创建的线程池大小是固定的。这时如果有新任务提交，且workQueue未满时，就把请求放入workQueue中，等待空闲线程从workQueue取出任务进行处理。如果需要运行的线程数量大于maximumPoolSize时，并且此时workQueue也满了，那么就使用rejectHandler参数所指定的拒绝策略去进行处理</p>
+<p>workQueue是保存待执行任务的一个阻塞队列，当我们提交一个新的任务到线程池后，线程池会根据当前池中正在运行的线程数量来决定该任务的处理方式。处理方式总共有三种：</p>
+</li>
 </ul>
+<ol>
+<li><p>直接切换（SynchronusQueue）</p>
+</li>
+<li><p>队列（LinkedBlockingQueue），若使用该队列，那么线程池中能够创建的最大线程数为corePoolSize，这时maximumPoolSize就不会起作用了。当线程池中所有的核心线程都是运行状态的时候，新的任务提交就会放入等待队列中。</p>
+</li>
+<li><p>有界队列（ArrayBlockingQueue），使用该队列可以将线程池中的最大线程数量限制为maximumPoolSize参数所指定的值，这种方式能够降低资源消耗，但是这种方式使得线程池对线程调度变的更困难。因为此时线程池与队列容量都是有限的了，所以想让线程池处理任务的吞吐率达到一个合理的范围，又想使我们的线程调度相对简单，并且还尽可能降低线程池对资源的消耗，那么我们就需要合理的设置corePoolSize和maximumPoolSize这两个参数的值</p>
+</li>
+</ol>
+<p>分配技巧： 如果想降低资源的消耗包括降低cpu使用率、操作系统资源的消耗、上下文切换的开销等等，可以设置一个较大的队列容量和较小的线程池容量，这样会降低线程池处理任务的吞吐量。如果我们提交的任务经常发生阻塞，我们可以考虑调用相关方法调整maximumPoolSize参数的值。如果我们的队列容量较小，通常需要把线程池的容量设置得大一些，这样cpu的使用率相对来说会高一些。但是如果线程池的容量设置的过大，提高任务的数量过多的时候，并发量会增加，那么线程之间的调度就是一个需要考虑的问题，这样反而可能会降低处理任务的吞吐量。</p>
 <p>拒绝策略的实现类都在ThreadPoolExecutor中</p>
 <p><img src="C:/Users/hawk4/Desktop/Temp/%E7%AC%94%E8%AE%B0/%E7%AC%94%E8%AE%B0%E5%9B%BE%E7%89%87/ThreadPoolExecutor%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5%E7%B1%BB.png" alt="ThreadPoolExecutor拒绝策略类"></p>
 <p>workQueue是保存待执行任务的一个阻塞队列，当我们提交一个新的任务到线程池后，线程池会根据当前池中正在运行的线程数量来决定该任务的处理方式，有三种处理方式</p>
@@ -1860,12 +1938,6 @@ Collection <span class="token function">getQueuedThreads</span><span class="toke
 <span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
 <span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span>atomic<span class="token punctuation">.</span>AtomicInteger<span class="token punctuation">;</span>
 
-<span class="token comment" spellcheck="true">/**
- * @program: concurrency-demo
- * @description: ThreadPoolExecutor使用示例
- * @author: 01
- * @create: 2018-10-20 16:35
- **/</span>
 <span class="token annotation punctuation">@Slf4j</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ThreadPoolExample6</span> <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
