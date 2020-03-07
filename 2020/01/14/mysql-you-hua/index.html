@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="MySQL优化, Shiki&#39;s Blog">
-    <meta name="description" content="MySQL进阶笔记主要来自https://www.cnblogs.com/lyjun/p/11371851.html,原课程来自Bilibili
+    <meta name="description" content="MySQL优化笔记主要来自https://www.cnblogs.com/lyjun/p/11371851.html,原课程来自Bilibili
 完整的mysql优化需要很深的功底，大公司甚至有专门的DBA写上述
 
 mysql内核
@@ -433,12 +433,12 @@ sql优">
                                 <span class="chip bg-color">MySQL</span>
                             </a>
                         
-                            <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                <span class="chip bg-color">关系型数据库</span>
-                            </a>
-                        
                             <a href="/tags/MySQL%E4%BC%98%E5%8C%96/">
                                 <span class="chip bg-color">MySQL优化</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                                <span class="chip bg-color">关系型数据库</span>
                             </a>
                         
                     </div>
@@ -469,7 +469,7 @@ sql优">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-02-19
+                    2020-03-06
                 </div>
                 
 
@@ -489,7 +489,7 @@ sql优">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="MySQL进阶"><a href="#MySQL进阶" class="headerlink" title="MySQL进阶"></a>MySQL进阶</h2><p>笔记主要来自<a href="https://www.cnblogs.com/lyjun/p/11371851.html,原课程来自Bilibili" target="_blank" rel="noopener">https://www.cnblogs.com/lyjun/p/11371851.html,原课程来自Bilibili</a></p>
+                <h2 id="MySQL优化"><a href="#MySQL优化" class="headerlink" title="MySQL优化"></a>MySQL优化</h2><p>笔记主要来自<a href="https://www.cnblogs.com/lyjun/p/11371851.html,原课程来自Bilibili" target="_blank" rel="noopener">https://www.cnblogs.com/lyjun/p/11371851.html,原课程来自Bilibili</a></p>
 <p>完整的mysql优化需要很深的功底，大公司甚至有专门的DBA写上述</p>
 <ul>
 <li>mysql内核</li>
@@ -505,7 +505,6 @@ sql优">
 <h3 id="mysqL-Linux版的安装"><a href="#mysqL-Linux版的安装" class="headerlink" title="mysqL-Linux版的安装"></a>mysqL-Linux版的安装</h3><ul>
 <li><p>mysql5.5</p>
 <ul>
-<li>下载地址：<a href="https://dev.mysql.com/downloads/mysql/5.5.html#downloads" target="_blank" rel="noopener">https://dev.mysql.com/downloads/mysql/5.5.html#downloads</a></li>
 <li>检查当前系统是否安装过mysql：<ul>
 <li>查询命令：rpm -qa|grep -i mysql</li>
 <li>删除命令：rpm -e RPM软件包名称<ul>
@@ -646,7 +645,7 @@ chown mysql:mysql /var/lib/mysql -R</code></pre></li>
 <h2 id="mysql逻辑架构介绍"><a href="#mysql逻辑架构介绍" class="headerlink" title="mysql逻辑架构介绍"></a>mysql逻辑架构介绍</h2><ul>
 <li>和其它数据库相比，MySQL有点与众不同，它的架构可以在多种不同场景中应用并发挥良好作用。主要体现在存储引擎的架构上，<strong>插件式的存储引擎架构将查询处理和其它的系统任务以及数据的存储提取相分离。</strong>这种架构可以根据业务的需求和时机需要选择合适的存储引擎。</li>
 </ul>
-<img src="/2020/01/14/mysql-jin-jie/MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84.png" class="" title="MySQL逻辑架构">
+<img src="/2020/01/14/mysql-you-hua/MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84.png" class="" title="MySQL逻辑架构">
 
 <ul>
 <li><p>从上到下，连接层，服务层，引擎层，存储层</p>
@@ -769,7 +768,7 @@ order by <order_by_condition>
 limit <limit_number></code></pre>
 </li>
 <li><p>总结</p>
-<img src="/2020/01/14/mysql-jin-jie/SQL%E8%A7%A3%E6%9E%90%E9%A1%BA%E5%BA%8F.png" class="" title="SQL解析顺序">
+<img src="/2020/01/14/mysql-you-hua/SQL%E8%A7%A3%E6%9E%90%E9%A1%BA%E5%BA%8F.png" class="" title="SQL解析顺序">
 </li>
 </ul>
 </li>
@@ -778,9 +777,9 @@ limit <limit_number></code></pre>
 <li><p>7种Join</p>
 </li>
 </ul>
-<img src="/2020/01/14/mysql-jin-jie/SQL-Join-1.png" class="" title="SQL-Join-1">
+<img src="/2020/01/14/mysql-you-hua/SQL-Join-1.png" class="" title="SQL-Join-1">
 
-<img src="/2020/01/14/mysql-jin-jie/SQL-Join-2.png" class="" title="SQL-Join-2">
+<img src="/2020/01/14/mysql-you-hua/SQL-Join-2.png" class="" title="SQL-Join-2">
 
 <h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><ul>
 <li><p>定义</p>
@@ -788,7 +787,7 @@ limit <limit_number></code></pre>
 <li><p>MySQL官方定义：索引（Index）是帮助MySQL高效获取数据的数据结构。索引本质是字段与实际数据的映射</p>
 </li>
 <li><p>排好序的快速查找数据结构</p>
-<img src="/2020/01/14/mysql-jin-jie/B%E6%A0%91%E7%BB%93%E6%9E%84.png" class="" title="B树结构">
+<img src="/2020/01/14/mysql-you-hua/B%E6%A0%91%E7%BB%93%E6%9E%84.png" class="" title="B树结构">
 </li>
 <li><p>结论</p>
 <p>数据本身之外，数据库还维护着一个满足特定查找算法的数据结构，这些数据结构以某种方式指向数据，这样就可以在这些数据结构的基础上实现高级查找算法，这种数据结构就是索引</p>
@@ -855,7 +854,7 @@ alter table tbl_name add fulltext_index index_name(column_list)</code></pre>
 <li><p>BTree索引</p>
 <ul>
 <li><p>索引原理</p>
-<img src="/2020/01/14/mysql-jin-jie/B-Tree%E7%B4%A2%E5%BC%95.png" class="" title="B-Tree索引">
+<img src="/2020/01/14/mysql-you-hua/B-Tree%E7%B4%A2%E5%BC%95.png" class="" title="B-Tree索引">
 
 <ol>
 <li>初始化介绍<br>一颗b树，浅蓝色的块我们称之为一个磁盘块，可以看到每个磁盘块包含几个数据项（深蓝色所示）和指针（黄色所示），<br>如磁盘块1包含数据项17和35，包含指针P1、P2、P3，<br>P1表示小于17的磁盘块，P2表示在17和35之间的磁盘块，P3表示大于35的磁盘块。<br><strong>真实的数据存在于叶子节点</strong>即3、5、9、10、13、15、28、29、36、60、75、79、90、99。<br><strong>非叶子节点不存储真实的数据，只存储指引搜索方向的数据项</strong>，如17、35并不真实存在于数据表中。</li>
@@ -1056,9 +1055,9 @@ alter table tbl_name add fulltext_index index_name(column_list)</code></pre>
 </ul>
 </li>
 <li><p>Case：</p>
-<img src="/2020/01/14/mysql-jin-jie/MySQL%E7%B4%A2%E5%BC%95Case.png" class="" title="MySQL索引Case">
+<img src="/2020/01/14/mysql-you-hua/MySQL%E7%B4%A2%E5%BC%95Case.png" class="" title="MySQL索引Case">
 
-<img src="/2020/01/14/mysql-jin-jie/MySQL%E7%B4%A2%E5%BC%95Case%E8%A7%A3%E9%87%8A.png" class="" title="MySQL索引Case解释">
+<img src="/2020/01/14/mysql-you-hua/MySQL%E7%B4%A2%E5%BC%95Case%E8%A7%A3%E9%87%8A.png" class="" title="MySQL索引Case解释">
 
 
 </li>
@@ -1093,19 +1092,19 @@ from article
 where category_id=1 AND comments>1
 order by views desc
 limit 1;</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E5%8D%95%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C1.png" class="" title="单表查询explain结果1">
+<img src="/2020/01/14/mysql-you-hua/%E5%8D%95%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C1.png" class="" title="单表查询explain结果1">
 
 <p>很显然,type 是 ALL,即最坏的情况。Extra 里还出现了 Using filesort,也是最坏的情况。优化是必须的</p>
 <pre class=" language-mysql"><code class="language-mysql">create index idx_article_ccv 
 on article(category_id,comments,views);</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E5%8D%95%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C2.png" class="" title="单表查询explain结果2">
+<img src="/2020/01/14/mysql-you-hua/%E5%8D%95%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C2.png" class="" title="单表查询explain结果2">
 
 <p>type 变成了 range,这是可以忍受的。但是 extra 里使用 Using filesort 仍是无法接受的。但是我们已经建立了索引,为啥没用呢?这是因为按照 BTree 索引的工作原理,先排序 category_id,如果遇到相同的 category_id 则再排序 comments,如果遇到相同的 comments 则再排序 views。当 comments 字段在联合索引里处于中间位置时,因comments &gt; 1 条件是一个范围值(所谓 range),MySQL 无法利用索引再对后面的 views 部分进行检索,即 range 类型查询字段后面的索引无效</p>
 <pre class=" language-mysql"><code class="language-mysql"> drop index idx_article_ccv on article;
 
 create index idx_article_cv 
 on article(category_id,views);</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E5%8D%95%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C3.png" class="" title="单表查询explain结果3">
+<img src="/2020/01/14/mysql-you-hua/%E5%8D%95%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C3.png" class="" title="单表查询explain结果3">
 
 <p>可以看到,type 变为了 ref,Extra 中的 Using filesort 也消失了,结果非常理想</p>
 </li>
@@ -1175,13 +1174,13 @@ on class.card=book.card;
 alter table `book` add index Y(`card`)
 #添加索引优化2
 alter table `class` add index Y(`card`)</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E4%B8%A4%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C1.png" class="" title="单表查询explain结果1">
+<img src="/2020/01/14/mysql-you-hua/%E4%B8%A4%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C1.png" class="" title="单表查询explain结果1">
 
 <p>索引优化1</p>
-<img src="/2020/01/14/mysql-jin-jie/%E4%B8%A4%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C2.png" class="" title="单表查询explain结果3">
+<img src="/2020/01/14/mysql-you-hua/%E4%B8%A4%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C2.png" class="" title="单表查询explain结果3">
 
 <p>索引优化2</p>
-<img src="/2020/01/14/mysql-jin-jie/%E4%B8%A4%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C3.png" class="" title="单表查询explain结果3">
+<img src="/2020/01/14/mysql-you-hua/%E4%B8%A4%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C3.png" class="" title="单表查询explain结果3">
 </li>
 <li><p>结论</p>
 <p>第一次优化的type变为了ref，rows优化也比较明显</p>
@@ -1225,10 +1224,10 @@ explain select * from class left join book on class.card=book.card left join pho
 #添加索引优化
 alter table `phone` add index Z(`card`);
 alter table `book` add index Y(`card`);</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E4%B8%89%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C1.png" class="" title="单表查询explain结果1">
+<img src="/2020/01/14/mysql-you-hua/%E4%B8%89%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C1.png" class="" title="单表查询explain结果1">
 
 <p>索引优化</p>
-<img src="/2020/01/14/mysql-jin-jie/%E4%B8%89%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C2.png" class="" title="单表查询explain结果2">
+<img src="/2020/01/14/mysql-you-hua/%E4%B8%89%E8%A1%A8%E6%9F%A5%E8%AF%A2explain%E7%BB%93%E6%9E%9C2.png" class="" title="单表查询explain结果2">
 
 <p>后 2 行的 type 都是 ref 且总 rows 优化很好,效果不错</p>
 </li>
@@ -1271,16 +1270,16 @@ alter table staffs add index idx_staffs_nameAgePos(name,age,pos);
 <li><p>全值匹配</p>
 <pre><code>explain select * from staffs where name=&#39;July&#39;;
 explain select * from staffs where name=&#39;July&#39; and age=23;
-explain select * from staffs where name=&#39;July&#39; and age=23 and pos=&#39;dev&#39;;</code></pre><img src="/2020/01/14/mysql-jin-jie/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E5%85%A8%E5%80%BC%E5%8C%B9%E9%85%8D1.png" class="" title="索引失效-全值匹配1">
+explain select * from staffs where name=&#39;July&#39; and age=23 and pos=&#39;dev&#39;;</code></pre><img src="/2020/01/14/mysql-you-hua/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E5%85%A8%E5%80%BC%E5%8C%B9%E9%85%8D1.png" class="" title="索引失效-全值匹配1">
 
-<img src="/2020/01/14/mysql-jin-jie/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E5%85%A8%E5%80%BC%E5%8C%B9%E9%85%8D2.png" class="" title="索引失效-全值匹配2">
+<img src="/2020/01/14/mysql-you-hua/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E5%85%A8%E5%80%BC%E5%8C%B9%E9%85%8D2.png" class="" title="索引失效-全值匹配2">
 
-<img src="/2020/01/14/mysql-jin-jie/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E5%85%A8%E5%80%BC%E5%8C%B9%E9%85%8D3.png" class="" title="索引失效-全值匹配3">
+<img src="/2020/01/14/mysql-you-hua/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E5%85%A8%E5%80%BC%E5%8C%B9%E9%85%8D3.png" class="" title="索引失效-全值匹配3">
 
 <pre class=" language-mysql"><code class="language-mysql">explain select * from staffs where age=23 and pos='dev';
 explain select * from staffs where pos='dev';
 explain select * from staffs where name='July';</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E5%85%A8%E5%80%BC%E5%8C%B9%E9%85%8D4.png" class="" title="索引失效-全值匹配4">
+<img src="/2020/01/14/mysql-you-hua/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E5%85%A8%E5%80%BC%E5%8C%B9%E9%85%8D4.png" class="" title="索引失效-全值匹配4">
 </li>
 <li><p><strong>最佳左前缀法则</strong>：</p>
 <ul>
@@ -1290,14 +1289,14 @@ explain select * from staffs where name='July';</code></pre>
 <li><p>不在索引列上作任何操作（计算、函数、（自动or手动）类型转换），会导致索引失效而转向全表扫描</p>
 <pre class=" language-mysql"><code class="language-mysql">explain select * from staffs where name='July';
 explain select * from staffs where left(name,4)='July';</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8C%B9%E9%85%8D.png" class="" title="索引失效-表达式匹配">
+<img src="/2020/01/14/mysql-you-hua/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8C%B9%E9%85%8D.png" class="" title="索引失效-表达式匹配">
 </li>
 <li><p>存储引擎不能使用索引中范围条件右边的列</p>
 <pre class=" language-mysql"><code class="language-mysql">explain select * from staffs where name='z4';
 explain select * from staffs where name='z4' and age=22;
 explain select * from staffs where name='z4' and age=22 and pos='manager';
 explain select * from staffs where name='z4' and age>11 and pos='manager';</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E8%8C%83%E5%9B%B4%E6%9D%A1%E4%BB%B6%E5%8F%B3%E5%80%BC%E5%8C%B9%E9%85%8D.png" class="" title="索引失效-范围条件右值匹配">
+<img src="/2020/01/14/mysql-you-hua/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E8%8C%83%E5%9B%B4%E6%9D%A1%E4%BB%B6%E5%8F%B3%E5%80%BC%E5%8C%B9%E9%85%8D.png" class="" title="索引失效-范围条件右值匹配">
 </li>
 <li><p>尽量使用覆盖索引（只访问索引的查询（索引列和查询列一致）），减少select *</p>
 <pre class=" language-mysql"><code class="language-mysql">explain select name,age,pos from staffs where name='July' and age=25 and pos='dev';
@@ -1305,13 +1304,13 @@ explain select * from staffs where name='July' and age=25 and pos='dev';
 explain select name,age,pos from staffs where name='July' and age>25 and pos='dev';
 explain select name,age,pos from staffs where name='July' and age=25;
 explain select name from staffs where name='July' and age=25;</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E5%B0%BD%E9%87%8F%E4%BD%BF%E7%94%A8%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95.png" class="" title="尽量使用覆盖索引">
+<img src="/2020/01/14/mysql-you-hua/%E5%B0%BD%E9%87%8F%E4%BD%BF%E7%94%A8%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95.png" class="" title="尽量使用覆盖索引">
 </li>
 <li><p>mysql在使用不等于（！=或者&lt;&gt;）的时候无法使用索引会导致全表扫描</p>
 <pre class=" language-mysql"><code class="language-mysql">explain select * from staffs where name='July';
 explain select * from staffs where name!='July';
 explain select * from staffs where name<>'July';</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E4%BD%BF%E7%94%A8%E4%B8%8D%E7%AD%89%E4%BA%8E%E5%8C%B9%E9%85%8D.png" class="" title="索引失效-使用不等于匹配">
+<img src="/2020/01/14/mysql-you-hua/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E4%BD%BF%E7%94%A8%E4%B8%8D%E7%AD%89%E4%BA%8E%E5%8C%B9%E9%85%8D.png" class="" title="索引失效-使用不等于匹配">
 </li>
 <li><p>is null，is not null也无法使用索引</p>
 <pre class=" language-mysql"><code class="language-mysql">explain select * from staffs where name is null;
@@ -1321,7 +1320,7 @@ explain select * from staffs where name is not null;</code></pre>
 <pre class=" language-mysql"><code class="language-mysql">explain select * from staffs where name like '%July%';
 explain select * from staffs where name like '%July';
 explain select * from staffs where name like 'July%';</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E4%BD%BF%E7%94%A8like%E5%8C%B9%E9%85%8D.png" class="" title="索引失效-使用like匹配">
+<img src="/2020/01/14/mysql-you-hua/%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88-%E4%BD%BF%E7%94%A8like%E5%8C%B9%E9%85%8D.png" class="" title="索引失效-使用like匹配">
 
 <ul>
 <li><p><strong>like%加右边</strong></p>
@@ -1536,13 +1535,13 @@ create index idx_A_ageBirth on tb1A(age,birth);</code></pre>
 <pre class=" language-mysql"><code class="language-mysql">explain select * from tb1A where age>20 order by age;
 explain select * from tb1A where age>20 order by age,birth;
 explain select * from tb1A where age>20 order by birth;</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/orderby%E5%AD%90%E5%8F%A5%E6%A1%88%E4%BE%8B1.png" class="" title="orderby子句案例1">
+<img src="/2020/01/14/mysql-you-hua/orderby%E5%AD%90%E5%8F%A5%E6%A1%88%E4%BE%8B1.png" class="" title="orderby子句案例1">
 
 <pre class=" language-mysql"><code class="language-mysql">explain select * from tb1A order by birth;
 explain select * from tb1a where birth>'2020-01-14 00:00:00' order by birth;
 explain select * from tb1a where birth>'2020-01-14 00:00:00' order by age;
 explain select * from tb1A order by age asc,birth desc;</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/orderby%E5%AD%90%E5%8F%A5%E6%A1%88%E4%BE%8B2.png" class="" title="orderby子句案例2">
+<img src="/2020/01/14/mysql-you-hua/orderby%E5%AD%90%E5%8F%A5%E6%A1%88%E4%BE%8B2.png" class="" title="orderby子句案例2">
 </li>
 <li><p>MySQL支持两种方式的排序</p>
 <ul>
@@ -1705,12 +1704,12 @@ show open tables;
 unlock tables;</code></pre>
 </li>
 <li><p>加读锁（我们为mylock表加read锁（读阻塞写例子））</p>
-<img src="/2020/01/14/mysql-jin-jie/%E6%A1%88%E4%BE%8B-%E8%AF%BB%E5%86%99%E9%94%811.png" class="" title="案例-读写锁1">
+<img src="/2020/01/14/mysql-you-hua/%E6%A1%88%E4%BE%8B-%E8%AF%BB%E5%86%99%E9%94%811.png" class="" title="案例-读写锁1">
 
-<img src="/2020/01/14/mysql-jin-jie/%E6%A1%88%E4%BE%8B-%E8%AF%BB%E5%86%99%E9%94%812.png" class="" title="案例-读写锁2">
+<img src="/2020/01/14/mysql-you-hua/%E6%A1%88%E4%BE%8B-%E8%AF%BB%E5%86%99%E9%94%812.png" class="" title="案例-读写锁2">
 </li>
 <li><p>加写锁（我们为mylock表加write锁（MyISAM存储引擎的写阻塞读例子））</p>
-<img src="/2020/01/14/mysql-jin-jie/%E6%A1%88%E4%BE%8B-%E8%AF%BB%E5%86%99%E9%94%813.png" class="" title="案例-读写锁3">
+<img src="/2020/01/14/mysql-you-hua/%E6%A1%88%E4%BE%8B-%E8%AF%BB%E5%86%99%E9%94%813.png" class="" title="案例-读写锁3">
 </li>
 </ul>
 </li>
@@ -1765,7 +1764,7 @@ create index idx_test_innodb_b on test(b);
 select * from test;
 # 自动提交关了，必须手动写commit才能提交
 set autocommit = 0;</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E6%A1%88%E4%BE%8B-%E5%81%8F%E5%86%99%E9%94%811.png" class="" title="案例-偏写锁1">
+<img src="/2020/01/14/mysql-you-hua/%E6%A1%88%E4%BE%8B-%E5%81%8F%E5%86%99%E9%94%811.png" class="" title="案例-偏写锁1">
 </li>
 <li><p>无索引行锁升级为表锁</p>
 <ul>
@@ -1777,7 +1776,7 @@ set autocommit = 0;</code></pre>
 update test set b='0629' where a>1 and a<6;
 #进程2
 insert into test values(2,'2000');</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E6%A1%88%E4%BE%8B-%E9%97%B4%E9%9A%99%E9%94%81.png" class="" title="案例-间隙锁">
+<img src="/2020/01/14/mysql-you-hua/%E6%A1%88%E4%BE%8B-%E9%97%B4%E9%9A%99%E9%94%81.png" class="" title="案例-间隙锁">
 
 <ul>
 <li>当我们用范围条件而不是相等条件索引数据，并请求共享或排他锁时，InnoDB会给符合条件的已有数据记录的索引项加锁；对于键值在条件范围内但并不存在的记录，叫做“间隙（GAP）”。InnoDB也会对这个“间隙”加锁，这种锁机制就是所谓的间隙锁（Next-Key锁）。</li>
@@ -1805,7 +1804,7 @@ insert into test values(2,'2000');</code></pre>
 <ul>
 <li><p>通过检查InnoDB_row_lock状态变量来分析系统上的行锁的争夺情况</p>
 <p>show status like ‘innodb_row_lock%’;</p>
-<img src="/2020/01/14/mysql-jin-jie/%E6%A1%88%E4%BE%8B-%E8%A1%8C%E9%94%81%E5%88%86%E6%9E%90.png" class="" title="案例-行锁分析">
+<img src="/2020/01/14/mysql-you-hua/%E6%A1%88%E4%BE%8B-%E8%A1%8C%E9%94%81%E5%88%86%E6%9E%90.png" class="" title="案例-行锁分析">
 </li>
 <li><p>对各个状态量的说明如下：</p>
 <ul>
@@ -1837,7 +1836,7 @@ insert into test values(2,'2000');</code></pre>
 <li><p>slave会从master读取binlog来进行数据同步</p>
 </li>
 <li><p>三步骤+原理图</p>
-<img src="/2020/01/14/mysql-jin-jie/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-%E4%B8%89%E6%AD%A5%E9%AA%A4%E5%8E%9F%E7%90%86%E5%9B%BE.png" class="" title="主从复制-三步骤原理图">
+<img src="/2020/01/14/mysql-you-hua/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-%E4%B8%89%E6%AD%A5%E9%AA%A4%E5%8E%9F%E7%90%86%E5%9B%BE.png" class="" title="主从复制-三步骤原理图">
 </li>
 <li><p>复制的基本原则</p>
 <ul>
@@ -1927,7 +1926,7 @@ insert into test values(2,'2000');</code></pre>
 <li><p>查询master的状态</p>
 <ul>
 <li><p>show master status</p>
-<img src="/2020/01/14/mysql-jin-jie/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B61.png" class="" title="主从复制1">
+<img src="/2020/01/14/mysql-you-hua/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B61.png" class="" title="主从复制1">
 </li>
 <li><p>记录下File和Position的值</p>
 </li>
@@ -1939,7 +1938,7 @@ insert into test values(2,'2000');</code></pre>
 </li>
 <li><p>在Linux从机上配置需要复制的主机</p>
 <pre class=" language-shell"><code class="language-shell">CHANGE MASTER TO MASTER_HOST='主机IP', MASTER_USER='zhangsan', MASTER_PASSWORD='123456', MASTER_LOG_FILE='file名字', MASTER_LOG_POS=position数字;</code></pre>
-<img src="/2020/01/14/mysql-jin-jie/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B62.png" class="" title="主从复制2">
+<img src="/2020/01/14/mysql-you-hua/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B62.png" class="" title="主从复制2">
 </li>
 <li><p>启动从服务器复制功能</p>
 <ul>
@@ -1953,7 +1952,7 @@ insert into test values(2,'2000');</code></pre>
 <li><p>Slave_IO_Running：Yes</p>
 </li>
 <li><p>Slave_SQL_Running：Yes</p>
-<img src="/2020/01/14/mysql-jin-jie/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B63.png" class="" title="主从复制3">
+<img src="/2020/01/14/mysql-you-hua/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B63.png" class="" title="主从复制3">
 </li>
 </ul>
 </li>
@@ -1999,7 +1998,7 @@ L2Dwidget.init({ "model": { jsonPath:
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://ryougi-shiki0.github.io/2020/01/14/mysql-jin-jie/">http://ryougi-shiki0.github.io/2020/01/14/mysql-jin-jie/</a>
+                    <a href="http://ryougi-shiki0.github.io/2020/01/14/mysql-you-hua/">http://ryougi-shiki0.github.io/2020/01/14/mysql-you-hua/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -2041,12 +2040,12 @@ L2Dwidget.init({ "model": { jsonPath:
                                     <span class="chip bg-color">MySQL</span>
                                 </a>
                             
-                                <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                    <span class="chip bg-color">关系型数据库</span>
-                                </a>
-                            
                                 <a href="/tags/MySQL%E4%BC%98%E5%8C%96/">
                                     <span class="chip bg-color">MySQL优化</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                                    <span class="chip bg-color">关系型数据库</span>
                                 </a>
                             
                         </div>
@@ -2133,12 +2132,12 @@ Spring优势：方便解耦，简化开发，AOP变成的支持，声明式事�
                         <span class="chip bg-color">Spring</span>
                     </a>
                     
-                    <a href="/tags/JavaEE/">
-                        <span class="chip bg-color">JavaEE</span>
-                    </a>
-                    
                     <a href="/tags/%E5%BC%80%E6%BA%90%E6%A1%86%E6%9E%B6/">
                         <span class="chip bg-color">开源框架</span>
+                    </a>
+                    
+                    <a href="/tags/JavaEE/">
+                        <span class="chip bg-color">JavaEE</span>
                     </a>
                     
                 </div>
@@ -2201,12 +2200,12 @@ Spring优势：方便解耦，简化开发，AOP变成的支持，声明式事�
                         <span class="chip bg-color">MySQL</span>
                     </a>
                     
-                    <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                        <span class="chip bg-color">关系型数据库</span>
-                    </a>
-                    
                     <a href="/tags/MySQL%E4%BC%98%E5%8C%96/">
                         <span class="chip bg-color">MySQL优化</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                        <span class="chip bg-color">关系型数据库</span>
                     </a>
                     
                 </div>

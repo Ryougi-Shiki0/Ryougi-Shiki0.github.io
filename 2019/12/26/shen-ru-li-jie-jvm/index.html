@@ -475,7 +475,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-03-05
+                    2020-03-06
                 </div>
                 
 
@@ -1042,6 +1042,7 @@
 <p>准备阶段将类变量（static变量）内存分配，此时初始值为0，初始化后值才为给定值，仅当ConstantValue属性（final修饰）时，才直接初始化为给定值</p>
 </li>
 <li><p>解析</p>
+<p>解析动作主要针对类或接口、 字段、类方法、接口方法、方法类型、方法句柄和调用点限定符7类符号引用进行</p>
 <ul>
 <li><p>符号引用</p>
 <p>以一组符号来描述所引用的目标，引用的目标不一定已加载至内存中</p>
@@ -1049,16 +1050,18 @@
 <li><p>直接引用</p>
 <p>可以是直接指向目标的指针、相对偏移量或是一个间接定位到目标的句柄，使用后引用的目标必定在内存中存在</p>
 </li>
-</ul>
-<p>解析动作主要针对类或接口、</p>
-<ul>
 <li><p>类和接口的解析</p>
-<p>非数组类型则将符号引用的全限定名传递给所处类的加载器去加载该类，过程出现异常则加载失败</p>
-<p>为数组则对每个进行以上过程</p>
-<p>若以上未出异常，则</p>
+<ol>
+<li><p>非数组类型则将符号引用的全限定名传递给所处类的加载器去加载该类，过程出现异常则加载失败</p>
+</li>
+<li><p>数组类型则为数组则对每个进行以上过程</p>
+</li>
+<li><p>若以上过程未出异常则检测访问权限，若无权限则IllegalAccessError</p>
+</li>
+</ol>
 </li>
 <li><p>字段解析</p>
-<p>首先，如果字段所属的类或接口本身包含与目标匹配的字段，则返回直接引用；否则若实现接口，将自顶向下递归查找接口及父接口；否则按继承关系搜索其父类；最后若哈找失败则抛出NoSuchFieldError异常，若权限验证失败则IllegalAccessError异常</p>
+<p>首先，如果字段所属的类或接口本身包含与目标匹配的字段，则返回直接引用；否则若实现接口，将自顶向下递归查找接口及父接口；否则按继承关系搜索其父类；最后若查找失败则抛出NoSuchFieldError异常，若权限验证失败则IllegalAccessError异常</p>
 </li>
 <li><p>类方法解析</p>
 <p>首先查找索引对应的是否接口，是则返回异常；进行匹配，成功则正常引用；否则在父类查找并直接引用；否则在实现的接口与父接口中递归查找，找到则抛出AbstractMethodError异常；否则抛出NoSuchMethodError异常</p>
@@ -1069,16 +1072,16 @@
 </ul>
 </li>
 <li><p>初始化</p>
-<p>此阶段开开始真正执行Java字节码</p>
+<p>此阶段开开始真正执行Java字节码，初始化阶段是执行类构造器&lt;clinit＞()方法的过程</p>
 <ul>
-<li><clinit>()方法收集类中所有的类变量和静态语句块中的语句</li>
-<li>父类的<clinit>()方法先执行，子类的<clinit>()页不需要显式的调用父类的方法</li>
-<li><clinit>()方法仅用于静态变量或静态代码块</li>
-<li>虚拟机负责管理<clinit>()方法的多线程同步问题</li>
+<li>&lt;clinit&gt;()方法收集类中所有的类变量和静态语句块中的语句</li>
+<li>父类的&lt;clinit&gt;()方法先执行，子类的&lt;clinit&gt;()页不需要显式的调用父类的方法</li>
+<li>&lt;clinit&gt;()方法仅用于静态变量或静态代码块</li>
+<li>虚拟机负责管理&lt;clinit&gt;()方法的多线程同步问题</li>
 </ul>
 </li>
-<li><p>类加载器</p>
-<ul>
+</ul>
+<h4 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h4><ul>
 <li><p>类在由不同的类加载器加载出来后，是两个独立的类，做对象所属检查不会判定为同一个</p>
 </li>
 <li><p>站在Java虚拟机的角度讲，只存在两种不同的类加载器</p>
@@ -1089,22 +1092,24 @@
 </li>
 <li><p>而站在开发人员角度则分为：</p>
 <ul>
-<li>启动类加载器： 将JAVA_HOME\lib中的，或者-Xbootclasspath参数所指定的路径中的类库加载到虚拟机内存，无法被Java程序直接引用</li>
-<li>扩展类加载器： 负责加载JAVA_HOME\lib\ext中的或者系统变量java.ext.dirs指定的路径中的所有类库，开发者可直接使用</li>
-<li>应用程序类加载器 又系统类加载器 程序默认的类加载器</li>
-</ul>
-</li>
+<li>启动类加载器BootstrapClassLoader： 将JAVA_HOME\lib中的，或者-Xbootclasspath参数所指定的路径中的类库加载到虚拟机内存，无法被Java程序直接引用</li>
+<li>扩展类加载器ExtClassLoader： 负责加载JAVA_HOME\lib\ext中的或者系统变量java.ext.dirs指定的路径中的所有类库，开发者可直接使用</li>
+<li>应用程序类加载器AppClassLoader 又系统类加载器 程序默认的类加载器</li>
 </ul>
 </li>
 <li><p>双亲委派模型</p>
 <p>当一个类收到了类加载的请求，委派父类加载器去完成，仅当父类加载器无法完成加载时，子加载器才尝试进行加载</p>
 </li>
-</ul>
-<h3 id="虚拟机字节码执行引擎"><a href="#虚拟机字节码执行引擎" class="headerlink" title="虚拟机字节码执行引擎"></a>虚拟机字节码执行引擎</h3><ul>
-<li><p>运行时栈帧结构</p>
+<li><p>破坏双亲委派模型</p>
 <ul>
+<li>线程上下文加载器</li>
+<li>SPI机制</li>
+</ul>
+</li>
+</ul>
+<h3 id="虚拟机字节码执行引擎"><a href="#虚拟机字节码执行引擎" class="headerlink" title="虚拟机字节码执行引擎"></a>虚拟机字节码执行引擎</h3><h4 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h4><ul>
 <li><p>局部变量表</p>
-<p>通过Slot存放数据</p>
+<p>通过Slot存放数据，64位VM需要通过补齐和补白与32位VM保持对外一致</p>
 </li>
 <li><p>操作数栈</p>
 </li>
@@ -1114,10 +1119,8 @@
 <li><p>方法返回地址</p>
 </li>
 </ul>
-<p>动态连接、方法返回地址、附加信息归为栈帧信息</p>
-</li>
-<li><p>方法调用</p>
-<ul>
+<p>一般把动态连接、方法返回地址、附加信息归为栈帧信息</p>
+<h4 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h4><ul>
 <li><p>解析 运行前便确定的调用版本，编译时必须确定的方法调用</p>
 <ul>
 <li>invokestatic 调用静态</li>
@@ -1134,7 +1137,7 @@
 <p>解析与分派并不是互斥的，static方法重载时可能先解析再静态分派</p>
 </li>
 <li><p>动态分派</p>
-<p><strong>继承与实现关系中的方法分派规则</strong></p>
+<p><strong>继承与实现关系中的重写方法分派规则</strong></p>
 <p>invokevirtual指令运行</p>
 <ol>
 <li>找到操作数栈顶的第一个元素所指向的对象那个的实际类型</li>
@@ -1150,29 +1153,19 @@
 <p>动态分派的实现与C++类似，虚方法表存放着方法的入口地址，若子类没有重写，则入口与父类一致，若重写了，则替换为子类的入口地址</p>
 </li>
 </ul>
-</li>
-<li><p>字节码执行引擎</p>
-<ul>
+<h4 id="字节码执行引擎"><a href="#字节码执行引擎" class="headerlink" title="字节码执行引擎"></a>字节码执行引擎</h4><ul>
 <li>解释执行</li>
 <li>基于栈的指令集与基于寄存器的指令集</li>
 <li>基于栈的解释器执行过程</li>
 </ul>
-</li>
-</ul>
-<h2 id="程序编译与代码优化"><a href="#程序编译与代码优化" class="headerlink" title="程序编译与代码优化"></a>程序编译与代码优化</h2><h3 id="编译期优化"><a href="#编译期优化" class="headerlink" title="编译期优化"></a>编译期优化</h3><ul>
-<li><p>Javac编译器</p>
-</li>
-<li><p>Java语法糖</p>
-<ul>
+<h2 id="程序编译与代码优化"><a href="#程序编译与代码优化" class="headerlink" title="程序编译与代码优化"></a>程序编译与代码优化</h2><h3 id="编译期优化"><a href="#编译期优化" class="headerlink" title="编译期优化"></a>编译期优化</h3><h3 id="Javac编译器"><a href="#Javac编译器" class="headerlink" title="Javac编译器"></a>Javac编译器</h3><h4 id="Java语法糖"><a href="#Java语法糖" class="headerlink" title="Java语法糖"></a>Java语法糖</h4><ul>
 <li><p>泛型与类型擦除</p>
-<p>重载需要方法的描述符不是完全一致</p>
+<p>重载需要方法的描述符不是完全一致，C#通过类型膨胀实现泛型而Java是类型擦除</p>
 </li>
 <li><p>自动装箱、拆箱与遍历循环</p>
 </li>
 <li><p>条件编译 </p>
 <p>自动消除无法到达的语法分支，或直接编译不通过</p>
-</li>
-</ul>
 </li>
 </ul>
 <h3 id="运行期优化"><a href="#运行期优化" class="headerlink" title="运行期优化"></a>运行期优化</h3><ul>
@@ -1185,9 +1178,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="高效并发"><a href="#高效并发" class="headerlink" title="高效并发"></a>高效并发</h2><h3 id="Java内存模型与线程"><a href="#Java内存模型与线程" class="headerlink" title="Java内存模型与线程"></a>Java内存模型与线程</h3><ul>
-<li><p>内存模型</p>
-<ul>
+<h2 id="高效并发"><a href="#高效并发" class="headerlink" title="高效并发"></a>高效并发</h2><h3 id="Java内存模型与线程"><a href="#Java内存模型与线程" class="headerlink" title="Java内存模型与线程"></a>Java内存模型与线程</h3><h4 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h4><ul>
 <li><p>主内存和工作内存</p>
 </li>
 <li><p>内存间交互操作</p>
@@ -1239,9 +1230,7 @@
 </ul>
 </li>
 </ul>
-</li>
-<li><p>Java与线程</p>
-<ul>
+<h4 id="Java与线程"><a href="#Java与线程" class="headerlink" title="Java与线程"></a>Java与线程</h4><ul>
 <li>线程的实现<ul>
 <li>内核级线程</li>
 <li>用户级线程</li>
@@ -1263,9 +1252,7 @@
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<h3 id="线程安全与锁优化"><a href="#线程安全与锁优化" class="headerlink" title="线程安全与锁优化"></a>线程安全与锁优化</h3><blockquote>
+<h3 id="线程安全与锁优化"><a href="#线程安全与锁优化" class="headerlink" title="线程安全与锁优化"></a>线程安全与锁优化</h3><h4 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h4><blockquote>
 <p>线程安全：当多个线程访问一个对象时，如果不用考v了这些线程在运行时环境的调度和交替执行，也不需要进行额外的同步，或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获得正确的结果，那这个对象就是线程安全的</p>
 </blockquote>
 <ul>
@@ -1312,11 +1299,18 @@
 </li>
 </ul>
 </li>
-<li><p>锁优化</p>
-<ul>
+</ul>
+<h4 id="锁优化"><a href="#锁优化" class="headerlink" title="锁优化"></a>锁优化</h4><ul>
 <li><p>自旋锁</p>
+<ul>
+<li>如果自旋超过了限定的次数仍然 没有成功获得锁，就应当使用传统的方式去挂起线程了。自旋次数的默认值是 10 次，用户 可以使用参数-XX:PreBlockSpin 来更改</li>
+</ul>
 </li>
 <li><p>锁消除</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//此段代码将在javac编译后转换为StringBuffer操作，而后同步操作将被JVM优化</span>
+<span class="token keyword">public</span> String <span class="token function">concatString</span><span class="token punctuation">(</span>String s1<span class="token punctuation">,</span>String s2<span class="token punctuation">,</span>String s3<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">return</span> s1<span class="token operator">+</span>s2<span class="token operator">+</span>s3<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
 <p>编译器运行时对代码加载的无必要同步措施进行消除</p>
 </li>
 <li><p>锁粗化</p>
@@ -1324,12 +1318,12 @@
 </li>
 <li><p>轻量级锁</p>
 <p>虚拟机对象头MarkWord</p>
+<img src="/2019/12/26/shen-ru-li-jie-jvm/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AF%B9%E8%B1%A1%E5%A4%B4MarkWord.png" class="" title="虚拟机对象头MarkWord">
 
+<p>32bit空间中的 25bit 用于存储对象哈希码(HashCode), 4bit 用于存储对象分代年龄， 2bit 于存储锁标志位， 1bit 固定为0</p>
 </li>
 <li><p>偏向锁</p>
 <p>消除数据在无竞争情况下的同步原语，提高运行性能</p>
-</li>
-</ul>
 </li>
 </ul>
 
@@ -1498,12 +1492,12 @@
                         <span class="chip bg-color">MySQL</span>
                     </a>
                     
-                    <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                        <span class="chip bg-color">关系型数据库</span>
-                    </a>
-                    
                     <a href="/tags/MySQL%E4%BC%98%E5%8C%96/">
                         <span class="chip bg-color">MySQL优化</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                        <span class="chip bg-color">关系型数据库</span>
                     </a>
                     
                 </div>

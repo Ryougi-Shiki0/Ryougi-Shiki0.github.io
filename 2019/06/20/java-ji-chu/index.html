@@ -474,7 +474,7 @@ new Integer(123)与 Inte">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-03-01
+                    2020-03-06
                 </div>
                 
 
@@ -604,7 +604,44 @@ new Integer(123)与 Inte">
 </ul>
 </li>
 </ul>
-<h3 id="7-新特性"><a href="#7-新特性" class="headerlink" title="7.新特性"></a>7.新特性</h3><ul>
+<h3 id="7-代理"><a href="#7-代理" class="headerlink" title="7.代理"></a>7.代理</h3><ul>
+<li><p>静态代理</p>
+<ul>
+<li>定义接口和接口的实现类, 然后定义接口的代理对象, 将接口的实例注入到代理对象中, 然后通过代理对象去调用真正的实现类，实现过程非常简单也比较容易理解, 静态代理的代理关系在编译期间就已经确定了的</li>
+</ul>
+</li>
+<li><p>动态代理</p>
+<p>代理类在程序运行时创建的代理方式被成为动态代理。在了解动态代理之前, 我们先简回顾一下 JVM 的类加载机制中的加载阶段要做的三件事情 ( 附 Java 中的类加载器 )</p>
+<ol>
+<li>通过一个类的全名或其它途径来获取这个类的二进制字节流</li>
+<li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构</li>
+<li>在内存中生成一个代表这个类的 Class 对象, 作为方法区中对这个类访问的入口</li>
+</ol>
+<p>而我们要说的动态代理，主要就发生在第一个阶段, 这个阶段类的二进制字节流的来源可以有很多, 比如 zip 包、网络、运行时计算生成、其它文件生成 (JSP)、数据库获取。其中运行时计算生成就是我们所说的动态代理技术，在 Proxy 类中, 就是运用了 ProxyGenerator.generateProxyClass 来为特定接口生成形式为 $Proxy 的代理类的二进制字节流。所谓的动态代理就是想办法根据接口或者目标对象计算出代理类的字节码然后加载进 JVM 中。</p>
+<ul>
+<li><p>JDK动态代理</p>
+<p>java 动态代理最大的特点就是动态生成的代理类和委托类实现同一个接口。java 动态代理其实内部是通过反射机制实现的，也就是已知的一个对象，在运行的时候动态调用它的方法，并且调用的时候还可以加一些自己的逻辑在里面</p>
+</li>
+<li><p>CGLIB动态代理</p>
+<p>CGLIB 创建动态代理类的模式是:</p>
+<ol>
+<li>查找目标类上的所有非 final 的 public 类型的方法 (final 的不能被重写)</li>
+<li>将这些方法的定义转成字节码</li>
+<li>将组成的字节码转换成相应的代理的 Class 对象然后通过反射获得代理类的实例对象</li>
+<li>实现 MethodInterceptor 接口, 用来处理对代理类上所有方法的请求</li>
+</ol>
+</li>
+<li><p>区别</p>
+<ul>
+<li>JDK 动态代理基于 Java 反射机制实现, 必须要实现了接口的业务类才能用这种方法生成代理对象。</li>
+<li>CGLIB 动态代理基于 ASM 框架通过生成业务类的子类来实现。</li>
+<li>JDK 动态代理的优势是最小化依赖关系，减少依赖意味着简化开发和维护并且有 JDK 自身支持。还可以平滑进行 JDK 版本升级，代码实现简单。基于 CGLIB 框架的优势是无须实现接口，达到代理类无侵入，我们只需操作我们关系的类，不必为其它相关类增加工作量，性能比较高</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-新特性"><a href="#8-新特性" class="headerlink" title="8.新特性"></a>8.新特性</h3><ul>
 <li>Stream</li>
 </ul>
 <h2 id="Java容器"><a href="#Java容器" class="headerlink" title="Java容器"></a>Java容器</h2><h3 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h3><ul>
