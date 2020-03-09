@@ -471,7 +471,7 @@ insert buff">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-03-07
+                    2020-03-08
                 </div>
                 
 
@@ -776,6 +776,24 @@ insert buff">
 <h4 id="B-树索引的使用"><a href="#B-树索引的使用" class="headerlink" title="B+树索引的使用"></a>B+树索引的使用</h4><ul>
 <li>联合索引</li>
 <li>覆盖索引</li>
+</ul>
+<h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><h4 id="lock与latch"><a href="#lock与latch" class="headerlink" title="lock与latch"></a>lock与latch</h4><img src="/2020/01/30/mysql-ji-zhu-nei-mu/lock%E4%B8%8Elatch.png" class="" title="lock与latch">
+
+<ul>
+<li>latch为轻量级的锁，要求锁定的时间短，否则性能差，InnoDB中分为两种<ul>
+<li>lock</li>
+<li>latch</li>
+</ul>
+</li>
+<li>lock对象针对事务，用于锁定表页行</li>
+</ul>
+<h4 id="储存引擎中的锁"><a href="#储存引擎中的锁" class="headerlink" title="储存引擎中的锁"></a>储存引擎中的锁</h4><ul>
+<li>锁的类型<ul>
+<li>共享锁</li>
+<li>排他锁</li>
+</ul>
+</li>
+<li></li>
 </ul>
 
             </div>
