@@ -468,7 +468,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-03-01
+                    2020-03-28
                 </div>
                 
 
@@ -726,7 +726,259 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
 </ul>
 </li>
 </ul>
-<h3 id="5-并发List"><a href="#5-并发List" class="headerlink" title="5.并发List"></a>5.并发List</h3><h2 id="实践篇"><a href="#实践篇" class="headerlink" title="实践篇"></a>实践篇</h2>
+<h3 id="5-并发List"><a href="#5-并发List" class="headerlink" title="5.并发List"></a>5.并发List</h3><p>写时复制策略，Reetrantlock独占锁来保证同时只有一个线程对快照进行修改，内部的array为volatile</p>
+<h4 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h4><ul>
+<li>初始化</li>
+<li>添加元素<ul>
+<li>写时复制原则，添加时加锁，写完释放锁</li>
+</ul>
+</li>
+<li>获取元素<ul>
+<li>写时复制策略带来的弱一致性</li>
+</ul>
+</li>
+<li>修改元素</li>
+<li>删除元素</li>
+<li>弱一致性的迭代器</li>
+</ul>
+<h3 id="6-锁原理剖析"><a href="#6-锁原理剖析" class="headerlink" title="6.锁原理剖析"></a>6.锁原理剖析</h3><h4 id="LockSupport"><a href="#LockSupport" class="headerlink" title="LockSupport"></a>LockSupport</h4><ul>
+<li>park()<ul>
+<li>默认线程不持有许可，调用此方法则将线程挂起，调用此方法的线程被中断后将直接返回</li>
+</ul>
+</li>
+<li>unpark()<ul>
+<li>线程调用此方法，若被park()阻塞，则被唤醒继续执行</li>
+<li>若未被park()阻塞，则调用了unpark()后持有了许可，park()方法将不能阻塞</li>
+</ul>
+</li>
+<li>parkNanos(long nanos)<ul>
+<li>相比park设定了挂起最长时间，超时则返回</li>
+</ul>
+</li>
+<li>park(Object blocker)<ul>
+<li>Thread类中包含volatile Object parkBlocker变量，存取park方法传递的变量</li>
+</ul>
+</li>
+</ul>
+<h4 id="AQS容器"><a href="#AQS容器" class="headerlink" title="AQS容器"></a>AQS容器</h4><ul>
+<li>锁的底层支持<ul>
+<li>FIFO的双向队列，节点head、tail记录队首队尾，元素节点为Node</li>
+<li>Node节点中<ul>
+<li>thread变量存放线程</li>
+<li>SHARED 标记获取共享资源是被阻塞挂起放入队列</li>
+<li>EXCLUSIVE 标记获取独占资源被阻塞放入队列</li>
+</ul>
+</li>
+<li>队列中的成员变量<ul>
+<li>waitStatus记录当前线程等待状态<ol>
+<li>CANCELLED 线程被取消</li>
+<li>SIGNAL 线程需要被唤醒</li>
+<li>CONDITION 在条件队列里等待</li>
+<li>PROPAGATE 释放共享资源需要通知其他节点</li>
+</ol>
+</li>
+<li>prev、next</li>
+</ul>
+</li>
+<li>state状态信息<ul>
+<li>ReetrantLock中state表示可重入次数</li>
+<li>ReetrantReadWriteLock中，高16位表示获取读锁的次数，低16位表示获取写锁可重入次数</li>
+<li>Semaphone中，表示可用信号的个数</li>
+<li>CountDownLatch中，表示计数器当前的值</li>
+</ul>
+</li>
+<li>内部类ConditionObject<ul>
+<li>本身为条件变量，对应一个单链表条件队列储存阻塞线程，结合锁实现线程同步</li>
+</ul>
+</li>
+<li>state操作<ul>
+<li>acquire() release()等对独占方式操作</li>
+<li>acquireShared() releaseShared()等对共享方式操作</li>
+</ul>
+</li>
+<li>独占方式流程<ol>
+<li>tryAcquire() CAS尝试state，成功则返回，失败则将Node.EXCLUSIVE尾插AQS，并park()挂起自己</li>
+<li>tryRelease() CAS尝试state，unpark()AQS中的一个线程，线程tryAcquire()重复上述过程</li>
+</ol>
+</li>
+<li>共享方式流程<ol>
+<li>tryAcquireShared() CAS尝试state，成功则返回，失败则将Node.EXCLUSIVE尾插AQS，并park()挂起自己</li>
+<li>tryReleaseShared() CAS尝试state，unpark()AQS中的一个线程，线程tryAcquireShared()重复上述过程</li>
+</ol>
+</li>
+<li>AQS队列维护流程<ul>
+<li>创建时头尾节点均为null，CAS创建哨兵节点</li>
+<li>再CAS插入Node</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>条件变量的支持<ul>
+<li>newCondition()可以创建一个条件变量，当该条件变量await()后，通过addConditionWaiter()将线程放入每个条件变量对应的条件队列</li>
+</ul>
+</li>
+<li>自定义同步器<ul>
+<li>自定义AQS</li>
+</ul>
+</li>
+</ul>
+<h4 id="ReentrantLock原理"><a href="#ReentrantLock原理" class="headerlink" title="ReentrantLock原理"></a>ReentrantLock原理</h4><ul>
+<li><p>获取锁</p>
+<ul>
+<li><p>lock()</p>
+<p>调用时state值+1，</p>
+<p>lock 优先考虑获取锁，待获取锁成功后，才响应中断。</p>
+</li>
+<li><p>lockInterruptibly()<br>lockInterruptibly 优先考虑响应中断，而不是响应锁的普通获取或重入获取</p>
+</li>
+<li><p>tryLock()</p>
+<p>尝试获取锁，成功则true否则false，不会引起当前线程阻塞</p>
+</li>
+<li><p>tryLock(long timeout,TimeUnit unit)</p>
+<p>设置超时时间</p>
+</li>
+</ul>
+</li>
+<li><p>释放锁</p>
+<ul>
+<li>unlock()</li>
+</ul>
+</li>
+</ul>
+<h4 id="ReetrantReadWriteLock"><a href="#ReetrantReadWriteLock" class="headerlink" title="ReetrantReadWriteLock"></a>ReetrantReadWriteLock</h4><ul>
+<li>内部维护了一个ReadLock和WriteLock</li>
+<li>分别实现了lock(),lockInterruptibly(),tryLock(),tryLock(Long timeout,TimeUnit unit),unlock()方法</li>
+<li>state变量高16位为读锁的获取个数，低16位为写锁可重入次数</li>
+</ul>
+<h4 id="StampedLock"><a href="#StampedLock" class="headerlink" title="StampedLock"></a>StampedLock</h4><ul>
+<li><p>为不可重入锁，提供了三种类型锁</p>
+<ul>
+<li>writeLock写锁</li>
+<li>readLock悲观读锁</li>
+<li>tryOptimisticRead乐观读锁，通过判断validate的返回值来获知其他线程是否持有写锁</li>
+</ul>
+</li>
+<li><p>实例</p>
+<p>Point类的move(),distanceFromOrigin(),moveIfAtOrigin()方法，分别使用写锁、乐观读锁以及悲观读锁转写锁</p>
+</li>
+</ul>
+<h3 id="7-并发队列"><a href="#7-并发队列" class="headerlink" title="7.并发队列"></a>7.并发队列</h3><h4 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h4><p>单链表实现，维护头尾节点，头为null值</p>
+<ul>
+<li><p>offer()</p>
+<p>通过CAS向尾部插入节点，失败则自旋尝试</p>
+</li>
+<li><p>poll()</p>
+<p>CAS从头部删除节点，失败则goto到外层重试循环</p>
+</li>
+</ul>
+<h4 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h4><ul>
+<li><p>包含takeLock、putLock、notEmpty、notFull两把锁以及两个条件变量，以及一个AtomicInteger类型的count</p>
+</li>
+<li><p>offer</p>
+<p>获取putLock，节点入队，notFull条件变量调用signal，调用signalNotEmpty()方法</p>
+</li>
+<li><p>poll</p>
+<p>获取takeLock，节点出队，notEmpty.signal()，调用signalNotFull()方法</p>
+</li>
+<li><p>remove</p>
+<p>fullyLock()方法双重加锁,takeLockputLock</p>
+</li>
+</ul>
+<h4 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h4><p>通过独占锁实现</p>
+<ul>
+<li><p>offer</p>
+<p>ReetrantLock加锁，enqueue()中完成入队及notEmpty.signal()，解锁</p>
+</li>
+<li><p>put</p>
+<p>ReetrantLock使用lockInterruptibly()加锁，队列满则while循环await，出循环则enqueue，解锁</p>
+</li>
+<li><p>poll</p>
+<p>ReetrantLock加锁，dequeue()完成出队及notFulls</p>
+</li>
+<li><p>take</p>
+<p>阻塞方法，ReetrantLock使用lockInterruptibly()加锁，队列空则while循环await，出循环则dequeue，解锁</p>
+</li>
+</ul>
+<h4 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h4><p>使用自旋锁allocationSpinLock，通过CAS保证只有一个线程进行扩容队列</p>
+<ul>
+<li><p>offer</p>
+<p>插入元素ReetrantLock加锁，while判断tryGrow，然后堆上用Comparator上滤，notEmpty.signal()，解锁</p>
+</li>
+<li><p>put</p>
+<p>同offer</p>
+</li>
+<li><p>poll</p>
+<p>取內部建堆根节点，为空则返回null，ReetrantLock加锁，dequeue中用Comparator上滤，解锁</p>
+</li>
+<li><p>take</p>
+<p>取堆根节点，为空则阻塞，lock.lockInterruptibly()，优先响应中断，while队列空则notEmpty.await()</p>
+</li>
+</ul>
+<h4 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h4><p>插入元素实现Delayed接口，每个元素包含过期时间，包含ReetrantLock和available条件变量</p>
+<ul>
+<li><p>offer</p>
+<p>插入元素，不可插入null</p>
+</li>
+<li><p>take</p>
+<p>获取并移除过期元素，若没有过期元素则等待</p>
+</li>
+<li><p>poll</p>
+<p>获取并移除过期元素，若没有过期元素则返回null</p>
+</li>
+</ul>
+<h3 id="8-ThreadPoolExecutor"><a href="#8-ThreadPoolExecutor" class="headerlink" title="8.ThreadPoolExecutor"></a>8.ThreadPoolExecutor</h3><p>线程池在执行大量异步任务时能够提供较好的性能，减少了执行任务的创建销毁线程的开销，提供了资源限制和管理的手段</p>
+<h4 id="Executors工具类"><a href="#Executors工具类" class="headerlink" title="Executors工具类"></a>Executors工具类</h4><ul>
+<li><p>底层调用ThreadPoolExecutor</p>
+</li>
+<li><p>ctl为AtomicInteger的变量，记录线程池状态和线程个数</p>
+<p>其中高3位表示线程池状态，低29位表示线程数量</p>
+<ul>
+<li><p>RUNNING</p>
+<p>接受新任务并且处理阻塞队列里的任务</p>
+</li>
+<li><p>SHUTDOWN</p>
+<p>拒绝新任务但是处理阻塞队列里的任务</p>
+</li>
+<li><p>STOP</p>
+<p>拒绝新任务并且抛弃阻塞队列里的任务 ，同时会中断正在处理的任务 </p>
+</li>
+<li><p>TIDYING</p>
+<p>所有任务都执行完（包含阻塞队列里面的任务）后当前线程池活动线程数为0将要调用 terminated 方法 </p>
+</li>
+<li><p>TERMINATED</p>
+<p> 终止状态 terminated 方法调用完成以后的状态</p>
+</li>
+</ul>
+</li>
+<li><p>线程池参数</p>
+<ul>
+<li>corePoolSize：核心线程数量</li>
+<li>maximumPoolSize：线程最大线程数</li>
+<li>workQueue：阻塞队列，存储等待执行的任务，很重要，会对线程池运行过程产生重大影响</li>
+<li>keepAliveTime：线程没有任务执行时最多保持多久时间终止（当线程中的线程数量大于corePoolSize的时候，如果这时没有新的任务提交核心线程外的线程不会立即销毁，而是等待，直到等待的时间超过keepAliveTime）</li>
+<li>unit：keepAliveTime的时间单位</li>
+<li>threadFactory：线程工厂，用来创建线程，若不设置则使用默认的工厂来创建线程，这样新创建出来的线程会具有相同的优先级，并且是非守护的线程，同时也会设置好名称</li>
+<li>rejectHandler：当拒绝处理任务时(阻塞队列满)的策略（AbortPolicy默认策略直接抛出异常、CallerRunsPolicy用调用者所在的线程执行任务、DiscardOldestPolicy丢弃队列中最靠前的任务并执行</li>
+</ul>
+</li>
+<li><p>线程池类型</p>
+<ul>
+<li><p>newCachedThreadPool</p>
+<p>创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程  </p>
+</li>
+<li><p>newFixedThreadPool</p>
+<p>创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待  </p>
+</li>
+<li><p>newScheduledThreadPool</p>
+<p>创建一个定长线程池，支持定时及周期性任务执行  </p>
+</li>
+<li><p>newSingleThreadExecutor</p>
+<p>创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="实践篇"><a href="#实践篇" class="headerlink" title="实践篇"></a>实践篇</h2>
             </div>
             <hr/>
 
@@ -741,7 +993,7 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://ryougi-shiki0.github.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -751,7 +1003,7 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://ryougi-shiki0.github.io/2019/10/18/bing-fa-bian-cheng-zhi-mei/">http://ryougi-shiki0.github.io/2019/10/18/bing-fa-bian-cheng-zhi-mei/</a>
+                    <a href="https://ryougishiki0.gitee.io/2019/10/18/bing-fa-bian-cheng-zhi-mei/">https://ryougishiki0.gitee.io/2019/10/18/bing-fa-bian-cheng-zhi-mei/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -764,7 +1016,7 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
+                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
                     !
                 </span>
             </div>
@@ -1103,7 +1355,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
+            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
