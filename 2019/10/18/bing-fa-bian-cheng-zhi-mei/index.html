@@ -468,7 +468,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-03-28
+                    2020-03-29
                 </div>
                 
 
@@ -927,7 +927,7 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
 </li>
 </ul>
 <h3 id="8-ThreadPoolExecutor"><a href="#8-ThreadPoolExecutor" class="headerlink" title="8.ThreadPoolExecutor"></a>8.ThreadPoolExecutor</h3><p>线程池在执行大量异步任务时能够提供较好的性能，减少了执行任务的创建销毁线程的开销，提供了资源限制和管理的手段</p>
-<h4 id="Executors工具类"><a href="#Executors工具类" class="headerlink" title="Executors工具类"></a>Executors工具类</h4><ul>
+<h4 id="类结构"><a href="#类结构" class="headerlink" title="类结构"></a>类结构</h4><ul>
 <li><p>底层调用ThreadPoolExecutor</p>
 </li>
 <li><p>ctl为AtomicInteger的变量，记录线程池状态和线程个数</p>
@@ -958,23 +958,129 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
 <li>keepAliveTime：线程没有任务执行时最多保持多久时间终止（当线程中的线程数量大于corePoolSize的时候，如果这时没有新的任务提交核心线程外的线程不会立即销毁，而是等待，直到等待的时间超过keepAliveTime）</li>
 <li>unit：keepAliveTime的时间单位</li>
 <li>threadFactory：线程工厂，用来创建线程，若不设置则使用默认的工厂来创建线程，这样新创建出来的线程会具有相同的优先级，并且是非守护的线程，同时也会设置好名称</li>
-<li>rejectHandler：当拒绝处理任务时(阻塞队列满)的策略（AbortPolicy默认策略直接抛出异常、CallerRunsPolicy用调用者所在的线程执行任务、DiscardOldestPolicy丢弃队列中最靠前的任务并执行</li>
+<li>rejectHandler：当拒绝处理任务时(阻塞队列满)的策略（AbortPolicy默认策略直接抛出异常、CallerRunsPolicy用调用者所在的线程执行任务、DiscardOldestPolicy丢弃队列中最靠前的任务并执行、DiscardPolicy直接抛弃</li>
 </ul>
 </li>
 <li><p>线程池类型</p>
 <ul>
 <li><p>newCachedThreadPool</p>
-<p>创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程  </p>
+<p>创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程  ，队列为同步队列</p>
 </li>
 <li><p>newFixedThreadPool</p>
-<p>创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待  </p>
+<p>创建一个定长线程池，核心线程和最大线程数均为nThreads，超出的线程会在队列中等待</p>
 </li>
 <li><p>newScheduledThreadPool</p>
-<p>创建一个定长线程池，支持定时及周期性任务执行  </p>
+<p>创建一个定长线程池，指定一定延迟时间或定时进行任务调度</p>
 </li>
 <li><p>newSingleThreadExecutor</p>
 <p>创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行</p>
 </li>
+</ul>
+</li>
+<li><p>ThreadPoolExecutor其他成员</p>
+<ul>
+<li>mainLock独占锁，控制新增worker线程的操作的原子性</li>
+<li>Worker继承AQS和Runnable接口，具体承载任务</li>
+<li>DefaultThreadFactory</li>
+</ul>
+</li>
+</ul>
+<h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><ul>
+<li><p>execute()</p>
+<ol>
+<li>若线程池线程个数小于corePoolSize则addWorkers()</li>
+<li>若大于等于corePoolSize则判断线程池状态，running则放入阻塞队列，否则抛弃</li>
+<li>添加成功后进行状态校验，非running则移除并执行拒绝策略，并判断线程池是否为空</li>
+</ol>
+</li>
+<li><p>addWorker()</p>
+<ol>
+<li>双重循环通过CAS增加线程数，外层判断线程池状态，内层设置线程个数</li>
+<li>使用全局独占锁将任务添加至workers(HashSet类型)工作集</li>
+</ol>
+</li>
+<li><p>runWorker</p>
+<p>获取独占锁，task.run()</p>
+<p>其中留了protected方法beforeExecute、afterExecute</p>
+<p>任务执行结束后调用processWorkerExit清理</p>
+</li>
+<li><p>shutdown</p>
+<p>不接受新任务，仅完成阻塞队列内任务</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">final</span> ReentrantLock mainLock <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>mainLock<span class="token punctuation">;</span>
+    mainLock<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        <span class="token function">checkShutdownAccess</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">advanceRunState</span><span class="token punctuation">(</span>SHUTDOWN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">interruptIdleWorkers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">onShutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// hook for ScheduledThreadPoolExecutor</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+        mainLock<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">tryTerminate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>shutdownNow</p>
+<p>不接受新任务，且丢弃阻塞队列内任务，返回List&lt;Runnable&gt;</p>
+</li>
+<li><p>awaitTermination</p>
+<ul>
+<li>阻塞当前线程，仅当线程池为Terminated或等待时间超时才返回，Terminated返回true，超时返回false</li>
+</ul>
+</li>
+</ul>
+<h3 id="9-ScheduledThreadPoolExecutor"><a href="#9-ScheduledThreadPoolExecutor" class="headerlink" title="9.ScheduledThreadPoolExecutor"></a>9.ScheduledThreadPoolExecutor</h3><h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>阻塞队列为DelayedWorkQueue</p>
+<ul>
+<li>7种状态<ul>
+<li>NEW</li>
+<li>COMPLETING</li>
+<li>NORMAL</li>
+<li>EXCEPTIONAL</li>
+<li>CANCELLED</li>
+<li>INTERRUPTING</li>
+<li>INTERRUPTED</li>
+</ul>
+</li>
+<li>转换路径<ul>
+<li>NEW-&gt;COMPLETING-&gt;NORMAL</li>
+<li>NEW-&gt;COMPLETING-&gt;EXCEPTIONAL</li>
+<li>NEW-&gt;CANCELLED</li>
+<li>NEW-&gt;INTERRUPTING-&gt;INTERRUPTED</li>
+</ul>
+</li>
+<li>ScheduledFutureTask内部变量period<ul>
+<li>为0则任务一次性，执行后即退出</li>
+<li>负数则为固定延迟的定时可重复执行的任务</li>
+<li>正数则为固定频率定时可重复执行任务</li>
+</ul>
+</li>
+</ul>
+<h4 id="原理剖析"><a href="#原理剖析" class="headerlink" title="原理剖析"></a>原理剖析</h4><ul>
+<li><p>schedule(Runnable command,long delay,TimeUnit unit)</p>
+<p>提交一个延迟执行的任务</p>
+<ol>
+<li>参数校验后command任务转换为ScheduledFutureTask，完成Runnable与Callable的适配</li>
+<li>delayedExecute将任务添加至延迟队列<ul>
+<li>判断是否关闭</li>
+<li>入队</li>
+<li>并再次检查状态</li>
+<li>确保至少有一个线程在处理任务</li>
+</ul>
+</li>
+<li>队列执行任务</li>
+</ol>
+</li>
+<li><p>scheduleWithFixedDelay(Runnable command,long initialDelay,long delay, TimeUnit unit)</p>
+<p>任务执行完毕后，使其延迟固定时间再次运行</p>
+<p>流程与前者大致相同，执行FutureTask的runAndReset方法</p>
+</li>
+<li><p>scheduleAtFixedRate(Runnable command,long initialDelay,long period, TimeUnit unit)</p>
+<p>相对起始时间点以固定频率调用指定的任务</p>
+</li>
+</ul>
+<h3 id="10-线程同步器"><a href="#10-线程同步器" class="headerlink" title="10.线程同步器"></a>10.线程同步器</h3><h4 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h4><ul>
+<li>await()<ul>
+<li></li>
 </ul>
 </li>
 </ul>
@@ -993,7 +1099,7 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -1003,7 +1109,7 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io/2019/10/18/bing-fa-bian-cheng-zhi-mei/">https://ryougishiki0.gitee.io/2019/10/18/bing-fa-bian-cheng-zhi-mei/</a>
+                    <a href="http://ryougi-shiki0.github.io/2019/10/18/bing-fa-bian-cheng-zhi-mei/">http://ryougi-shiki0.github.io/2019/10/18/bing-fa-bian-cheng-zhi-mei/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1016,7 +1122,7 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
                     !
                 </span>
             </div>
@@ -1355,7 +1461,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
