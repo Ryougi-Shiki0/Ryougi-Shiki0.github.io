@@ -468,7 +468,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-03-29
+                    2020-03-30
                 </div>
                 
 
@@ -1078,10 +1078,58 @@ UNSAFE<span class="token punctuation">.</span><span class="token function">putLo
 <p>相对起始时间点以固定频率调用指定的任务</p>
 </li>
 </ul>
-<h3 id="10-线程同步器"><a href="#10-线程同步器" class="headerlink" title="10.线程同步器"></a>10.线程同步器</h3><h4 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h4><ul>
-<li>await()<ul>
-<li></li>
+<h3 id="10-线程同步器"><a href="#10-线程同步器" class="headerlink" title="10.线程同步器"></a>10.线程同步器</h3><h4 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h4><p>单个线程任务执行完成后等待全部线程任务完成，即countDown为0时，返回</p>
+<ul>
+<li><p>void await()</p>
+<p>调用后，阻塞当前线程，直到state为0或当前线程被中断抛出异常时才会返回</p>
+</li>
+<li><p>boolean await(long timeout, TimeUnit unit)</p>
+<p>可以设置超时时长</p>
+</li>
+<li><p>countDown()</p>
+<p>sync.releaseShared()</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">boolean</span> <span class="token function">tryReleaseShared</span><span class="token punctuation">(</span><span class="token keyword">int</span> releases<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Decrement count; signal when transition to zero</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> c <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> nextc <span class="token operator">=</span> c<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">compareAndSetState</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> nextc<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> nextc <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>getCount()</p>
+</li>
 </ul>
+<h4 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h4><p>可多次设置同步任务的节点，所有每到一个节点需同步完成任务，通过parties记录线程总数，count记录当前剩余任务进行中的线程数</p>
+<ul>
+<li><p>int await()</p>
+<p>调用后，当parties个线程都调用了await（即全部到达屏障点）或其他线程调用当前线程的interrupt方法中断当前线程或与当前平站点关联的Generation对象的broken标志被设置为true时，返回</p>
+</li>
+<li><p>boolean await(long timeout,TimeUnit unit)</p>
+<p>比前者增加超时返回</p>
+</li>
+<li><p>int dowait(boolean timed,long nanos)</p>
+<ol>
+<li>获取独占锁</li>
+<li>计数器循环递减，此时index不为0则则放入条件队列并释放锁资源</li>
+<li>index为0，则执行CyclicBarrier构造函数传入的任务，完毕后唤醒其他线程，重置后开始下一轮</li>
+</ol>
+</li>
+</ul>
+<h4 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h4><p>限制执行任务的线程数量</p>
+<ul>
+<li><p>void acquire()</p>
+<p>获取当前state值，减去acquires，若小于0则返回负数，挂起线程，若正数则CAS设置</p>
+<p>公平性通过hasQueuedPredecessors()实现</p>
+</li>
+<li><p>acquireUninterruptibly()</p>
+<p>对中断不响应</p>
+</li>
+<li><p>release()</p>
+<p>将当前Semaphore对象的信号量+1</p>
 </li>
 </ul>
 <h2 id="实践篇"><a href="#实践篇" class="headerlink" title="实践篇"></a>实践篇</h2>
