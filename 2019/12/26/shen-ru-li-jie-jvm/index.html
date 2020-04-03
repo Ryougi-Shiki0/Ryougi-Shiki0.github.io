@@ -475,7 +475,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-03-06
+                    2020-03-31
                 </div>
                 
 
@@ -746,6 +746,34 @@
 <li>最后处理虚软弱引用</li>
 </ol>
 <p>三.MixGC 同YoungGC</p>
+</li>
+</ul>
+</li>
+<li><p>ZGC</p>
+<p>特性</p>
+<ul>
+<li><p>Colored pointer</p>
+<p>在对象的引用中借用几个bit存储额外状态标记，Load Barrier会根据这些状态标记执行不同的逻辑</p>
+</li>
+<li><p>Load Barrier</p>
+<p>加载屏障：在应用线程从堆中加载对象应用后，执行的一段逻辑，跟CPU中的内存屏障（Memory barrier）完全没有关联</p>
+</li>
+<li><p>Single generation</p>
+<p>目前ZGC没有分代，每次GC都会标记整个堆</p>
+</li>
+<li><p>Page Allocation</p>
+<p>将堆分为 2M（small）, 32M（medium）, n*2M（large）三种大小的页面（Page）来管理，根据对象的大小来判断在那种页面分配</p>
+</li>
+<li><p>Partial compaction</p>
+<p>在relocation阶段将Page中活的对象转移到另一个Page，并整个回收原Page。会根据一定算法选择部分Page进行整理。</p>
+</li>
+<li><p>Mostly Concurrent</p>
+<p>大部分对象标记和对象转移都是可以和应用线程并发。只会在以下阶段会发生stop-the-world</p>
+<ol>
+<li>GC开始时对root set的标记时</li>
+<li>在标记结束的时候，由于并发的原因，需要确认所有对象已完成遍历，需要进行暂停</li>
+<li>在relocate root-set 中的对象时</li>
+</ol>
 </li>
 </ul>
 </li>
