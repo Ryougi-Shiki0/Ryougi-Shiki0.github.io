@@ -468,7 +468,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-04-03
+                    2020-04-06
                 </div>
                 
 
@@ -866,7 +866,7 @@ openAndClose<span class="token punctuation">.</span><span class="token function"
 </ul>
 <h4 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h4><ul>
 <li><p>概述</p>
-<p>定义了一个接口用于创建相关或有依赖的对象族，而无需指明具体的类，是对简单工厂的改进。将工厂抽象成两层，抽象工厂和具体实现的工厂子类，将单个的简单工厂编程了工厂族，方便代码的维护和扩展</p>
+<p>定义了一个接口用于创建相关或有依赖的对象族，而无需指明具体的类，是对简单工厂的改进。将工厂抽象成两层，抽象工厂和具体实现的工厂子类，将单个的简单工厂变成了工厂族，方便代码的维护和扩展</p>
 </li>
 </ul>
 <img src="/2020/03/20/she-ji-mo-shi/%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E7%B1%BB%E5%9B%BE.png" class="" title="抽象工厂类图">
@@ -964,9 +964,370 @@ openAndClose<span class="token punctuation">.</span><span class="token function"
 </li>
 </ul>
 <h4 id="JDK中的使用-1"><a href="#JDK中的使用-1" class="headerlink" title="JDK中的使用"></a>JDK中的使用</h4><ul>
-<li>Calendar</li>
+<li><p>Calendar</p>
+<pre class=" language-java"><code class="language-java">Calendar calendar<span class="token operator">=</span>Calendar<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">createCalendar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
 </ul>
+<h3 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h3><ul>
+<li><p>概述</p>
+<p>用原型实例创建指定种类的对象，通过拷贝这些原型创建新的对象</p>
+</li>
+<li><p>实现</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Prototype</span> <span class="token punctuation">{</span>
+    <span class="token keyword">abstract</span> Prototype <span class="token function">myClone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ConcretePrototype</span> <span class="token keyword">extends</span> <span class="token class-name">Prototype</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> String filed<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">ConcretePrototype</span><span class="token punctuation">(</span>String filed<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>filed <span class="token operator">=</span> filed<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    Prototype <span class="token function">myClone</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ConcretePrototype</span><span class="token punctuation">(</span>filed<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> filed<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Client</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Prototype prototype <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ConcretePrototype</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Prototype clone <span class="token operator">=</span> prototype<span class="token punctuation">.</span><span class="token function">myClone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>clone<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>优劣</p>
+<ul>
+<li>创建新的对象复杂时，可以简化创建过程，提高效率</li>
+<li>不用重新初始化对象，动态获取对象运行时状态</li>
+<li>需要为每个类实现clone()方法，违背了ocp原则</li>
+</ul>
+</li>
+</ul>
+<h4 id="Spring中的使用"><a href="#Spring中的使用" class="headerlink" title="Spring中的使用"></a>Spring中的使用</h4><ul>
+<li><p>prototype标签</p>
+<pre class=" language-java"><code class="language-java"><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token function">doGetBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//最终调用</span>
+prototypeInstance<span class="token operator">=</span><span class="token function">createBean</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+<h4 id="深浅拷贝"><a href="#深浅拷贝" class="headerlink" title="深浅拷贝"></a>深浅拷贝</h4><ul>
+<li><p>浅拷贝</p>
+<p>默认的clone()方法，基本数据类型进行值传递，对象则进行引用传递</p>
+</li>
+<li><p>深拷贝</p>
+<p>通过重写clone()方法或序列化对象实现</p>
+</li>
+<li><p>序列化实现</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//创建流对象</span>
+ByteArrayOutputStream bos <span class="token operator">=</span> null<span class="token punctuation">;</span>
+ObjectOutputStream oos <span class="token operator">=</span> null<span class="token punctuation">;</span>
+ByteArrayInputStream bis <span class="token operator">=</span> null<span class="token punctuation">;</span>
+ObjectInputStream ois <span class="token operator">=</span> null<span class="token punctuation">;</span>
+
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//序列化</span>
+    bos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    oos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectOutputStream</span><span class="token punctuation">(</span>bos<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    oos<span class="token punctuation">.</span><span class="token function">writeObject</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//当前这个对象以对象流的方式输出</span>
+
+    <span class="token comment" spellcheck="true">//反序列化</span>
+    bis <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayInputStream</span><span class="token punctuation">(</span>bos<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ois <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectInputStream</span><span class="token punctuation">(</span>bis<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    DeepProtoType copyObj <span class="token operator">=</span> <span class="token punctuation">(</span>DeepProtoType<span class="token punctuation">)</span>ois<span class="token punctuation">.</span><span class="token function">readObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> copyObj<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// TODO: handle exception</span>
+    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//关闭流</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        bos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        oos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        bis<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ois<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// TODO: handle exception</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>e2<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+</ul>
+<h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><ul>
+<li><p>概述</p>
+<p>将复杂对象的建造过程抽离出来，使这个抽象过程的不同实现方法可以构造出不同的表现的对象</p>
+<p>抽象工厂模式实现对产品家族的创建，一个产品家族是这样的一系列产品：具有不同分类维度的产品组合，采用抽象工厂模式不需要关心构建过程，只关心什么产品由什么工厂生产即可。</p>
+<p>而建造者模式则是要求按照指定的蓝图建造产品，它的主要目的是通过组装零配件而产生一个新产品。</p>
+</li>
+<li><p>四个角色</p>
+<ul>
+<li>Product</li>
+<li>Builder</li>
+<li>ConcreteBuilder</li>
+<li>Director</li>
+</ul>
+</li>
+<li><p>实现</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 抽象的建造者</span>
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">HouseBuilder</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">protected</span> House house <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">House</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//将建造的流程写好, 抽象的方法</span>
+    <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">buildBasic</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">buildWalls</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">void</span> <span class="token function">roofed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//建造房子好， 将产品(房子) 返回</span>
+    <span class="token keyword">public</span> House <span class="token function">buildHouse</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> house<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HighBuilding</span> <span class="token keyword">extends</span> <span class="token class-name">HouseBuilder</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">buildBasic</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">buildWalls</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">roofed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>注意</p>
+<ol>
+<li>客户端不必知道产品内部组成的细节，将产品本身与产品的创建过程解耦，使得相同的创建过程可以创建不同的产品对象。</li>
+<li>每一个具体建造者都相对独立，而与其他的具体建造者无关，因此可以很方便地替换具体建造者或增加新的具体建造者， 用户使用不同的具体建造者即可得到不同的产品对象 。</li>
+<li>可以更加精细地控制产品的创建过程 。将复杂产品的创建步骤分解在不同的方法中，使得创建过程更加清晰，也更方便使用程序来控制创建过程。</li>
+<li>增加新的具体建造者无须修改原有类库的代码，指挥者类针对抽象建造者类编程，系统扩展方便，符合 “开闭原则”</li>
+<li>产品之间差异性很大的情况：建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，则不适合使用建造者模式，因此其使用范围受到一定的限制。</li>
+<li>产品内部变化很复杂的情况： 如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大。</li>
+</ol>
+</li>
+</ul>
+<h2 id="结构型"><a href="#结构型" class="headerlink" title="结构型"></a>结构型</h2><h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><ul>
+<li><p>概述</p>
+<p>将某个类的接口转换成客户端期望的另一个接口标识，主要是为了兼容性，让原本因接口不匹配不能一起工作的两个类可以协同工作（也称为包装器</p>
+</li>
+<li><p>分类</p>
+<ul>
+<li>类适配器模式</li>
+<li>对象适配器模式</li>
+<li>接口适配器模式</li>
+</ul>
+</li>
+<li><p>实现</p>
+<ul>
+<li><p>类适配器</p>
+<p>需要继承src类，适配的dst需要为接口，src类的方法在在Adapter会暴露，增加了使用成本</p>
+<p>可以重写src类的方法，增强了灵活性</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">VoltageAdapter</span> <span class="token keyword">extends</span> <span class="token class-name">Voltage220V</span> <span class="token keyword">implements</span> <span class="token class-name">IVoltage5V</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">output5V</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// TODO Auto-generated method stub</span>
+        <span class="token comment" spellcheck="true">//获取到220V电压</span>
+        <span class="token keyword">int</span> srcV <span class="token operator">=</span> <span class="token function">output220V</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> dstV <span class="token operator">=</span> srcV <span class="token operator">/</span> <span class="token number">44</span> <span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//转成 5v</span>
+        <span class="token keyword">return</span> dstV<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>对象适配器</p>
+<p>将src类做修改，持有src类，实现dst接口。遵循了合成复用原则，用关联关系替代继承，较为常用</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">VoltageAdapter</span> <span class="token keyword">implements</span> <span class="token class-name">IVoltage5V</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 关联关系-聚合</span>
+    <span class="token keyword">private</span> Voltage220V voltage220V<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">output5V</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> dst <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>null <span class="token operator">!=</span> voltage220V<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">int</span> src <span class="token operator">=</span> voltage220V<span class="token punctuation">.</span><span class="token function">output220V</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//获取220V 电压</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"使用对象适配器，进行适配~~"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            dst <span class="token operator">=</span> src <span class="token operator">/</span> <span class="token number">44</span><span class="token punctuation">;</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"适配完成，输出的电压为="</span> <span class="token operator">+</span> dst<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> dst<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>接口适配器</p>
+<p>或称缺省适配器模式，在不需要使用接口的全部方法时，设计一个抽象类为每个方法提供默认的空方法实现，则该抽象类的子类可以选择性的覆盖某些方法来实现需求</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">AbsAdapter</span> <span class="token keyword">implements</span> <span class="token class-name">Interface4</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">m1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">m2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">m3</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">m4</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+    AbsAdapter absAdapter <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AbsAdapter</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//只需要去覆盖我们 需要使用 接口方法</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">m1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// TODO Auto-generated method stub</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"使用了m1的方法"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+</li>
+<li><p>Spring中的使用</p>
+<p>每种Controller都有一种对应的适配器实现类，适配器代替controller执行相应的方法，扩展Controller时仅需增加适配器类即可扩展</p>
+<p>HandlerAdapter</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DispatchServlet</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>HandlerAdapter<span class="token operator">></span> handlerAdapters <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>HandlerAdapter<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">DispatchServlet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        handlerAdapters<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AnnotationHandlerAdapter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        handlerAdapters<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HttpHandlerAdapter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        handlerAdapters<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">SimpleHandlerAdapter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doDispatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment" spellcheck="true">// 此处模拟SpringMVC从request取handler的对象，</span>
+        <span class="token comment" spellcheck="true">// 适配器可以获取到希望的Controller</span>
+         HttpController controller <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HttpController</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// AnnotationController controller = new AnnotationController();</span>
+        <span class="token comment" spellcheck="true">//SimpleController controller = new SimpleController();</span>
+        <span class="token comment" spellcheck="true">// 得到对应适配器</span>
+        HandlerAdapter adapter <span class="token operator">=</span> <span class="token function">getHandler</span><span class="token punctuation">(</span>controller<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 通过适配器执行对应的controller对应方法</span>
+        adapter<span class="token punctuation">.</span><span class="token function">handle</span><span class="token punctuation">(</span>controller<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> HandlerAdapter <span class="token function">getHandler</span><span class="token punctuation">(</span>Controller controller<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//遍历：根据得到的controller(handler), 返回对应适配器</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>HandlerAdapter adapter <span class="token operator">:</span> handlerAdapters<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>adapter<span class="token punctuation">.</span><span class="token function">supports</span><span class="token punctuation">(</span>controller<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> adapter<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>注意事项</p>
+<ul>
+<li>通过src传递给Adapter的方式命名，类、对象、接口</li>
+<li>实现不兼容的接口融合工作</li>
+</ul>
+</li>
+</ul>
+<h3 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h3><ul>
+<li><p>概述</p>
+<p>将实现和抽象放在两个不同的类层次中，是的两个层次可以独立改变</p>
+<p>基于类的最小设计原则，通过使用封装、聚合及继承等行为让不同的类承担不同的职责，保持各部分的独立性以及应对他们的功能扩展</p>
+</li>
+<li><p>类图说明</p>
+<ul>
+<li>Client类为调用者</li>
+<li>抽象类维护了Implemetor即它的实现类</li>
+<li>RefinedAbstraction为抽象类的子类</li>
+<li>Implementor为行为实现类的接口</li>
+<li>ConcreteImplemetor为行为的具体实现类</li>
+<li>抽象类和接口是聚合关系</li>
+</ul>
+</li>
+<li><p>实现</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Brand</span> <span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Phone</span> <span class="token punctuation">{</span>
+
+    <span class="token comment" spellcheck="true">//组合品牌</span>
+    <span class="token keyword">private</span> Brand brand<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//构造器</span>
+    <span class="token keyword">public</span> <span class="token function">Phone</span><span class="token punctuation">(</span>Brand brand<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>brand <span class="token operator">=</span> brand<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>brand<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        brand<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        brand<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//获取折叠式手机 (样式 + 品牌 )</span>
+        Phone phone1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FoldedPhone</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">XiaoMi</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        phone1<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        phone1<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        phone1<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        UpRightPhone phone4 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UpRightPhone</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Vivo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        phone4<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        phone4<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        phone4<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>JDK中的使用</p>
+<img src="/2020/03/20/she-ji-mo-shi/JDBC%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F.png" class="" title="JDBC桥接模式">
+</li>
+<li><p>注意事项</p>
+<ol>
+<li>实现了抽象和实现部分的分离，从而极大的提供了系统的灵活性，让抽象部分和实现部分独立开来，这有助于系统进行分层设计，从而产生更好的结构化系统</li>
+<li>对于系统的高层部分，只需要知道抽象部分和实现部分的接口就可以了，其他的部分由具体业务来完成</li>
+<li>桥接模式替代多层继承方案，可以减少子类的个数，降低系统的管理和维护成本</li>
+<li>桥接模式的引入增加了系统的理解和设计难度，由于聚合关联关系建立在抽象层，要求开发者针对抽象进行设计和编程</li>
+<li>桥接模式要求正确识别出系统中两个独立变化的纬度，因此其使用范围有一定的局限性，即需要有这样的应用场景</li>
+</ol>
+</li>
+<li><p>应用场景</p>
+<p>对于那些不希望使用继承或因为多层次继承导致系统类的个数急剧增加的系统，桥接模式很适用</p>
+<p>常见的应用场景：</p>
+<ul>
+<li>JDBC驱动程序<ul>
+<li>银行转账系统转账分类：网上转账、柜台转账、AMT转账</li>
+<li>转账用户类型：普通用户、银卡用户、金卡用户</li>
+</ul>
+</li>
+<li>消息管理<ul>
+<li>消息类型：即时消息、延时消息</li>
+<li>消息分类：手机短信、邮件消息、QQ消息</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3>
             </div>
             <hr/>
 
