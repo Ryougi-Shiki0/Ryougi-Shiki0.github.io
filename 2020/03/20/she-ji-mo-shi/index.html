@@ -468,7 +468,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-04-06
+                    2020-04-07
                 </div>
                 
 
@@ -1327,7 +1327,87 @@ ObjectInputStream ois <span class="token operator">=</span> null<span class="tok
 </ul>
 </li>
 </ul>
-<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3>
+<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3><ul>
+<li><p>概述</p>
+<p>装饰者模式是动态地将新功能附加到对象上。在对象功能扩展方面，它比继承更有弹性，装饰者模式也体现了开闭原则（ocp）</p>
+<p>装饰者模式就像打包一个快递，主体：比如陶瓷、衣服；包装：比如报纸填充、塑料泡沫、纸板、木板</p>
+<ul>
+<li>Component：主体，比如下面的Drink</li>
+<li>ConcreteComponent：具体的主体，比如下面的各个单品咖啡</li>
+<li>Decorator：装饰者，比如各调料</li>
+<li>在如图的Component与ConcreteComponent之间，如果ConcreteComponent类很多，还可以设计一个缓冲层，将共有的部分提取出来，抽象成一个类</li>
+</ul>
+</li>
+<li><p>实现</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Decorator</span> <span class="token keyword">extends</span> <span class="token class-name">Drink</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> Drink obj<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//组合</span>
+    <span class="token keyword">public</span> <span class="token function">Decorator</span><span class="token punctuation">(</span>Drink obj<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>obj <span class="token operator">=</span> obj<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LongBlack</span> <span class="token keyword">extends</span> <span class="token class-name">Coffee</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token function">LongBlack</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">setDes</span><span class="token punctuation">(</span><span class="token string">" longblack "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">setPrice</span><span class="token punctuation">(</span><span class="token number">5.0f</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Coffee</span> <span class="token keyword">extends</span> <span class="token class-name">Drink</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">float</span> <span class="token function">cost</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// TODO Auto-generated method stub</span>
+        <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">getPrice</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Drink</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> String des<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">float</span> price <span class="token operator">=</span> <span class="token number">0.0f</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> String <span class="token function">getDes</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> des<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setDes</span><span class="token punctuation">(</span>String des<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>des <span class="token operator">=</span> des<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">float</span> <span class="token function">getPrice</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> price<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setPrice</span><span class="token punctuation">(</span><span class="token keyword">float</span> price<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>price <span class="token operator">=</span> price<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">//计算费用的抽象方法</span>
+    <span class="token comment" spellcheck="true">//子类来实现</span>
+    <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">float</span> <span class="token function">cost</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 装饰者模式下的订单：2份巧克力+一份牛奶的LongBlack</span>
+
+        <span class="token comment" spellcheck="true">// 1. 点一份 LongBlack</span>
+        Drink order <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LongBlack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 2. order 加入一份牛奶</span>
+        order <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Milk</span><span class="token punctuation">(</span>order<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 3. order 加入一份巧克力</span>
+        order <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Chocolate</span><span class="token punctuation">(</span>order<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 3. order 加入一份巧克力</span>
+        order <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Chocolate</span><span class="token punctuation">(</span>order<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>JDK应用</p>
+<img src="/2020/03/20/she-ji-mo-shi/InputStream%E8%A3%85%E9%A5%B0%E8%80%85%E6%A8%A1%E5%BC%8F.png" class="" title="InputStream装饰者模式"></li>
+</ul>
+
             </div>
             <hr/>
 
