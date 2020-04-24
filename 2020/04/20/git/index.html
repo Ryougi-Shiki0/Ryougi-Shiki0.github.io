@@ -11,9 +11,10 @@
 
 分布式的版本控制
 Git，本地存储完整的代码仓库，通过压缩算法缩小占用空间
+存放的不是版本与版本之间的差异，存放的是索引，回滚快
 
 集中式的版本控制
-SVN，提取最新的更改文件的快照，有可能在中央服务器宕机的情况下丢失期间的更新的内容，">
+SVN，提取最新的更改文件的快照">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -462,14 +463,14 @@ SVN，提取最新的更改文件的快照，有可能在中央服务器宕机�
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-07
+                    2020-04-20
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-04-22
+                    2020-04-24
                 </div>
                 
 
@@ -495,14 +496,56 @@ SVN，提取最新的更改文件的快照，有可能在中央服务器宕机�
 <ul>
 <li><p>分布式的版本控制</p>
 <p>Git，本地存储完整的代码仓库，通过压缩算法缩小占用空间</p>
+<p>存放的不是版本与版本之间的差异，存放的是索引，回滚快</p>
 </li>
 <li><p>集中式的版本控制</p>
-<p>SVN，提取最新的更改文件的快照，有可能在中央服务器宕机的情况下丢失期间的更新的内容，甚至可能丢失全部的历史记录</p>
+<p>SVN，提取最新的更改文件的快照，有可能在中央服务器宕机的情况下丢失期间的更新的内容，甚至可能丢失全部的历史记录，回滚慢</p>
+</li>
+</ul>
+</li>
+<li><p>本地分区</p>
+<ul>
+<li><p>工作区</p>
+<p>即日常代码编写的区域</p>
+</li>
+<li><p>暂存区</p>
+<p>git add的部分做临时存储</p>
+</li>
+<li><p>本地库</p>
+<p>git commit提交的区域，存储历史版本</p>
+</li>
+</ul>
+</li>
+<li><p>本地库与远程库</p>
+<ul>
+<li><p>团队内协作</p>
+<p>clone代码，加入团队后push，其他人pull</p>
+</li>
+<li><p>跨团队协作</p>
+<p>fork代码，push后提交pull request，审核通过后merge</p>
 </li>
 </ul>
 </li>
 </ul>
-<h3 id="Git基本命令"><a href="#Git基本命令" class="headerlink" title="Git基本命令"></a>Git基本命令</h3>
+<h3 id="Git基本命令"><a href="#Git基本命令" class="headerlink" title="Git基本命令"></a>Git基本命令</h3><h4 id="本地库操作"><a href="#本地库操作" class="headerlink" title="本地库操作"></a>本地库操作</h4><ul>
+<li><p>本地库初始化</p>
+<p>git add，创建.git文件夹，存放本地库相关的子目录与文件</p>
+<p>git config user.name Arthas git config user.email <a href="mailto:Arthas@163.com">Arthas@163.com</a>设置仓库级别</p>
+<p>git config –global user.name Arthas 设置系统级别</p>
+</li>
+<li><p>基本操作</p>
+<p>git status 查看工作区、暂存区状态</p>
+<p>git add 将工作区的新建/修改添加到暂存区</p>
+<p>git log 显示版本  –oneline按部分hash+操作一行显示</p>
+<p>git reflog 查看 历史记录</p>
+<p>git reset –hard hash值 可前进可后退</p>
+<p>git reset –hard HEAD^ 后退一步</p>
+<p>git reset –hard HEAD~3 后退三步</p>
+</li>
+<li><p>分支管理</p>
+</li>
+</ul>
+<h4 id="远程库操作"><a href="#远程库操作" class="headerlink" title="远程库操作"></a>远程库操作</h4>
             </div>
             <hr/>
 
@@ -517,7 +560,7 @@ SVN，提取最新的更改文件的快照，有可能在中央服务器宕机�
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -527,7 +570,7 @@ SVN，提取最新的更改文件的快照，有可能在中央服务器宕机�
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io/2020/04/07/git/">https://ryougishiki0.gitee.io/2020/04/07/git/</a>
+                    <a href="http://ryougi-shiki0.github.io/2020/04/20/git/">http://ryougi-shiki0.github.io/2020/04/20/git/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -540,7 +583,7 @@ SVN，提取最新的更改文件的快照，有可能在中央服务器宕机�
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
                     !
                 </span>
             </div>
@@ -616,7 +659,7 @@ SVN，提取最新的更改文件的快照，有可能在中央服务器宕机�
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2020/04/07/git/">
+                <a href="/2020/04/20/git/">
                     <div class="card-image">
                         
                         
@@ -634,14 +677,15 @@ SVN，提取最新的更改文件的快照，有可能在中央服务器宕机�
 
 分布式的版本控制
 Git，本地存储完整的代码仓库，通过压缩算法缩小占用空间
+存放的不是版本与版本之间的差异，存放的是索引，回滚快
 
 集中式的版本控制
-SVN，提取最新的更改文件的快照，有可能在中央服务器宕机的情况下丢失期间的更新的内容，
+SVN，提取最新的更改文件的快照
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-20
                             </span>
                         <span class="publish-author">
                             
@@ -870,7 +914,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
