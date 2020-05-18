@@ -1,0 +1,1352 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Kafka基础, Shiki&#39;s Blog">
+    <meta name="description" content="Kafka概述特性
+高吞吐量、低延迟
+每秒可以处理几十万条消息，它的延迟最低只有几毫秒，每个topic可以分多个partition, consumer group 对partition进行consume操作。
+
+可扩展性
+kafka集群支持">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Kafka基础 | Shiki&#39;s Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Shiki's Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Shiki's Blog</div>
+        <div class="logo-desc">
+            
+            Keep learning
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/Ryougi-Shiki0/ryougi-shiki0.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/Ryougi-Shiki0/ryougi-shiki0.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Kafka基础</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-05-18
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2020-05-18
+                </div>
+                
+
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><h4 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h4><ul>
+<li><p>高吞吐量、低延迟</p>
+<p>每秒可以处理几十万条消息，它的延迟最低只有几毫秒，每个topic可以分多个partition, consumer group 对partition进行consume操作。</p>
+</li>
+<li><p>可扩展性</p>
+<p>kafka集群支持热扩展</p>
+</li>
+<li><p>持久性、可靠性</p>
+<p>消息被持久化到本地磁盘，并且支持数据备份防止数据丢失</p>
+</li>
+<li><p>容错性</p>
+<p>允许集群中节点失败（若副本数量为n,则允许n-1个节点失败）</p>
+</li>
+<li><p>高并发</p>
+<p>支持数千个客户端同时读写</p>
+</li>
+</ul>
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ul>
+<li><p>日志收集</p>
+<p>一个公司可以用Kafka可以收集各种服务的log，通过kafka以统一接口服务的方式开放给各种consumer，例如hadoop、Hbase、Solr等。</p>
+</li>
+<li><p>消息系统</p>
+<p>解耦和生产者和消费者、缓存消息等。</p>
+</li>
+<li><p>用户活动跟踪</p>
+<p>Kafka经常被用来记录web用户或者app用户的各种活动，如浏览网页、搜索、点击等活动，这些活动信息被各个服务器发布到kafka的topic中，然后订阅者通过订阅这些topic来做实时的监控分析，或者装载到hadoop、数据仓库中做离线分析和挖掘。</p>
+</li>
+<li><p>运营指标</p>
+<p>Kafka也经常用来记录运营监控数据。包括收集各种分布式应用的数据，生产各种操作的集中反馈，比如报警和报告。</p>
+</li>
+<li><p>流式处理</p>
+<p>比如spark streaming和storm</p>
+</li>
+<li><p>事件源</p>
+</li>
+</ul>
+<h4 id="技术优势"><a href="#技术优势" class="headerlink" title="技术优势"></a>技术优势</h4><ul>
+<li><p>可伸缩性</p>
+<ol>
+<li>Kafka集群在运行期间可以轻松的扩展和收缩</li>
+<li>可以扩展一个Kafka主题来包含更多的分区，由于一个分区无法扩展到多个代理，所以它的容量收到代理磁盘空间的限制，能够增加分区和代理的数量意味着单个主题可以存储的数据量是没有限制的</li>
+</ol>
+</li>
+<li><p>容错性和可靠性</p>
+<p>Kafka的设计方式是某个代理的故障能够被集群中的其他代理检测到，由于每个主题都可以在多个代理上复制，所以集群可以在不中断服务的情况下从此类故障中恢复并继续运行</p>
+</li>
+<li><p>吞吐量</p>
+<p>代理能够以超快的速度有效地存储和检索数据</p>
+</li>
+</ul>
+<h3 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h3><blockquote>
+<p>producer封装数据封装成一个ProducerRecord对象</p>
+</blockquote>
+<h4 id="发送类型"><a href="#发送类型" class="headerlink" title="发送类型"></a>发送类型</h4><ul>
+<li><p>发送即忘记</p>
+<pre class=" language-java"><code class="language-java">producer<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>record<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li><p>同步发送</p>
+<pre class=" language-java"><code class="language-java">producer<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>record<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li><p>异步发送</p>
+<pre class=" language-java"><code class="language-java">producer<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>record<span class="token punctuation">,</span><span class="token keyword">new</span> <span class="token class-name">Callback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onCompletion</span><span class="token punctuation">(</span>RecordMetadata metadata<span class="token punctuation">,</span>Exception exception<span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+<h4 id="序列化器"><a href="#序列化器" class="headerlink" title="序列化器"></a>序列化器</h4><ul>
+<li><p>Serializer接口</p>
+<p>提供了StringSerializer, IntegerSerializer, BytesSerializer</p>
+</li>
+<li><p>自定义序列化器</p>
+</li>
+</ul>
+<h4 id="分区器"><a href="#分区器" class="headerlink" title="分区器"></a>分区器</h4><ul>
+<li><p>分区策略</p>
+<ol>
+<li><p>指定partition时，直接按指定</p>
+</li>
+<li><p>没有指定但包含key，则按key的hash与topic的partition数取余的值</p>
+</li>
+<li><p>均未指定则第一次调用随机生成值，将值按topic的partition总数取</p>
+<p>轮询调度算法的原理是每一次把来自用户的请求轮流分配给内部中的服务器，从1开始，直到N(内部服务器个数)，然后重新开始循环。算法的优点是其简洁性，它无需记录当前所有连接的状态，所以它是一种无状态调度。</p>
+</li>
+</ol>
+</li>
+<li><p>自定义分区器</p>
+</li>
+</ul>
+<h4 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h4><ul>
+<li><p>使用场景</p>
+<ol>
+<li>按照某个规则过滤掉不符合要求的消息</li>
+<li>修改消息的内容</li>
+<li>统计类需求</li>
+</ol>
+</li>
+<li><p>自定义拦截器</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ProducerInterceptor</span> <span class="token keyword">implements</span> <span class="token class-name">ProducerInterceptor</span><span class="token operator">&lt;</span>String<span class="token punctuation">,</span>String<span class="token operator">></span><span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">long</span> sendSuccess <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">long</span> sendFailure <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> P <span class="token function">onSend</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ProducerRecord</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>
+    record<span class="token punctuation">.</span><span class="token function">topic</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> record<span class="token punctuation">.</span><span class="token function">partition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> record<span class="token punctuation">.</span><span class="token function">timestamp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>record<span class="token punctuation">.</span><span class="token function">key</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"prefix-"</span><span class="token operator">+</span>record<span class="token punctuation">.</span><span class="token function">value</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>record<span class="token punctuation">.</span><span class="token function">headers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">onAcknowledgement</span><span class="token punctuation">(</span>RecordMetadata recordMetadata<span class="token punctuation">,</span> Exception e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>e <span class="token operator">==</span> null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            sendSuccess<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span><span class="token punctuation">{</span>
+            sendFailure<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">configure</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ul>
+<h4 id="生产者参数"><a href="#生产者参数" class="headerlink" title="生产者参数"></a>生产者参数</h4><ul>
+<li><p>ACK</p>
+<p>Kafka 为用户提供了三种可靠性级别，用户根据可靠性和延迟的要求进行权衡，选择以下配置</p>
+<ul>
+<li>0表示producer 不等待 broker 的 ack，这提供了最低延迟，broker 一收到数据还没有写入磁盘就已经返回，当 broker 故障时有可能丢失数据</li>
+<li>1表示producer 等待 broker 的 ack，partition 的 leader 落盘成功后返回 ack，如果在 follower 同步成功之前 leader 故障，那么将会丢失数据</li>
+<li>-1表示producer 等待 broker 的 ack，partition 的 leader 和 follower 全部落盘成功后才返回 ack。但是在 broker 发送 ack 时，leader 发生故障，则会造成数据重复</li>
+</ul>
+</li>
+</ul>
+<h3 id="消费者"><a href="#消费者" class="headerlink" title="消费者"></a>消费者</h3><h4 id="订阅分区和主题"><a href="#订阅分区和主题" class="headerlink" title="订阅分区和主题"></a>订阅分区和主题</h4><pre class=" language-java"><code class="language-java">KafkaConsumer<span class="token operator">&lt;</span>String<span class="token punctuation">,</span>String<span class="token operator">></span> consumer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">KafkaConsumer</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>properties<span class="token punctuation">)</span><span class="token punctuation">;</span>
+consumer<span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span>Collections<span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span>topic<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+consumer<span class="token punctuation">.</span><span class="token function">assign</span><span class="token punctuation">(</span>Arrays<span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">TopicPartition</span><span class="token punctuation">(</span>topic<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="消费消息"><a href="#消费消息" class="headerlink" title="消费消息"></a>消费消息</h4><p>对于Kafka的分区而言，它的每条消息都有唯一的offset，用来表示消息在分区中的位置</p>
+<p>当我们调用poll()，消息从broker返回消费者，broker并不跟踪这些消息是否被消费者接收，Kafka让消费者自身来管理消费的位移，并向消费者提供更新位移的接口，此种方式称为提交</p>
+<ul>
+<li><p>重复消费</p>
+<p>多个消费者，某个消费者消息唯一还未提交，另一个消费者可能消费到还未提交但已经被消费的消息</p>
+</li>
+<li><p>消息丢失</p>
+<p>消费者消费一部分后宕机，则重启后未消费的部分丢失</p>
+</li>
+<li><p>自动提交</p>
+<p>让消费者管理位移，应用本身不需要显式操作，将enable.auto.commit设置为true，消费者调用poll后每隔五秒提交一次offset，此种方式可能导致重复消费</p>
+</li>
+<li><p>同步提交</p>
+<p>consumer.commitSync();</p>
+</li>
+<li><p>异步提交</p>
+<p>异步提交可能在提交失败后不能进行重试</p>
+</li>
+</ul>
+<h4 id="指定位移消费"><a href="#指定位移消费" class="headerlink" title="指定位移消费"></a>指定位移消费</h4><p>consumer.seek(topic,offset)</p>
+<h4 id="重平衡监听器"><a href="#重平衡监听器" class="headerlink" title="重平衡监听器"></a>重平衡监听器</h4><p>指分区的所属从一个消费者转移到另一个消费者的行为，期间消费者无法拉取消息</p>
+<h4 id="消费者拦截器"><a href="#消费者拦截器" class="headerlink" title="消费者拦截器"></a>消费者拦截器</h4><p>应用于消费到消息或者提交消费位移时进行的一些定制化操作，如设置消息有效期的属性</p>
+<h4 id="其他参数"><a href="#其他参数" class="headerlink" title="其他参数"></a>其他参数</h4><ul>
+<li><p>fetch.min.bytes</p>
+<p>允许消费者指定从broker读取消息时最小的数据量，当小欸这从broker读取消息时，如果数据量小于这个阈值，broker会等待有足够的数据后才会批量返回给消费者。减少broker和消费者的压力</p>
+</li>
+<li><p>fetch.max.wait.ms</p>
+<p>指定了消费者读取时的最长等待时间，避免长时间阻塞，默认500ms</p>
+</li>
+<li><p>max.poll.records</p>
+<p>制定了每个分区返回的最多字节数，默认1M</p>
+</li>
+</ul>
+<h3 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h3><h4 id="创建主题"><a href="#创建主题" class="headerlink" title="创建主题"></a>创建主题</h4><pre class=" language-shell"><code class="language-shell">bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic test --replication-factor 1</code></pre>
+<p>参数依次表示为</p>
+<ul>
+<li>zookeeper所在IP，多个使用,分隔</li>
+<li>主题分区数，每个线程处理一个分区数据</li>
+<li>设置主题副本数，每个副本分布在不同节点，不能吃超过总结点数，否则将报错。</li>
+</ul>
+{% asset_img Topic管理.png Topic管理 %}
+
+<h4 id="删除主题"><a href="#删除主题" class="headerlink" title="删除主题"></a>删除主题</h4><pre class=" language-shell"><code class="language-shell">bin/kafka-topic.sh -delete --zookeeper localhost:2181 --topic test</code></pre>
+<p>若delete.topic.enable=true，则直接删除Topic</p>
+<p>若为false，若当前Topic没有传输过信息，则实际删除；若有传输过信息，则标记删除，重启Server后删除</p>
+<h4 id="增加分区"><a href="#增加分区" class="headerlink" title="增加分区"></a>增加分区</h4><pre class=" language-shell"><code class="language-shell">bin/kafka-topics.sh --zookeeper localhost:2181 --topic test --partition 3</code></pre>
+<h3 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h3><blockquote>
+<p>Kafka可以将主题划分为多个分区，会根据分区规则吧消息存储到哪个分区中，只要分区设置的合理，所有的消息都会均匀的分布到不同的分区中，实现水平扩展和负载均衡。另外，多个订阅者可以从一个或着多个分区中同时消费数据，以支撑海量数据处理。消息追加到分区中，顺序写磁盘效率高于随机写内存</p>
+</blockquote>
+<h4 id="副本机制"><a href="#副本机制" class="headerlink" title="副本机制"></a>副本机制</h4><p>由于Producer和Consumer都只会与Leader角色的分区副本相连，所以kafka需要以集群的组织形式提供主题下的消息高可用。kafka支持主备复制，所以消息具备高可用和持久性。<br>一个分区可以有多个副本，这些副本保存在不同的broker上。每个分区的副本中都会有一个作为Leader。当一个broker失败时，Leader在这台broker上的分区都会变得不可用，kafka会自动移除Leader，再其他副本中选一个作为新的Leader。<br>在通常情况下，增加分区可以提供kafka集群的吞吐量。然而，也应该意识到集群的总分区数或是单台服务器上的分区数过多，会增加不可用及延迟的风险。</p>
+{% asset_img Kafka分区.png Kafka分区 %}
+
+<h4 id="Leader选举"><a href="#Leader选举" class="headerlink" title="Leader选举"></a>Leader选举</h4><p>如果某个分区的Leader挂了,那么其它跟随者将会进行选举产生一个新的leader,之后所有的读写就会转移到这个新的Leader上,在kafka中,其不是采用常见的多数选举的方式进行副本的Leader选举,而是会在Zookeeper上针对每个Topic维护一个称为ISR（in-sync replica，已同步的副本）的集合,显然还有一些副本没有来得及同步。只有这个ISR列表里面的才有资格成为leader(先使用ISR里面的第一个，如果不行依次类推，因为ISR里面的是同步副本，消息是最完整且各个节点都是一样的)。<br>通过ISR,kafka需要的冗余度较低，可以容忍的失败数比较高。假设某个topic有f+1个副本，kafka可以容忍f个不可用,当然,如果全部ISR里面的副本都不可用,也可以选择其他可用的副本,只是存在数据的不一致。</p>
+<h4 id="重新分区"><a href="#重新分区" class="headerlink" title="重新分区"></a>重新分区</h4><p>步骤</p>
+<ol>
+<li><p>创建一个三节点分区</p>
+<pre class=" language-shell"><code class="language-shell">kafka-topics.sh --create --zookeeper localhost:2181 --topic test --partition 3 -replication-factor 3
+kafka-topics.sh --describe --zookeeper localhost:2181 --topic test</code></pre>
+</li>
+<li><p>在test主题增加一个分区</p>
+<pre class=" language-shell"><code class="language-shell">kafka-topics.sh --alter --zookeeper localhost:2181 --topic test --partition 4
+kafka-topics.sh --describe --zookeeper localhost:2181 --topic test</code></pre>
+</li>
+<li><p>再增加一个broker节点</p>
+<pre class=" language-shell"><code class="language-shell">kafka-topics.sh --describe --zookeeper localhost:2181 --topic test</code></pre>
+</li>
+<li><p>重新分配</p>
+<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"topics"</span><span class="token operator">:</span><span class="token punctuation">[</span>
+    <span class="token punctuation">{</span><span class="token property">"topic"</span><span class="token operator">:</span><span class="token string">"test"</span><span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+ <span class="token property">"version"</span><span class="token operator">:</span><span class="token number">1</span>
+<span class="token punctuation">}</span></code></pre>
+<pre class=" language-shell"><code class="language-shell">kafka-reassign-partition.sh --zookeeper localhost:2181 --topics-to-move-json-file reassign.json --broker-list "0,1,2,3" --generate</code></pre>
+<p>生成两个json串，第一个为当前分区副本分配情况，第二个为重新分配的候选方案（此时为执行重分配</p>
+<p>将生成的json保存到result.json</p>
+</li>
+<li><p>执行重新分配</p>
+<pre class=" language-shell"><code class="language-shell">kafka-reassign-partitions --zookeeper localhost:2181 --reassignment-json-file result.json --excute</code></pre>
+</li>
+</ol>
+<h4 id="分区分配策略"><a href="#分区分配策略" class="headerlink" title="分区分配策略"></a>分区分配策略</h4><ul>
+<li><p>RangeAssignor策略RangeAssignor策略的原理是按照消费者总数和分区总数进行整除运算来获得一个跨度，然后将分区按照跨度进行平均分配，以保证分区尽可能均匀地分配给所有的消费者。对于每一个topic，RangeAssignor策略会将消费组内所有订阅这个topic的消费者按照名称的字典序排序，然后为每个消费者划分固定的分区范围，如果不够平均分配，那么字典序靠前的消费者会被多分配一个分区。</p>
+<p>假设n=分区数/消费者数量，m=分区数%消费者数量，那么前m个消费者每个分配n+1个分区，后面的（消费者数量-m）个消费者每个分配n个分区。</p>
+<p>为了更加通俗的讲解RangeAssignor策略，我们不妨再举一些示例。假设消费组内有2个消费者C0和C1，都订阅了主题t0和t1，并且每个主题都有4个分区，那么所订阅的所有分区可以标识为：t0p0、t0p1、t0p2、t0p3、t1p0、t1p1、t1p2、t1p3。最终的分配结果为：</p>
+<pre><code>消费者C0：t0p0、t0p1、t1p0、t1p1``消费者C1：t0p2、t0p3、t1p2、t1p3</code></pre><p>这样分配的很均匀，那么此种分配策略能够一直保持这种良好的特性呢？我们再来看下另外一种情况。假设上面例子中2个主题都只有3个分区，那么所订阅的所有分区可以标识为：t0p0、t0p1、t0p2、t1p0、t1p1、t1p2。最终的分配结果为：</p>
+<pre><code>消费者C0：t0p0、t0p1、t1p0、t1p1``消费者C1：t0p2、t1p2</code></pre><p>可以明显的看到这样的分配并不均匀，如果将类似的情形扩大，有可能会出现部分消费者过载的情况</p>
+</li>
+<li><p>RoundRobinAssignor策略</p>
+<p>RoundRobinAssignor策略的原理是将消费组内所有消费者以及消费者所订阅的所有topic的partition按照字典序排序，然后通过轮询方式逐个将分区以此分配给每个消费者。RoundRobinAssignor策略对应的partition.assignment.strategy参数值为：org.apache.kafka.clients.consumer.RoundRobinAssignor。</p>
+<p>如果同一个消费组内所有的消费者的订阅信息都是相同的，那么RoundRobinAssignor策略的分区分配会是均匀的。举例，假设消费组中有2个消费者C0和C1，都订阅了主题t0和t1，并且每个主题都有3个分区，那么所订阅的所有分区可以标识为：t0p0、t0p1、t0p2、t1p0、t1p1、t1p2。最终的分配结果为：</p>
+<pre><code>消费者C0：t0p0、t0p2、t1p1``消费者C1：t0p1、t1p0、t1p2</code></pre><p>如果同一个消费组内的消费者所订阅的信息是不相同的，那么在执行分区分配的时候就不是完全的轮询分配，有可能会导致分区分配的不均匀。如果某个消费者没有订阅消费组内的某个topic，那么在分配分区的时候此消费者将分配不到这个topic的任何分区。</p>
+<p>举例，假设消费组内有3个消费者C0、C1和C2，它们共订阅了3个主题：t0、t1、t2，这3个主题分别有1、2、3个分区，即整个消费组订阅了t0p0、t1p0、t1p1、t2p0、t2p1、t2p2这6个分区。具体而言，消费者C0订阅的是主题t0，消费者C1订阅的是主题t0和t1，消费者C2订阅的是主题t0、t1和t2，那么最终的分配结果为：</p>
+<pre><code>消费者C0：t0p0``消费者C1：t1p0``消费者C2：t1p1、t2p0、t2p1、t2p2</code></pre><p>可以看到RoundRobinAssignor策略也不是十分完美，这样分配其实并不是最优解，因为完全可以将分区t1p1分配给消费者C1</p>
+</li>
+<li><p>StickyAssignor分配策略<br>我们再来看一下StickyAssignor策略，“sticky”这个单词可以翻译为“粘性的”，Kafka从0.11.x版本开始引入这种分配策略，它主要有两个目的：</p>
+<p>分区的分配要尽可能的均匀；<br>分区的分配尽可能的与上次分配的保持相同。<br>当两者发生冲突时，第一个目标优先于第二个目标。鉴于这两个目标，StickyAssignor策略的具体实现要比RangeAssignor和RoundRobinAssignor这两种分配策略要复杂很多。我们举例来看一下StickyAssignor策略的实际效果。<br>假设消费组内有3个消费者：C0、C1和C2，它们都订阅了4个主题：t0、t1、t2、t3，并且每个主题有2个分区，也就是说整个消费组订阅了t0p0、t0p1、t1p0、t1p1、t2p0、t2p1、t3p0、t3p1这8个分区。最终的分配结果如下：</p>
+<pre><code>消费者C0：t0p0、t1p1、t3p0``消费者C1：t0p1、t2p0、t3p1``消费者C2：t1p0、t2p1</code></pre><p>这样初看上去似乎与采用RoundRobinAssignor策略所分配的结果相同，但事实是否真的如此呢？再假设此时消费者C1脱离了消费组，那么消费组就会执行再平衡操作，进而消费分区会重新分配。如果采用RoundRobinAssignor策略，那么此时的分配结果如下：</p>
+<pre><code>消费者C0：t0p0、t1p0、t2p0、t3p0``消费者C2：t0p1、t1p1、t2p1、t3p1</code></pre><p>如分配结果所示，RoundRobinAssignor策略会按照消费者C0和C2进行重新轮询分配。而如果此时使用的是StickyAssignor策略，那么分配结果为：</p>
+<pre><code>消费者C0：t0p0、t1p1、t3p0、t2p0``消费者C2：t1p0、t2p1、t0p1、t3p1</code></pre><p>可以看到分配结果中保留了上一次分配中对于消费者C0和C2的所有分配结果，并将原来消费者C1的“负担”分配给了剩余的两个消费者C0和C2，最终C0和C2的分配还保持了均衡。</p>
+<p>如果发生分区重分配，那么对于同一个分区而言有可能之前的消费者和新指派的消费者不是同一个，对于之前消费者进行到一半的处理还要在新指派的消费者中再次复现一遍，这显然很浪费系统资源。StickyAssignor策略如同其名称中的“sticky”一样，让分配策略具备一定的“粘性”，尽可能地让前后两次分配相同，进而减少系统资源的损耗以及其它异常情况的发生。</p>
+</li>
+<li><p>消费者消费消息什么时候重新分配</p>
+<p>当消费者个数发生变的时候</p>
+<ol>
+<li><p>假设topic1有6个分区  三个消费者A、B、C，不管用什么策略分配，假设C负责消费partition4和partition5，突然C挂掉了，这个时候partition4和partition5需不需要消费，答案当然是要，那怎么消费？当然是重新分配</p>
+</li>
+<li><p>假设topic1有6个分区  三个消费者A、B、C、D，当消费者A服务起来的时候6个分区都分配给了A，当B起来的时候重新分配，当C起来时候也会重新分配，消费者A、B、C都分配到了2个partition，当第四个消费者D加进来的时候，会怎么办？还是上面那句话，消费者个数发生变化的时候，就会触发分区分配策略重新分配</p>
+<p>当消费者个数发生变的时候，消费者个数可以增多或者减少，甚至可以增多至比分区数还多的时候，照样会重新分配，只是有些消费者可能被分配不到</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h3><h4 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h4><ul>
+<li><p>特性</p>
+<ul>
+<li><p>每一个partition相当于一个巨型文件被平均分配到多个大小相等的segment数据文件里</p>
+</li>
+<li><p>每一个segment file消息数量不一定相等，这样的特性方便old segment file高速被删除</p>
+</li>
+<li><p>每一个partition仅仅需要支持顺序读写即可，segment文件生命周期由服务端配置参数决定</p>
+</li>
+</ul>
+</li>
+<li><p>存储结构</p>
+<p>segment由两大部分组成，分别为.index .log，分别为索引文件和数据文件</p>
+<p>segment文件命名规则，partition全局的第一个segment从0开始，每一个segment文件名称为上一个segment文件最后一条消息的offset值</p>
+</li>
+</ul>
+<h4 id="日志索引"><a href="#日志索引" class="headerlink" title="日志索引"></a>日志索引</h4><ul>
+<li><p>数据文件的分段</p>
+<p>Kafka解决查询效率的手段之一是将数据文件分段，比如有100条Message，它们的offset是从0到99。假设将数据文件分成5段，第一段为0-19，第二段为20-39，以此类推，每段放在一个单独的数据文件里面，数据文件以该段中最小的offset命名。这样在查找指定offset的Message的时候，用二分查找就可以定位到该Message在哪个段中</p>
+</li>
+<li><p>偏移量索引</p>
+<p>数据文件分段使得可以在一个较小的数据文件中查找对应offset的Message了，但是这依然需要顺序扫描才能找到对应offset的Message。为了进一步提高查找的效率，Kafka为每个分段后的数据文件建立了索引文件，文件名与数据文件的名字是一样的，只是文件扩展名为.index</p>
+</li>
+</ul>
+<h4 id="日志清理"><a href="#日志清理" class="headerlink" title="日志清理"></a>日志清理</h4><ul>
+<li><p>日志删除</p>
+<pre class=" language-properties"><code class="language-properties"><span class="token comment" spellcheck="true"># 启用删除策略</span>
+<span class="token attr-name">log.clean.policy</span><span class="token punctuation">=</span><span class="token attr-value">delete</span>
+<span class="token comment" spellcheck="true"># 直接删除，删除后的消息不可恢复，可配置以下两个策略</span>
+<span class="token comment" spellcheck="true"># 清理超过指定时间</span>
+<span class="token attr-name">log.retention.hours</span><span class="token punctuation">=</span><span class="token attr-value">16</span>
+<span class="token comment" spellcheck="true"># 超过指定大小后删除旧消息</span>
+<span class="token attr-name">log.retention.bytes</span><span class="token punctuation">=</span><span class="token attr-value">1073741824</span></code></pre>
+</li>
+<li><p>日志压缩</p>
+<pre class=" language-properties"><code class="language-properties"><span class="token comment" spellcheck="true"># broker中启用cleaner</span>
+<span class="token attr-name">log.cleaner.enable</span><span class="token punctuation">=</span><span class="token attr-value">true</span>
+<span class="token comment" spellcheck="true"># Topic中配置启用压缩策略</span>
+<span class="token attr-name">log.cleanup.policy</span><span class="token punctuation">=</span><span class="token attr-value">compact</span></code></pre>
+</li>
+</ul>
+<h4 id="磁盘存储优势"><a href="#磁盘存储优势" class="headerlink" title="磁盘存储优势"></a>磁盘存储优势</h4><ul>
+<li><p>Kafka设计采用了文件追加的方式写入消息，不允许修改已经写入的消息，因此为典型顺序写入，保证了吞吐量</p>
+</li>
+<li><p>大量使用页缓存</p>
+</li>
+<li><p>零拷贝技术</p>
+<p>只用将磁盘文件的数据复制到页面缓存中一次，然后将数据从页面缓存直接发送到网络中（发送给不同的订阅者时，都可以使用同一个页面缓存），避免了重复赋值操作</p>
+</li>
+</ul>
+<h3 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h3><blockquote>
+<p>Kafka的消息传输保障机制，当producer向broker发送消息时，一旦这条消息commit，由于副本机制的存在，它就不会丢失，但如果producer发送数据给broker后，遇到的网络问题而造成通信中断，那producer就无法判断该条消息是否已经提交。Kafka无法确定网络故障期间的情况，但producer可能retry多次，确保消息已经正确传输到broker中，保证At least one</p>
+</blockquote>
+<h4 id="幂等性"><a href="#幂等性" class="headerlink" title="幂等性"></a>幂等性</h4><p>简单地说就是对接口的多次调用所产生的结果和调用一次是一致的。生产者在进行重试的时候有可能会重复写入消息，而使用Kafka的幂等性功能之后就可以避免这种情况</p>
+<p>条件</p>
+<ul>
+<li>只能保证 Producer 在单个会话内不丟不重，如果 Producer 出现意外挂掉再重启是无法保证的(幂等性情况下，是无法获取之前的状态信息，因此是无法做到跨会话级别的不丢不重)。</li>
+<li>幂等性不能跨多个 Topic-Partition，只能保证单个 Partition 内的幂等性，当涉及多个 Topic-Partition 时，这中间的状态并没有同步。</li>
+</ul>
+<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><p>Kafka 从 0.11 版本开始引入了事务支持。事务可以保证 Kafka 在 Exactly Once 语义的基础上，生产和消费可以跨分区和会话，要么全部成功，要么全部失败。</p>
+<ul>
+<li><p>Producer 事务<br>为了实现跨分区跨会话的事务，需要引入一个全局唯一的 Transaction ID，并将 Producer 获得的 PID 和 Transaction ID 绑定。这样当 Producer 重启后就可以通过正在进行的 Transaction ID 获得原来的 PID。<br>为了管理 Transaction，Kafka 引入了一个新的组件 Transaction Coordinator。Producer 就是通过和 Transaction Coordinator 交互获得 Transaction ID 对应的任务状态。Transaction Coordinator 还负责将事务所有写入 Kafka 的一个内部 Topic，这样即使整个服务重启，由于事务状态得到保存，进行中的事务状态可以得到恢复，从而继续进行。</p>
+</li>
+<li><p>Consumer 事务<br>上述事务机制主要是从 Producer 方面考虑，对于 Consumer 而言，事务的保证就会相对较弱，尤其时无法保证 Commit 的信息被精确消费。这是由于 Consumer 可以通过 offset 访问任意信息，而且不同的 Segment File 生命周期不同，同一事务的消息可能会出现重启后被删除的情况。</p>
+</li>
+<li><p>相关API</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//transactionalId配置完毕后，配置初始化事务</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">initTransactions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//开启事务</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">beginTransaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//为消费者提供事务内的位移提交操作</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sendOffsetsToTransaction</span><span class="token punctuation">(</span>MapTopicPartition<span class="token punctuation">,</span> OffsetAndMetadata offsets<span class="token punctuation">,</span> String consumerGroupId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//提交</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">commitTransaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//回滚事务</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">abortTransaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+<h4 id="控制器"><a href="#控制器" class="headerlink" title="控制器"></a>控制器</h4><ul>
+<li><p>概述</p>
+<p>kafka集群中会有至少一个broker,会有且只有一个broker被选举为控制器,负责管理集群中所有分区和副本的状态</p>
+<p>如果分区的leader副本出现故障.控制器负责为该分区选举新的leader副本；分区的ISR集合发生变化时,由控制器负责同志所有broker更新数据信息；使用kafka-topics.sh脚本给topic增加分区数量时,还是控制器负责分区的重新分配</p>
+</li>
+<li><p>kafka控制器选举的工作依赖于Zookeeper,成功竞选为控制器的broker会在Zookeeper中创建/controkker这个临时节点</p>
+<ul>
+<li>监听partition相关的变化</li>
+<li>监听topic相关的变化</li>
+<li>监听broker相关的变化</li>
+<li>从Zookeeper中读取获取当前所有和topic,partition和broker有关信息,进行相应的管理</li>
+</ul>
+</li>
+<li><p>zookeeper选举机制</p>
+<p>每个broker启动的时候回尝试去读取/controller节点的brokerId的值,</p>
+<ol>
+<li>如果brokerId不为-1,表示已经有其他的broker节点成功竞选为控制器了,</li>
+<li>如果不存在/controller这个节点.或者这个节点的数据异常,就会尝试去创建这个节点</li>
+<li>只有成功创建/controller这个节点的broker才能成为控制器</li>
+<li>除了竞选成功的broker,其他的broker都会在内存中保存当前控制器的brokerId值,这个可以被标识位activeControllerid</li>
+</ol>
+</li>
+<li><p>zookeeper里面有一个/controller_epoch节点,这个节点是持久节点,在里面存放一个整型的<br>controller_epoch值,用来记录控制器发生变更的次数,也就是控制器的版本，每个和controller交互的请求都会带上controller_epoch,如果这个值不等于内存中controller_epoch值.则说明控制器已经更新了，自己这个请求会被作废,并重新拉取controller_epoch的值保存在内存中.保证一致性</p>
+</li>
+</ul>
+<h4 id="可靠性保证"><a href="#可靠性保证" class="headerlink" title="可靠性保证"></a>可靠性保证</h4><blockquote>
+<p>可靠性保证:确保系统在不同环境下能够发生一致的行为</p>
+</blockquote>
+<ul>
+<li><p>kafka的保证</p>
+<ol>
+<li>保证分区消息的顺序<br>如果使用同一个生产者往同一个分区写入消息,而且消息b在消息a之后写入，kafka可以保证消息b的偏移量比消息a的偏移量大,而且消费组会先读取到a再读取到b</li>
+<li>只有消息被写入分区所有同步副本时,才被认为是已提交<br>生产者可以选择接受不同类型的确认,控制系数acks，只要有一个副本时活跃的,已提交的消息就不会丢失<br>消费组只能读取已经提交的消息</li>
+</ol>
+</li>
+<li><p>副本失效<br>判断副本是否失效,由一个参数replica.lag.time.max.ms默认为10000来控制，当ISR的一个follower副本之后leader副本的时间超过replica.lag.time.max.ms(简称replica)的值,就是判断为失效,被剔除在ISR之外，具体原理为，当follower副本将leader的LEO(log end offset)之前的日志全部同步时,认为follower已经追上了leader副本,会更改这个副本的lastCaughtUpTimeMs标识，kafka的副本管理器(ReplicaManager)启动时会启动副本过期检测的定时任务,而这个定时任务会定时检查当前时间和副本的lastCaughtUpTimeMs之间的差是否大于replica</p>
+</li>
+<li><p>副本复制</p>
+<ul>
+<li><p>复制策略</p>
+<p>半数加一的数量完成同步，就发送ack，延迟低，n个副本选举leader容许n/2台节点故障</p>
+<p>全部完成同步才发送ack，延迟高，选举新leader只要有一台未故障即可</p>
+</li>
+<li><p>副本不同步leader原因<br>副本慢，复制消息跟不上leader的写入,所以被判定失效,从ISR剔除</p>
+<p>副本卡住，由于GC暂停或者follower失效或死亡,都会停止从leader拉取请求</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="一致性保证"><a href="#一致性保证" class="headerlink" title="一致性保证"></a>一致性保证</h4><ul>
+<li><p>旧版</p>
+<p>leader宕机之后,从ISR选举之后,新的leader可以保证HW之前的数据,确保消费者能继续看到HW之前已经提交的数据<br>HW截断机制使新的leader选举之后,为了保证数据一致性,所有follower都将HW之后的数据截断，宕机的leader恢复后,也会将自己的数据在新leader的HW位置之后数据全部截断,保证数据一致性<br>使用HW的话可能会导致数据丢失和数据不一致,因为HW的更新时异步延迟的,需要额外的FETCH请求处理流程才能更新</p>
+</li>
+<li><p>新版解决方案</p>
+<p>Kafka0.11引入了leader epoch取代HW值，Leader端多开辟一段内存区域专门保存leader的epoch信息，保证一致性</p>
+<p>leader epoch实质上是一对值，(epoch,offset)，epoch表示leader的版本号，从0开始，dangleader变更过1次epoch+1，offset对应于改epoch版本的leader写入第一条消息的位移，leaderbroker定期保存缓存，定期写入到checkpoint文件中</p>
+</li>
+</ul>
+<h4 id="消息重复"><a href="#消息重复" class="headerlink" title="消息重复"></a>消息重复</h4><ul>
+<li>生产者端重复<br>生产发送的消息没有收到正确的brok响应,导致producer重试<br>启动kafka的幂等性,修改配置文件:enable.idempotence=true,同时ack = all且retries&gt;1<br>ack=0 ,不重试:可能会丢消息,适用于吞吐量指标重要性高于数据丢失</li>
+<li>消费者重复<br>数据消费完没有及时提交offset到broker<br>取消自动提交:每次消费完或程序退出时手动提交,但是可能也没法保证<br>下游做幂等:比如将offset记录其他地方,做唯一性校验,通过锁,事务等保证</li>
+<li>consumer_offsets<br>consumer_offsets是一个内部topic,保存的是kafka新版本consumer的位移信息，当集群中第一有消费者消费消息时会有自动创建主题_consumer_offsets,分区数可以通过offset.topic.num.partitions参数设定,默认50</li>
+</ul>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://ryougi-shiki0.github.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://ryougi-shiki0.github.io/2020/05/18/kafka-ji-chu/">http://ryougi-shiki0.github.io/2020/05/18/kafka-ji-chu/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/05/18/kafka-ji-chu/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="Kafka基础">
+                        
+                        <span class="card-title">Kafka基础</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Kafka概述特性
+高吞吐量、低延迟
+每秒可以处理几十万条消息，它的延迟最低只有几毫秒，每个topic可以分多个partition, consumer group 对partition进行consume操作。
+
+可扩展性
+kafka集群支持
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-18
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Ryougi-Shiki
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/04/20/git/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="Git">
+                        
+                        <span class="card-title">Git</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Git学习概述
+版本控制
+记录一个或若干文件的内容变化
+
+分布式的版本控制
+Git，本地存储完整的代码仓库，通过压缩算法缩小占用空间
+存放的不是版本与版本之间的差异，存放的是索引，回滚快
+
+集中式的版本控制
+SVN，提取最新的更改文件的快照
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-20
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Git/" class="post-category">
+                                    Git
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/">
+                        <span class="chip bg-color">版本控制</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/">
+                        <span class="chip bg-color">开发规范</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/Ryougi-Shiki0" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:2497641289@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2497641289" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2497641289" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

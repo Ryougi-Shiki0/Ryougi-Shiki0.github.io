@@ -469,7 +469,7 @@ sql优">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-03-06
+                    2020-05-10
                 </div>
                 
 
@@ -1023,7 +1023,7 @@ alter table tbl_name add fulltext_index index_name(column_list)</code></pre>
 </li>
 <li><p>key：实际使用的索引。如果为NULL，则没有使用索引。<strong>查询中若使用了覆盖索引，则该索引仅出现在key列表中，不会出现在possible_keys列表中。</strong>（覆盖索引：查询的字段与建立的复合索引的个数一一吻合）</p>
 </li>
-<li><p>key_len：表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度。在不损失精确性的情况下，长度越短越好。key_len显示的值为索引字段的最大可能长度，<strong>并非实际使用长度</strong>，即key_len是根据表定义计算而得，不是通过表内检索出的。</p>
+<li><p>key_len：表示索引中使用的字节数（使用的最左前缀的长度），可通过该列计算查询中使用的索引的长度。在不损失精确性的情况下，长度越短越好。key_len显示的值为索引字段的最大可能长度，<strong>并非实际使用长度</strong>，即key_len是根据表定义计算而得，不是通过表内检索出的。</p>
 </li>
 <li><p>ref：显示索引的哪一列被使用了，如果可能的话，是一个常数。哪些列或常量被用于查找索引列上的值。<strong>查询中与其它表关联的字段，外键关系建立索引</strong>。</p>
 </li>
@@ -1067,6 +1067,15 @@ alter table tbl_name add fulltext_index index_name(column_list)</code></pre>
 </li>
 </ul>
 <h3 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h3><ul>
+<li><p>思路</p>
+<ol>
+<li>查询是否使用了索引，key是否为null</li>
+<li>索引连接类型是否符合，type为range以上级别</li>
+<li>查看extra字段是否出现using temporary和using filesort</li>
+<li>检查索引的选择，顺序，长度等设计是否合理</li>
+<li>寻找替代的索引、调整已有索引或新建索引</li>
+</ol>
+</li>
 <li><p>索引分析</p>
 <ul>
 <li><p>单表</p>
@@ -2132,12 +2141,12 @@ Spring优势：方便解耦，简化开发，AOP变成的支持，声明式事�
                         <span class="chip bg-color">Spring</span>
                     </a>
                     
-                    <a href="/tags/JavaEE/">
-                        <span class="chip bg-color">JavaEE</span>
-                    </a>
-                    
                     <a href="/tags/%E5%BC%80%E6%BA%90%E6%A1%86%E6%9E%B6/">
                         <span class="chip bg-color">开源框架</span>
+                    </a>
+                    
+                    <a href="/tags/JavaEE/">
+                        <span class="chip bg-color">JavaEE</span>
                     </a>
                     
                 </div>
