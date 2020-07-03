@@ -1,0 +1,1188 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="单元测试的艺术, Shiki&#39;s Blog">
+    <meta name="description" content="单元测试的艺术1.基础知识
+单元测试的要求
+自动化可重复执行
+容易实现
+有复用价值
+运行方便
+结果稳定
+完全隔离
+完全控制单元
+失败后易于定位问题
+
+
+集成测试
+测试驱动开发（TDD）
+
+2.第一个单元测试
+语法
+assertTrue();">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>单元测试的艺术 | Shiki&#39;s Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Shiki's Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Shiki's Blog</div>
+        <div class="logo-desc">
+            
+            Keep learning
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/Ryougi-Shiki0/ryougi-shiki0.github.io" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/Ryougi-Shiki0/ryougi-shiki0.github.io" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">单元测试的艺术</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-05-25
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2020-05-26
+                </div>
+                
+
+                
+
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="单元测试的艺术"><a href="#单元测试的艺术" class="headerlink" title="单元测试的艺术"></a>单元测试的艺术</h1><h3 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1.基础知识"></a>1.基础知识</h3><ul>
+<li>单元测试的要求<ol>
+<li>自动化可重复执行</li>
+<li>容易实现</li>
+<li>有复用价值</li>
+<li>运行方便</li>
+<li>结果稳定</li>
+<li>完全隔离</li>
+<li>完全控制单元</li>
+<li>失败后易于定位问题</li>
+</ol>
+</li>
+<li>集成测试</li>
+<li>测试驱动开发（TDD）</li>
+</ul>
+<h3 id="2-第一个单元测试"><a href="#2-第一个单元测试" class="headerlink" title="2.第一个单元测试"></a>2.第一个单元测试</h3><ul>
+<li><p>语法</p>
+<pre class=" language-java"><code class="language-java"><span class="token function">assertTrue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertFalse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertSame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertNull</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertNotNull</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertNotEquals</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">assertNotSame</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li><p>AssertThat</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token keyword">void</span> <span class="token function">assertThat</span><span class="token punctuation">(</span>T actual<span class="token punctuation">,</span> Matcher<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> T<span class="token operator">></span> matcher<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">assertThat</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">,</span> actual<span class="token punctuation">,</span> matcher<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Matcher</p>
+<p><a href="https://blog.csdn.net/smxjant/article/details/78206435" target="_blank" rel="noopener">https://blog.csdn.net/smxjant/article/details/78206435</a></p>
+<p>一般匹配符</p>
+<p>is anyOf anything allOf not</p>
+<p>字符串匹配符</p>
+<p>containsString endsWith startWith equalTo equalToIgnoringCase </p>
+<p>数值相关匹配符</p>
+<p>closeTo greaterThan lessThan greaterThanOrEqualTo lessThanOrEqualTo</p>
+<p>集合相关匹配符</p>
+<p>hasEntry hasItem hasKey hasValue</p>
+</li>
+<li><p>@Rule</p>
+<p><a href="https://blog.csdn.net/weixin_34399060/article/details/93886426" target="_blank" rel="noopener">https://blog.csdn.net/weixin_34399060/article/details/93886426</a></p>
+<p><strong>Verifier</strong>：所有测试结束后对测试执行结果添加额外的逻辑验证测试最终成功与否。该抽象类为子类提供一个接口方法verify()供扩展</p>
+<p><strong>ErrorCollector</strong>：是Verifier类的一个子类实现，用于在测试执行过程中收集错误信息，不会中断测试，最后调用verify()方法处理。</p>
+<p><strong>TemporaryFolder</strong>：是抽象类ExternalResource的一个子类实现，用于在JUnit测试执行前后，创建和删除临时目录</p>
+<p><strong>TestName</strong>：是抽象类TestWatcher的一个子类实现，用于在测试执行过程中获取测试方法名称。在starting()中记录测试方法名，在getMethodName()中返回</p>
+<p><strong>TestWatcher</strong>：监视测试方法生命周期的各个阶段。该抽象类为子类提供了五个接口方法succeeded(), failed(), skipped(), starting()及finished()供扩展</p>
+<p><strong>Timeout</strong>：与@Test中的timeout相对应，@Test只能修饰待测试方法，Timeout可以修饰待测试类</p>
+<p><strong>ExpectedException</strong>：与@Test中的expected相对应，提供更强大灵活的异常验证功能，@Test只能修饰待测试方法，ExpectedException可以修饰待测试类</p>
+</li>
+</ul>
+<h2 id="3-使用存根破除依赖"><a href="#3-使用存根破除依赖" class="headerlink" title="3.使用存根破除依赖"></a>3.使用存根破除依赖</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><blockquote>
+<p>存根是对系统中存在的一个依赖项的可控制的替代物。通过使用存根，</p>
+</blockquote>
+<h3 id="如何破除依赖"><a href="#如何破除依赖" class="headerlink" title="如何破除依赖"></a>如何破除依赖</h3><ol>
+<li>找到被测试对象使用的外部接口或API</li>
+<li>将接口的底层实现替换成能控制的内容</li>
+</ol>
+<h3 id="重构代码设计以提高可测试性"><a href="#重构代码设计以提高可测试性" class="headerlink" title="重构代码设计以提高可测试性"></a>重构代码设计以提高可测试性</h3><ul>
+<li><p>重构</p>
+<p>不改变代码功能的前提下对代码的修改</p>
+</li>
+<li><p>接缝</p>
+<p>是代码中可以插入不同功能的地方</p>
+</li>
+<li><p>重构类型</p>
+<p>可以把具体类抽象成接口或委托；重构使得能够注入委托和接口的伪实现</p>
+</li>
+<li><p>重构思路</p>
+<ol>
+<li>抽取接口使底层可替换</li>
+<li>依赖注入，在被测试单元注入伪实现</li>
+<li>构造函数注入，在构造函数层注入伪对象</li>
+<li>用伪对象模拟异常</li>
+<li>getter,setter注入伪对象</li>
+<li>方法调用前注入伪对象<ul>
+<li>使用工厂类构造</li>
+<li>在发布版本中隐藏接缝</li>
+<li>不同的间接层次</li>
+<li>伪造方法使用局部的工厂方法</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="使用模拟对象进行交互测试"><a href="#使用模拟对象进行交互测试" class="headerlink" title="使用模拟对象进行交互测试"></a>使用模拟对象进行交互测试</h3><ul>
+<li>基于状态的测试</li>
+<li>交互测试</li>
+</ul>
+<h4 id="模拟对象与存根的区别"><a href="#模拟对象与存根的区别" class="headerlink" title="模拟对象与存根的区别"></a>模拟对象与存根的区别</h4><blockquote>
+<p>存根永远不会导致测试失败，模拟对象可以</p>
+</blockquote>
+<p>资料查阅理解：伪对象就是后两者的统称，模拟对象是一种功能更强大的存根，模拟对象会记录交互的状态，不记录交互状态的就是存根</p>
+<p>个人理解：存根面向特定调用过程的结果，模拟对象注重对象状态</p>
+<h3 id="隔离框架"><a href="#隔离框架" class="headerlink" title="隔离框架"></a>隔离框架</h3><h4 id="动态生成伪对象"><a href="#动态生成伪对象" class="headerlink" title="动态生成伪对象"></a>动态生成伪对象</h4><ul>
+<li><p>NSub</p>
+<pre class=" language-c#"><code class="language-c#">ILogger logger = Substitute.For<ILogger>();</code></pre>
+</li>
+<li><p>Mockito</p>
+<pre class=" language-java"><code class="language-java">ILogger logger <span class="token operator">=</span> Mockito<span class="token punctuation">.</span><span class="token function">mock</span><span class="token punctuation">(</span>ILogger<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+<h4 id="模拟值"><a href="#模拟值" class="headerlink" title="模拟值"></a>模拟值</h4><ul>
+<li><p>NSub</p>
+<pre class=" language-c#"><code class="language-c#">IFilenameRules fakeRules = Substitue.For<IFilenameRules>();
+fakeRules.IsValidLogFileName("strict.txt").Returns(true);</code></pre>
+</li>
+<li><p>Mockito</p>
+<pre class=" language-java"><code class="language-java">IFilenameRules fakeRules <span class="token operator">=</span> Mockito<span class="token punctuation">.</span><span class="token function">mock</span><span class="token punctuation">(</span>IFilenameRules<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Mockito<span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span>fakeRules<span class="token punctuation">.</span><span class="token function">IsValidLogFileName</span><span class="token punctuation">(</span><span class="token string">"strict.txt"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenReturn</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+<h4 id="隔离框架的优缺点"><a href="#隔离框架的优缺点" class="headerlink" title="隔离框架的优缺点"></a>隔离框架的优缺点</h4><h4 id="应避免的陷阱"><a href="#应避免的陷阱" class="headerlink" title="应避免的陷阱"></a>应避免的陷阱</h4><ul>
+<li>测试代码不可读</li>
+<li>验证错误的内容</li>
+<li>一个测试多个模拟对象</li>
+<li>过度指定测试</li>
+</ul>
+<h4 id="隔离框架设计反模式"><a href="#隔离框架设计反模式" class="headerlink" title="隔离框架设计反模式"></a>隔离框架设计反模式</h4><ul>
+<li><p>避免概念混淆</p>
+<p>模拟对象与存根不可混用</p>
+</li>
+<li><p>使用Given-when-then模式而非录制重放</p>
+</li>
+<li><p>避免粘性行为</p>
+</li>
+</ul>
+<h3 id="优秀单元测试的支柱"><a href="#优秀单元测试的支柱" class="headerlink" title="优秀单元测试的支柱"></a>优秀单元测试的支柱</h3><p>可靠性、可维护性、可读性</p>
+<h4 id="编写可靠的测试"><a href="#编写可靠的测试" class="headerlink" title="编写可靠的测试"></a>编写可靠的测试</h4><ol>
+<li><p>删除或修改测试</p>
+<p>测试失败的原因：产品缺陷、测试缺陷、语义或API变更、冲突或无效的测试</p>
+</li>
+<li><p>避免测试中的逻辑</p>
+<p>避免循环以及控制逻辑</p>
+</li>
+<li><p>只测试一个关注点</p>
+</li>
+<li><p>分离单元测试与集成测试</p>
+</li>
+<li><p>用CR确保单测覆盖率</p>
+</li>
+</ol>
+<h4 id="编写可维护的测试"><a href="#编写可维护的测试" class="headerlink" title="编写可维护的测试"></a>编写可维护的测试</h4><ul>
+<li><p>测试私有或受保护的方法</p>
+<ul>
+<li>测试的方法设为public</li>
+<li>独立逻辑的方法抽取到新类</li>
+<li>使方法称为静态方法</li>
+<li>使方法称为内部方法</li>
+</ul>
+</li>
+<li><p>去除重复代码</p>
+</li>
+<li><p>以可维护的方法使用setup方法</p>
+<ol>
+<li>避免只在某些测试中使用的初始化对象</li>
+<li>避免冗长难懂</li>
+<li>避免准备伪对象</li>
+<li>停用setup方法</li>
+</ol>
+</li>
+<li><p>实现测试隔离</p>
+<p>坏味道</p>
+<ol>
+<li>强制的测试顺序</li>
+<li>隐藏的测试调用</li>
+<li>共享状态损坏</li>
+<li>外部共享状态损坏</li>
+</ol>
+</li>
+<li><p>避免对不同关注点多次断言</p>
+</li>
+<li><p>对象比较应提高可维护性，如重写toString</p>
+</li>
+<li><p>避免过度指定</p>
+<ol>
+<li>避免纯内部行为</li>
+<li>在需要存根时使用模拟对象</li>
+<li>不必要的顺序指定或精确匹配</li>
+</ol>
+</li>
+</ul>
+<h4 id="编写可读的测试"><a href="#编写可读的测试" class="headerlink" title="编写可读的测试"></a>编写可读的测试</h4><ol>
+<li><p>注意单测命名</p>
+</li>
+<li><p>变量命名</p>
+</li>
+<li><p>有意义的断言</p>
+<p>不要重复测试控制台输出信息</p>
+<p>不要重复测试名中包含的信息</p>
+<p>若无有用信息则无需输出</p>
+<p>提供应发生与未发生的信息</p>
+</li>
+<li><p>断言和操作分离</p>
+</li>
+<li><p>避免滥用setup与teardown</p>
+</li>
+</ol>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://ryougishiki0.gitee.io/2020/05/25/dan-yuan-ce-shi-de-yi-zhu/">https://ryougishiki0.gitee.io/2020/05/25/dan-yuan-ce-shi-de-yi-zhu/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/05/25/dan-yuan-ce-shi-de-yi-zhu/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="单元测试的艺术">
+                        
+                        <span class="card-title">单元测试的艺术</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            单元测试的艺术1.基础知识
+单元测试的要求
+自动化可重复执行
+容易实现
+有复用价值
+运行方便
+结果稳定
+完全隔离
+完全控制单元
+失败后易于定位问题
+
+
+集成测试
+测试驱动开发（TDD）
+
+2.第一个单元测试
+语法
+assertTrue();
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-25
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Ryougi-Shiki
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/05/24/zookeeper/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="Zookeeper学习笔记">
+                        
+                        <span class="card-title">Zookeeper学习笔记</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            ZookeeperZookeeper基础配合使用的中间件
+Hadoop
+HBase
+Kafka
+
+应用场景
+配置管理
+DNS服务
+组成员管理
+各种分布式锁
+
+数据模型
+层次模型
+便于表达数据之间层次关系，便于为不同应用分配独立的命名空间
+示
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category">
+                                    中间件
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">
+                        <span class="chip bg-color">中间件</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">
+                        <span class="chip bg-color">分布式</span>
+                    </a>
+                    
+                    <a href="/tags/Zookeeper/">
+                        <span class="chip bg-color">Zookeeper</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/Ryougi-Shiki0" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:2497641289@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2497641289" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2497641289" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
