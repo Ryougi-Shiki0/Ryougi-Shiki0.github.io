@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>集合类源码阅读</title>
+      <link href="/2020/07/26/java-ji-he-lei/"/>
+      <url>/2020/07/26/java-ji-he-lei/</url>
+      
+        <content type="html"><![CDATA[<h2 id="集合类源码阅读"><a href="#集合类源码阅读" class="headerlink" title="集合类源码阅读"></a>集合类源码阅读</h2><h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><h5 id="继承体系及域"><a href="#继承体系及域" class="headerlink" title="继承体系及域"></a>继承体系及域</h5><ul><li><p>继承Map AbstractMap</p><p>保证代理的使用多继承了Map接口</p></li><li><p>类私有域及类</p><ol><li>初始容量16，最大容量2的30次幂，扩容负载因子0.75</li><li>树化容量8，退化容量6，最小树化容量64</li><li>Node</li></ol></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> JVM </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> Java集合 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>单元测试的艺术</title>
       <link href="/2020/05/25/dan-yuan-ce-shi-de-yi-zhu/"/>
       <url>/2020/05/25/dan-yuan-ce-shi-de-yi-zhu/</url>
