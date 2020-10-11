@@ -466,7 +466,7 @@ Unix简洁，仅提供几百个明确设计的系统调用
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-05-22
+                    2020-10-11
                 </div>
                 
 
@@ -508,6 +508,20 @@ Unix简洁，仅提供几百个明确设计的系统调用
 </ul>
 </li>
 </ul>
+<h2 id="内核"><a href="#内核" class="headerlink" title="内核"></a>内核</h2><h3 id="内核开发特点"><a href="#内核开发特点" class="headerlink" title="内核开发特点"></a>内核开发特点</h3><ul>
+<li>不能访问C库及标准的C头文件</li>
+<li>必须使用GNU C<ol>
+<li>内联函数</li>
+<li>内联汇编</li>
+<li>分支声明</li>
+</ol>
+</li>
+<li>无内存保护机制</li>
+<li>难以执行浮点运算</li>
+<li>给每个进程分配的只有很小的定长堆栈</li>
+<li>支持异步中断、抢占和SMP，必须时刻注意同步、并发</li>
+<li>需考虑可移植</li>
+</ul>
 <h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><h3 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h3><blockquote>
 <p>进程就是执行期内的程序，是操作系统进行资源调度分配的基本单位</p>
 </blockquote>
@@ -515,7 +529,86 @@ Unix简洁，仅提供几百个明确设计的系统调用
 <blockquote>
 <p>线程是进程中活动的对象，是CPU进行资源分配的最小单位</p>
 </blockquote>
-<h3 id="进程描述符与任务结构"><a href="#进程描述符与任务结构" class="headerlink" title="进程描述符与任务结构"></a>进程描述符与任务结构</h3>
+<h3 id="进程描述符与任务结构"><a href="#进程描述符与任务结构" class="headerlink" title="进程描述符与任务结构"></a>进程描述符与任务结构</h3><blockquote>
+<p>进程的列表以task_struct的形式放入任务队列中</p>
+</blockquote>
+<pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> task_struct<span class="token punctuation">{</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> state<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> prio<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> policy<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> task_struct <span class="token operator">*</span>parent<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> list_head tasks<span class="token punctuation">;</span>
+    pid_t pid<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> thread_info<span class="token punctuation">{</span>
+    <span class="token keyword">struct</span> task_struct <span class="token operator">*</span>task<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> exec_domain <span class="token operator">*</span>exec_domain<span class="token punctuation">;</span>
+    __u32 flag<span class="token punctuation">;</span>
+    __u32 status<span class="token punctuation">;</span>
+    __u32 cpu<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> preempt_count<span class="token punctuation">;</span>
+    mm_segment_t addr_limit<span class="token punctuation">;</span>
+    stuct restart_block<span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token operator">*</span>sysenter_return<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> uaccess_err<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<h4 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h4><ul>
+<li>TASK_RUNNING 运行</li>
+<li>TASK_INTERRUPTIBLE 可中断</li>
+<li>TASK_UNINTERRUPTIBLE 不可中断</li>
+<li>__TASK_TRACED 被其他进程跟踪的进程</li>
+<li>__TASK_STOPPED 停止执行</li>
+</ul>
+<h3 id="进程创建"><a href="#进程创建" class="headerlink" title="进程创建"></a>进程创建</h3><h4 id="fork"><a href="#fork" class="headerlink" title="fork()"></a>fork()</h4><p><strong>clone()调用do_fork()完成创建中的大部分工作，其中调用copy_process()</strong></p>
+<ol>
+<li>调用dup_task_struct()为新进程创建一个内核栈、thread_info结构和task_struct，这些值与当前进程的值相同</li>
+<li>检查创建后的资源没有超出用户分配资源限制</li>
+<li>子进程的进程描述符的许多成员被清0或初始值</li>
+<li>子进程状态被设置为TASK_UNITERRUPTIBLE</li>
+<li>调用copy_flags()更新flags成员，调用alloc_pid()分配有效的pid</li>
+<li>拷贝进程的其他资源如打开的文件、文件系统信息、信号处理函数、进程地址空间和命名空间</li>
+<li>copy_process()做扫尾工作范围指向子进程的指针</li>
+</ol>
+<h4 id="vfork"><a href="#vfork" class="headerlink" title="vfork()"></a>vfork()</h4><p>不拷贝父进程的页表项，其他与fork()功能相同；vfork()系统调用的实现是通过clone()系统调用一个特殊标志实现</p>
+<ol>
+<li>调用copy_process()，task_struct的vfor_done成员被设置为NULL</li>
+<li>执行do_fork()时，若给定特别标志，vfork_done指定特定地址</li>
+<li>子进程开始执行后，父进程不是马上恢复执行，二十一直等待，知道子进程通过vfork_done指针发送信号</li>
+<li>mm_release()时，进程退出内存地址空间，进程vfork_done是否为空，不为空则发送信号</li>
+<li>回到do_fork()，父进程恢复开始执行</li>
+</ol>
+<h3 id="线程在Linux中的实现"><a href="#线程在Linux中的实现" class="headerlink" title="线程在Linux中的实现"></a>线程在Linux中的实现</h3><blockquote>
+<p>Linux线程拥有唯一隶属于自己的task_struct，对内核而言可视作进程实现</p>
+</blockquote>
+<h4 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h4><p>与普通进程的创建类似，clone()需额外传递参数标志</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">//线程创建的clone()</span>
+<span class="token function">clone</span><span class="token punctuation">(</span>CLONE_VM <span class="token operator">|</span> CLONE_FS <span class="token operator">|</span> CLONE_FILES <span class="token operator">|</span> CLONE_SIGNAND<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//普通fork()的实现</span>
+<span class="token function">clone</span><span class="token punctuation">(</span>SIGCHLD<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//普通vfork()实现</span>
+<span class="token function">clone</span><span class="token punctuation">(</span>CLONE_VFORK <span class="token operator">|</span> CLONE_VM <span class="token operator">|</span> SIGCHLD<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="内核线程"><a href="#内核线程" class="headerlink" title="内核线程"></a>内核线程</h4><p>内核线程与普通线程的区别在于内核线程没有独立的地址空间，只在内核空间运行，从不切换到用户空间去</p>
+<h3 id="进程终结"><a href="#进程终结" class="headerlink" title="进程终结"></a>进程终结</h3><p>进程终结时，内核释放其资源并告知父线程，终结进程通过调用do_exit()完成</p>
+<ol>
+<li>讲task_struct中的标志成员设置为PF_EXITING</li>
+<li>调用del_timer_sync()删除任一内核定时器，根据返回的结果确保没有定时器在排队，也没有定时器处理程序在运行</li>
+<li>调用exit_mm()函数释放进程占用的mm_struct</li>
+<li>调用sem__exit()函数，如果进程排队等候IPC信号，离开队列</li>
+<li>调用exit_files()和exit_fs()递减文件描述符、文件系统数据的引用计数，若某一项为零则可释放</li>
+<li>exit_code成员中的任务退出代码置为由exit()提供的退出代码</li>
+<li>调用exit_notify()向父进程发送信号，给子进程重新找父进程</li>
+<li>do_exit()调用schedule()切换到新的进程</li>
+</ol>
+<h4 id="删除进程描述符"><a href="#删除进程描述符" class="headerlink" title="删除进程描述符"></a>删除进程描述符</h4><p>release_task()调用完成以下内容</p>
+<ol>
+<li>调用__exit_signal()，其中调用 _unhash_process()调用detach_pid()从pidhash上删除该进程</li>
+<li>_exit_signal()释放目前僵死进程所使用的所有剩余资源</li>
+<li>如果这个进程时线程组最后一个进程，release_task()需通知领头进程的父进程</li>
+<li>release_task()调用put_task_struct()释放进程内核栈和thread_info结构所占的页，并释放tast_struct所占的slab高速缓存</li>
+</ol>
+<h4 id="孤儿进程"><a href="#孤儿进程" class="headerlink" title="孤儿进程"></a>孤儿进程</h4><p>避免进程进入僵死状态耗费内存，给子进程在当前线程组找个一个线程为父进程或init为父进程</p>
+<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2>
             </div>
             <hr/>
 
@@ -530,7 +623,7 @@ Unix简洁，仅提供几百个明确设计的系统调用
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -540,7 +633,7 @@ Unix简洁，仅提供几百个明确设计的系统调用
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io/2020/05/21/linux-nei-he-she-ji-yu-shi-xian/">https://ryougishiki0.gitee.io/2020/05/21/linux-nei-he-she-ji-yu-shi-xian/</a>
+                    <a href="http://ryougi-shiki0.github.io/2020/05/21/linux-nei-he-she-ji-yu-shi-xian/">http://ryougi-shiki0.github.io/2020/05/21/linux-nei-he-she-ji-yu-shi-xian/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -553,7 +646,7 @@ Unix简洁，仅提供几百个明确设计的系统调用
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
                     !
                 </span>
             </div>
@@ -710,9 +803,9 @@ assertTrue();
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Redis设计与实现Redis命令基本数据结构String
+                            Redis设计与实现简述Redis命令基本数据结构String
 常用指令set/get/del/incr/decr/incrby/decrby
-字符串处理指令getrange/append/setrange/getbit/setbit/bico
+字符串处理指令getrange/append/setrange/getbit/setbit/bi
                         
                     </div>
                     <div class="publish-info">
@@ -893,7 +986,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>

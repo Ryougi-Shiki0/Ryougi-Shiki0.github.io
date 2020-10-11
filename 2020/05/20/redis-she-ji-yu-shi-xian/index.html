@@ -5,9 +5,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Redis设计与实现阅读笔记, Shiki&#39;s Blog">
-    <meta name="description" content="Redis设计与实现Redis命令基本数据结构String
+    <meta name="description" content="Redis设计与实现简述Redis命令基本数据结构String
 常用指令set/get/del/incr/decr/incrby/decrby
-字符串处理指令getrange/append/setrange/getbit/setbit/bico">
+字符串处理指令getrange/append/setrange/getbit/setbit/bi">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -471,7 +471,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-08-05
+                    2020-09-16
                 </div>
                 
 
@@ -491,7 +491,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Redis设计与实现"><a href="#Redis设计与实现" class="headerlink" title="Redis设计与实现"></a>Redis设计与实现</h2><h3 id="Redis命令"><a href="#Redis命令" class="headerlink" title="Redis命令"></a>Redis命令</h3><h4 id="基本数据结构"><a href="#基本数据结构" class="headerlink" title="基本数据结构"></a>基本数据结构</h4><p><strong>String</strong></p>
+                <h1 id="Redis设计与实现"><a href="#Redis设计与实现" class="headerlink" title="Redis设计与实现"></a>Redis设计与实现</h1><h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><h3 id="Redis命令"><a href="#Redis命令" class="headerlink" title="Redis命令"></a>Redis命令</h3><h4 id="基本数据结构"><a href="#基本数据结构" class="headerlink" title="基本数据结构"></a>基本数据结构</h4><p><strong>String</strong></p>
 <p>常用指令set/get/del/incr/decr/incrby/decrby</p>
 <p>字符串处理指令getrange/append/setrange/getbit/setbit/bicount/bitop</p>
 <p><strong>List</strong></p>
@@ -523,7 +523,30 @@
 </ol>
 </li>
 </ul>
-<h3 id="基本数据结构与对象"><a href="#基本数据结构与对象" class="headerlink" title="基本数据结构与对象"></a>基本数据结构与对象</h3><h4 id="简单动态字符串"><a href="#简单动态字符串" class="headerlink" title="简单动态字符串"></a>简单动态字符串</h4>
+<h2 id="第一部分"><a href="#第一部分" class="headerlink" title="第一部分"></a>第一部分</h2><h3 id="基本数据结构与对象"><a href="#基本数据结构与对象" class="headerlink" title="基本数据结构与对象"></a>基本数据结构与对象</h3><h4 id="简单动态字符串"><a href="#简单动态字符串" class="headerlink" title="简单动态字符串"></a>简单动态字符串</h4><h4 id="SDS定义"><a href="#SDS定义" class="headerlink" title="SDS定义"></a>SDS定义</h4><pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> sdshdr<span class="token punctuation">{</span>
+    <span class="token keyword">int</span> len<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> free<span class="token punctuation">;</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="第三部分"><a href="#第三部分" class="headerlink" title="第三部分"></a>第三部分</h2><h3 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h3><h4 id="旧版复制"><a href="#旧版复制" class="headerlink" title="旧版复制"></a>旧版复制</h4><ul>
+<li><p>同步</p>
+<ol>
+<li>从服务器向主服务器发送SYNC</li>
+<li>主进行BGSAVE，完成后回传RDB文件</li>
+<li>最后将BGSAVE期间在缓冲区的写命令同步至从服务器</li>
+</ol>
+</li>
+<li><p>命令传播</p>
+<p>将命令传播给各从服务器</p>
+</li>
+</ul>
+<h4 id="新版复制"><a href="#新版复制" class="headerlink" title="新版复制"></a>新版复制</h4><p>完整重同步和部分重同步解决断线问题</p>
+<h5 id="部分重同步实现"><a href="#部分重同步实现" class="headerlink" title="部分重同步实现"></a>部分重同步实现</h5><ul>
+<li>主从服务器各自的复制偏移量</li>
+<li>主的复制积压缓冲区</li>
+<li>服务器运行ID</li>
+</ul>
+
             </div>
             <hr/>
 
@@ -538,7 +561,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -548,7 +571,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io/2020/05/20/redis-she-ji-yu-shi-xian/">https://ryougishiki0.gitee.io/2020/05/20/redis-she-ji-yu-shi-xian/</a>
+                    <a href="http://ryougi-shiki0.github.io/2020/05/20/redis-she-ji-yu-shi-xian/">http://ryougi-shiki0.github.io/2020/05/20/redis-she-ji-yu-shi-xian/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -561,7 +584,7 @@
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
                     !
                 </span>
             </div>
@@ -896,7 +919,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
