@@ -464,7 +464,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-04-16
+                    2021-04-17
                 </div>
                 
 
@@ -500,6 +500,132 @@
 隐藏元素
 <span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span></code></pre>
 </li>
+<li><p>在&lt;head&gt;或&lt;body&gt;中的JS脚本</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>script<span class="token operator">></span>
+<span class="token keyword">function</span> <span class="token function">changeColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"demo"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token string">"段落被更改。"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span>
+
+<span class="token operator">&lt;</span>body<span class="token operator">></span>
+
+<span class="token operator">&lt;</span>h2<span class="token operator">></span>Head 中的 JavaScript<span class="token operator">&lt;</span><span class="token operator">/</span>h2<span class="token operator">></span>
+
+<span class="token operator">&lt;</span>p id<span class="token operator">=</span><span class="token string">"demo"</span><span class="token operator">></span>一个段落。<span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span>
+
+<span class="token operator">&lt;</span>button type<span class="token operator">=</span><span class="token string">"button"</span> onclick<span class="token operator">=</span><span class="token string">"changeColor()"</span><span class="token operator">></span>更换颜色<span class="token operator">&lt;</span><span class="token operator">/</span>button<span class="token operator">></span>
+
+<span class="token operator">&lt;</span><span class="token operator">/</span>body<span class="token operator">></span>
+<span class="token comment" spellcheck="true">//外部加载或引用JS脚本</span>
+<span class="token operator">&lt;</span>script src<span class="token operator">=</span><span class="token string">"myScript.js"</span><span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span>
+<span class="token operator">&lt;</span>script src<span class="token operator">=</span><span class="token string">"https://www.w3school.com.cn/js/myScript1.js"</span><span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span>
+<span class="token operator">&lt;</span>script src<span class="token operator">=</span><span class="token string">"/js/myScript1.js"</span><span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span></code></pre>
+</li>
+<li><p>JS输出</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>p id<span class="token operator">=</span><span class="token string">"demo"</span><span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span>
+
+<span class="token operator">&lt;</span>script<span class="token operator">></span>
+document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"demo"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>innerHTML <span class="token operator">=</span> <span class="token number">5</span> <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">;</span>
+document<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token number">5</span> <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+window<span class="token punctuation">.</span><span class="token function">alert</span><span class="token punctuation">(</span><span class="token number">5</span> <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">5</span> <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span></code></pre>
+</li>
+<li><p>关键字</p>
+<table>
+<thead>
+<tr>
+<th align="center">关键词</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">break</td>
+<td align="center">终止 switch 或循环。</td>
+</tr>
+<tr>
+<td align="center">continue</td>
+<td align="center">跳出循环并在顶端开始。</td>
+</tr>
+<tr>
+<td align="center">debugger</td>
+<td align="center">停止执行 JavaScript，并调用调试函数（如果可用）。</td>
+</tr>
+<tr>
+<td align="center">do … while</td>
+<td align="center">执行语句块，并在条件为真时重复代码块。</td>
+</tr>
+<tr>
+<td align="center">for</td>
+<td align="center">标记需被执行的语句块，只要条件为真。</td>
+</tr>
+<tr>
+<td align="center">function</td>
+<td align="center">声明函数。</td>
+</tr>
+<tr>
+<td align="center">if … else</td>
+<td align="center">标记需被执行的语句块，根据某个条件。</td>
+</tr>
+<tr>
+<td align="center">return</td>
+<td align="center">退出函数。</td>
+</tr>
+<tr>
+<td align="center">switch</td>
+<td align="center">标记需被执行的语句块，根据不同的情况。</td>
+</tr>
+<tr>
+<td align="center">try … catch</td>
+<td align="center">对语句块实现错误处理。</td>
+</tr>
+<tr>
+<td align="center">var</td>
+<td align="center">声明变量。</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>JS数据类型</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">//数字</span>
+<span class="token keyword">var</span> length <span class="token operator">=</span> <span class="token number">7</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//字符串</span>
+<span class="token keyword">var</span> lastName <span class="token operator">=</span> <span class="token string">"Gates"</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//数组</span>
+<span class="token keyword">var</span> cars <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"Porsche"</span><span class="token punctuation">,</span> <span class="token string">"Volvo"</span><span class="token punctuation">,</span> <span class="token string">"BMW"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//对象</span>
+<span class="token keyword">var</span> x <span class="token operator">=</span> <span class="token punctuation">{</span>firstName<span class="token punctuation">:</span><span class="token string">"Bill"</span><span class="token punctuation">,</span> lastName<span class="token punctuation">:</span><span class="token string">"Gates"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//JavaScript为动态类型语言</span>
+<span class="token comment" spellcheck="true">//现在 x 是 undefined</span>
+<span class="token keyword">var</span> x<span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//现在 x 是数值</span>
+<span class="token keyword">var</span> x <span class="token operator">=</span> <span class="token number">7</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//现在 x 是字符串值</span>
+<span class="token keyword">var</span> x <span class="token operator">=</span> <span class="token string">"Bill"</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//Undefined 与 null 的值相等，但类型不相等</span></code></pre>
+</li>
+<li><p>函数</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">toCelsius</span><span class="token punctuation">(</span>fahrenheit<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> carName <span class="token operator">=</span> <span class="token number">32</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token number">5</span><span class="token operator">/</span><span class="token number">9</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token punctuation">(</span>fahrenheit<span class="token operator">-</span>carName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li><p>对象</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> person <span class="token operator">=</span> <span class="token punctuation">{</span>
+  firstName<span class="token punctuation">:</span> <span class="token string">"Bill"</span><span class="token punctuation">,</span>
+  lastName <span class="token punctuation">:</span> <span class="token string">"Gates"</span><span class="token punctuation">,</span>
+  id       <span class="token punctuation">:</span> <span class="token number">678</span><span class="token punctuation">,</span>
+  fullName <span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>firstName <span class="token operator">+</span> <span class="token string">" "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>lastName<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//访问对象属性</span>
+objectName<span class="token punctuation">.</span>propertyName
+objectName<span class="token punctuation">[</span><span class="token string">"propertyName"</span><span class="token punctuation">]</span>
+<span class="token comment" spellcheck="true">//访问对象方法 若不使用()则返回函数定义</span>
+objectName<span class="token punctuation">.</span><span class="token function">methodName</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+name <span class="token operator">=</span> objectName<span class="token punctuation">.</span>methodName<span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//避免new字符串、数值或布尔对象，会影响执行速度</span></code></pre>
+</li>
 <li></li>
 </ul>
 
@@ -517,7 +643,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -527,7 +653,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ryougishiki0.gitee.io/2021/04/03/javascript/">https://ryougishiki0.gitee.io/2021/04/03/javascript/</a>
+                    <a href="http://ryougi-shiki0.github.io/2021/04/03/javascript/">http://ryougi-shiki0.github.io/2021/04/03/javascript/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -540,7 +666,7 @@
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+                    <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
                     !
                 </span>
             </div>
@@ -867,7 +993,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
+            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
