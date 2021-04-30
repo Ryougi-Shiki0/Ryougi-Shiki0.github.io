@@ -356,21 +356,21 @@
                     <div class="post-statis col l4 hide-on-med-and-down" data-aos="zoom-in-right">
                         
 <div class="statis">
-    <span class="count"><a href="/">23</a></span>
+    <span class="count"><a href="/">24</a></span>
     <span class="name">文章</span>
 </div>
 
 
 
 <div class="statis">
-    <span class="count"><a href="/categories">14</a></span>
+    <span class="count"><a href="/categories">15</a></span>
     <span class="name">分类</span>
 </div>
 
 
 
 <div class="statis">
-    <span class="count"><a href="/tags">36</a></span>
+    <span class="count"><a href="/tags">37</a></span>
     <span class="name">标签</span>
 </div>
 
@@ -386,21 +386,21 @@
                                 <div class="post-statis hide-on-large-only" data-aos="zoom-in-right">
                                     
 <div class="statis">
-    <span class="count"><a href="/">23</a></span>
+    <span class="count"><a href="/">24</a></span>
     <span class="name">文章</span>
 </div>
 
 
 
 <div class="statis">
-    <span class="count"><a href="/categories">14</a></span>
+    <span class="count"><a href="/categories">15</a></span>
     <span class="name">分类</span>
 </div>
 
 
 
 <div class="statis">
-    <span class="count"><a href="/tags">36</a></span>
+    <span class="count"><a href="/tags">37</a></span>
     <span class="name">标签</span>
 </div>
 
@@ -534,7 +534,7 @@
         },
         xAxis: {
             type: 'category',
-            data: ["2020-04","2020-05","2020-06","2020-07","2020-08","2020-09","2020-10","2020-11","2020-12","2021-01","2021-02","2021-03","2021-04"]
+            data: ["2020-05","2020-06","2020-07","2020-08","2020-09","2020-10","2020-11","2020-12","2021-01","2021-02","2021-03","2021-04","2021-05"]
         },
         yAxis: {
             type: 'value',
@@ -544,7 +544,7 @@
                 name: '文章篇数',
                 type: 'line',
                 color: ['#6772e5'],
-                data: [1,5,0,1,0,0,0,0,0,0,0,0,1],
+                data: [5,0,1,0,0,0,0,0,0,0,0,2,0],
                 markPoint: {
                     symbolSize: 45,
                     color: ['#fa755a','#3ecf8e','#82d3f4'],
@@ -586,7 +586,7 @@
                 type: 'pie',
                 radius: '50%',
                 color: ['#6772e5', '#ff9e0f', '#fa755a', '#3ecf8e', '#82d3f4', '#ab47bc', '#525f7f', '#f51c47', '#26A69A'],
-                data: [{"name":"JavaScript","value":1},{"name":"JVM","value":3},{"name":"Git","value":1},{"name":"Java基础","value":2},{"name":"Java","value":2},{"name":"消息引擎","value":1},{"name":"数据库","value":4},{"name":"Linux","value":1},{"name":"Java框架","value":3},{"name":"Nosql","value":1},{"name":"工程化","value":1},{"name":"中间件","value":1},{"name":"设计模式","value":1},{"name":"NoSQL","value":1}],
+                data: [{"name":"前端","value":1},{"name":"Git","value":1},{"name":"JVM","value":3},{"name":"Java基础","value":2},{"name":"Java","value":2},{"name":"JavaScript","value":1},{"name":"消息引擎","value":1},{"name":"Linux","value":1},{"name":"Java框架","value":3},{"name":"数据库","value":4},{"name":"Nosql","value":1},{"name":"中间件","value":1},{"name":"工程化","value":1},{"name":"设计模式","value":1},{"name":"NoSQL","value":1}],
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
@@ -610,7 +610,7 @@
         xAxis: [
             {
                 type: 'category',
-                data: ["Java","MySQL","关系型数据库","JVM","中间件","分布式","MySQL优化","Redis","缓存","非关系型数据库"]
+                data: ["Java","MySQL","关系型数据库","前端基础","JVM","中间件","分布式","MySQL优化","Spring","开源框架"]
             }
         ],
         yAxis: [
@@ -740,22 +740,14 @@
         <div class="tag-chips center-align">
             
             
-            <a href="/tags/JS/">
-                <span class="chip center-align waves-effect waves-light chip-default">JS</span>
+            <a href="/tags/HTML/">
+                <span class="chip center-align waves-effect waves-light chip-default">HTML</span>
             </a>
             
             
             
             <a href="/tags/%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/">
                 <span class="chip center-align waves-effect waves-light chip-default">前端基础</span>
-            </a>
-            
-            
-            
-            
-            
-            <a href="/tags/Java%E9%9B%86%E5%90%88/">
-                <span class="chip center-align waves-effect waves-light chip-default">Java集合</span>
             </a>
             
             
@@ -774,6 +766,14 @@
             
             
             
+            <a href="/tags/Java%E9%9B%86%E5%90%88/">
+                <span class="chip center-align waves-effect waves-light chip-default">Java集合</span>
+            </a>
+            
+            
+            
+            
+            
             <a href="/tags/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
                 <span class="chip center-align waves-effect waves-light chip-default">Java内存模型</span>
             </a>
@@ -786,6 +786,12 @@
             
             
             
+            <a href="/tags/JS/">
+                <span class="chip center-align waves-effect waves-light chip-default">JS</span>
+            </a>
+            
+            
+            
             <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">
                 <span class="chip center-align waves-effect waves-light chip-default">中间件</span>
             </a>
@@ -794,20 +800,6 @@
             
             <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">
                 <span class="chip center-align waves-effect waves-light chip-default">分布式</span>
-            </a>
-            
-            
-            
-            
-            
-            <a href="/tags/MySQL%E4%BC%98%E5%8C%96/">
-                <span class="chip center-align waves-effect waves-light chip-default">MySQL优化</span>
-            </a>
-            
-            
-            
-            <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                <span class="chip center-align waves-effect waves-light chip-default">关系型数据库</span>
             </a>
             
             
@@ -836,52 +828,22 @@
             
             
             
+            
+            
+            <a href="/tags/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                <span class="chip center-align waves-effect waves-light chip-default">关系型数据库</span>
+            </a>
+            
+            
+            
             <a href="/tags/MySQL%E5%9F%BA%E7%A1%80/">
                 <span class="chip center-align waves-effect waves-light chip-default">MySQL基础</span>
             </a>
             
             
             
-            
-            
-            <a href="/tags/%E7%BC%93%E5%AD%98/">
-                <span class="chip center-align waves-effect waves-light chip-default">缓存</span>
-            </a>
-            
-            
-            
-            <a href="/tags/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                <span class="chip center-align waves-effect waves-light chip-default">非关系型数据库</span>
-            </a>
-            
-            
-            
-            <a href="/tags/Redis%E9%9B%86%E7%BE%A4/">
-                <span class="chip center-align waves-effect waves-light chip-default">Redis集群</span>
-            </a>
-            
-            
-            
-            <a href="/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
-                <span class="chip center-align waves-effect waves-light chip-default">单元测试</span>
-            </a>
-            
-            
-            
-            <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">
-                <span class="chip center-align waves-effect waves-light chip-default">工程化</span>
-            </a>
-            
-            
-            
-            <a href="/tags/Zookeeper/">
-                <span class="chip center-align waves-effect waves-light chip-default">Zookeeper</span>
-            </a>
-            
-            
-            
-            <a href="/tags/%E5%BC%80%E6%BA%90%E5%B7%A5%E5%85%B7/">
-                <span class="chip center-align waves-effect waves-light chip-default">开源工具</span>
+            <a href="/tags/MySQL%E4%BC%98%E5%8C%96/">
+                <span class="chip center-align waves-effect waves-light chip-default">MySQL优化</span>
             </a>
             
             
@@ -910,8 +872,58 @@
             
             
             
+            
+            
+            <a href="/tags/%E7%BC%93%E5%AD%98/">
+                <span class="chip center-align waves-effect waves-light chip-default">缓存</span>
+            </a>
+            
+            
+            
+            <a href="/tags/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                <span class="chip center-align waves-effect waves-light chip-default">非关系型数据库</span>
+            </a>
+            
+            
+            
+            <a href="/tags/Redis%E9%9B%86%E7%BE%A4/">
+                <span class="chip center-align waves-effect waves-light chip-default">Redis集群</span>
+            </a>
+            
+            
+            
+            <a href="/tags/%E5%BC%80%E6%BA%90%E5%B7%A5%E5%85%B7/">
+                <span class="chip center-align waves-effect waves-light chip-default">开源工具</span>
+            </a>
+            
+            
+            
+            <a href="/tags/Zookeeper/">
+                <span class="chip center-align waves-effect waves-light chip-default">Zookeeper</span>
+            </a>
+            
+            
+            
+            <a href="/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
+                <span class="chip center-align waves-effect waves-light chip-default">单元测试</span>
+            </a>
+            
+            
+            
+            <a href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/">
+                <span class="chip center-align waves-effect waves-light chip-default">工程化</span>
+            </a>
+            
+            
+            
             <a href="/tags/Java%E5%B9%B6%E5%8F%91/">
                 <span class="chip center-align waves-effect waves-light chip-default">Java并发</span>
+            </a>
+            
+            
+            
+            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                <span class="chip center-align waves-effect waves-light chip-default">设计模式</span>
             </a>
             
             
@@ -924,12 +936,6 @@
             
             <a href="/tags/GC/">
                 <span class="chip center-align waves-effect waves-light chip-default">GC</span>
-            </a>
-            
-            
-            
-            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                <span class="chip center-align waves-effect waves-light chip-default">设计模式</span>
             </a>
             
             
@@ -960,7 +966,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
+            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
