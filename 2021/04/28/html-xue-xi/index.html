@@ -472,7 +472,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-05-02
+                    2021-05-03
                 </div>
                 
 
@@ -654,7 +654,7 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span></code></pre>
 </li>
 </ul>
-<h2 id="CSS样式"><a href="#CSS样式" class="headerlink" title="CSS样式"></a>CSS样式</h2><h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><ul>
+<h2 id="CSS样式"><a href="#CSS样式" class="headerlink" title="CSS样式"></a>CSS样式</h2><h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><h4 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h4><ul>
 <li><p>标签选择器</p>
 <pre class=" language-css"><code class="language-css"><span class="token selector">&lt;head>
     &lt;style>
@@ -694,6 +694,34 @@
     &lt;h<span class="token number">1</span> class=<span class="token string">"testCss"</span>>标题&lt;/h<span class="token number">1</span>>
 &lt;/body></code></pre>
 </li>
+<li><p>通配选择器</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector">&lt;head>
+&lt;style>
+    * </span><span class="token punctuation">{</span>
+        <span class="token property">color</span><span class="token punctuation">:</span> aquamarine<span class="token punctuation">;</span>
+        <span class="token property">font-size</span><span class="token punctuation">:</span> <span class="token number">30</span>px<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+&lt;/style>
+&lt;/head>
+&lt;body>
+    &lt;h<span class="token number">1</span> class=<span class="token string">"testCss"</span>>标题&lt;/h<span class="token number">1</span>>
+&lt;/body></code></pre>
+</li>
+</ul>
+<h4 id="字体属性"><a href="#字体属性" class="headerlink" title="字体属性"></a>字体属性</h4><ul>
+<li><p>字体属性</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector">&lt;!-- 多个字体按先后顺序匹配 -->
+<span class="token class">.fontType</span> </span><span class="token punctuation">{</span>
+    <span class="token property">font-style</span><span class="token punctuation">:</span> italic<span class="token punctuation">;</span>
+    &lt;!-- <span class="token number">400</span>为normal <span class="token number">700</span>为bold加粗 -->
+    <span class="token property">font-weight</span><span class="token punctuation">:</span> normal<span class="token punctuation">;</span>
+    <span class="token property">font-size</span><span class="token punctuation">:</span> <span class="token number">30</span>px<span class="token punctuation">;</span>
+    <span class="token property">font-family</span><span class="token punctuation">:</span> Arial,<span class="token string">"Microsoft YaHei"</span>,<span class="token string">"微软雅黑"</span><span class="token punctuation">;</span>
+    &lt;!-- 复合形式按style weight size family顺序 且后两者不可省略 -->
+    <span class="token property">font</span><span class="token punctuation">:</span> italic normal <span class="token number">30</span>px Arial<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</li>
+<li></li>
 </ul>
 
             </div>
@@ -710,7 +738,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://ryougi-shiki0.github.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
+                    <a href="https://ryougishiki0.gitee.io" rel="external nofollow noreferrer">Ryougi-Shiki</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -720,7 +748,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://ryougi-shiki0.github.io/2021/04/28/html-xue-xi/">http://ryougi-shiki0.github.io/2021/04/28/html-xue-xi/</a>
+                    <a href="https://ryougishiki0.gitee.io/2021/04/28/html-xue-xi/">https://ryougishiki0.gitee.io/2021/04/28/html-xue-xi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -733,7 +761,7 @@
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
+                    <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
                     !
                 </span>
             </div>
@@ -1062,7 +1090,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             <span id="year">2020</span>
-            <a href="http://ryougi-shiki0.github.io" target="_blank">Ryougi-Shiki</a>
+            <a href="https://ryougishiki0.gitee.io" target="_blank">Ryougi-Shiki</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
