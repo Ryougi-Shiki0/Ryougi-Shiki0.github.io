@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>MyBatis入门学习</title>
+      <link href="/2021/07/31/ling-yu-qu-dong-she-ji/"/>
+      <url>/2021/07/31/ling-yu-qu-dong-she-ji/</url>
+      
+        <content type="html"><![CDATA[<h1 id="领域驱动设计"><a href="#领域驱动设计" class="headerlink" title="领域驱动设计"></a>领域驱动设计</h1><h2 id="交流与语言的使用"><a href="#交流与语言的使用" class="headerlink" title="交流与语言的使用"></a>交流与语言的使用</h2><h3 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h3><h4 id="船运清关制定路线场景"><a href="#船运清关制定路线场景" class="headerlink" title="船运清关制定路线场景"></a>船运清关制定路线场景</h4><blockquote><p> 对比两种方式，方式二在交流过程中，交换信息更高效，不必对细节表达不清额外解释</p></blockquote><ol><li>讨论方式一：描述出发地、目的地及清关地点改变时，对航线进行改变</li><li>讨论方式二：航线表述为抽象模型Itinerary，出发地、目的地及清关地点抽象为route specification进行交流</li></ol><h4 id="抽象出模型并使用通用语言"><a href="#抽象出模型并使用通用语言" class="headerlink" title="抽象出模型并使用通用语言"></a>抽象出模型并使用通用语言</h4><img src="/2021/07/31/ling-yu-qu-dong-she-ji/%E9%80%9A%E7%94%A8%E8%AF%AD%E8%A8%80%E5%BD%A2%E6%88%90.png" class="" title="通用语言形成"><h4 id="合理使用文档与图"><a href="#合理使用文档与图" class="headerlink" title="合理使用文档与图"></a>合理使用文档与图</h4><h5 id="书面设计文档"><a href="#书面设计文档" class="headerlink" title="书面设计文档"></a>书面设计文档</h5><ul><li><p>文档不应重复代码明确表示过的内容，应作为代码的补充；</p></li><li><p>此外对文档进行及时的更新，保证与代码的同步性</p></li></ul><h4 id="解释性模型"><a href="#解释性模型" class="headerlink" title="解释性模型"></a>解释性模型</h4><p>使用非纯UML而使用解释性的业务流程图，可能更易于理解</p><img src="/2021/07/31/ling-yu-qu-dong-she-ji/%E8%A7%A3%E9%87%8A%E6%80%A7%E6%A8%A1%E5%9E%8B.png" class="" title="解释性模型"><h3 id="绑定模型和实现"><a href="#绑定模型和实现" class="headerlink" title="绑定模型和实现"></a>绑定模型和实现</h3><h4 id="MODEL-DRIVEN-DESGIN"><a href="#MODEL-DRIVEN-DESGIN" class="headerlink" title="MODEL-DRIVEN DESGIN"></a>MODEL-DRIVEN DESGIN</h4><p>严格执行程序设计与模型相对应</p><ul><li>制定意图明显的接口</li><li>考虑一个接口的边界影响，即接口功能副功能影响</li><li>对象粒度需要在不断重构中提高与模型契合度</li><li>尽量对模型相互依赖进行去除</li></ul><h4 id="建立范式及工具"><a href="#建立范式及工具" class="headerlink" title="建立范式及工具"></a>建立范式及工具</h4><p>场景如：</p><blockquote><p>引脚布线，顺序排列引脚，查找对应引脚的规则，并进行生成</p></blockquote><ul><li>方式一：引脚文件排序，读取文件搜索匹配对应总线的数据，将引脚与规则文件增加至新生成的完整规则文件</li><li>方式二：抽象引脚类并使用实例管脚、总线类继承；<ul><li>构建Net List import 读取Net列表文件，为每行数据创建Net实例</li><li>构建Net Rule export 已知Net集合，将所有附加规则写入规则文件</li><li>构建Net Repository 提供通过名称访问Net的接口</li><li>Inferred Bus Factory 已知Net集合，利用命名约定来推断总线，并且创建总线实例</li><li>Bus Repository 提供通过名称访问总线的接口</li></ul></li></ul><h4 id="亲身实践建模"><a href="#亲身实践建模" class="headerlink" title="亲身实践建模"></a>亲身实践建模</h4><h2 id="模型驱动设计的构造块"><a href="#模型驱动设计的构造块" class="headerlink" title="模型驱动设计的构造块"></a>模型驱动设计的构造块</h2><h3 id="分离领域"><a href="#分离领域" class="headerlink" title="分离领域"></a>分离领域</h3><h4 id="分层架构"><a href="#分层架构" class="headerlink" title="分层架构"></a>分层架构</h4><p>每层结构应与上层松散耦合、依赖于下层</p><img src="/2021/07/31/ling-yu-qu-dong-she-ji/%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84.png" class="" title="分层架构"><ul><li><p>用户界面层 </p><p>负责向用户解是信息和解释用户指令</p></li><li><p>应用层</p><p>定义软件要完成的任务，指挥表达领域概念的对象来解决问题；该层应不包含业务规则和知识，只为下层协调任务分配工作</p></li><li><p>领域层</p><p>负责表达业务概念、业务状态信息及业务规则</p></li><li><p>基础设施层</p><p>为上面各层提供通用的技术能力，为应用层传递消息、为领域层提供持久化、为用户曾提供绘制屏幕组件</p></li></ul><h5 id="各层关联"><a href="#各层关联" class="headerlink" title="各层关联"></a>各层关联</h5><p>下层架构不应发起上层的操作</p><h4 id="反模式的SMART-UI"><a href="#反模式的SMART-UI" class="headerlink" title="反模式的SMART UI"></a>反模式的SMART UI</h4><blockquote><p>简单的功能场景，以数据输入和显示为主，轻量级的开发可采用该种模式</p></blockquote><h5 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h5><ul><li>效率高</li><li>对能力较差的开发人员友好</li><li>程序独立，交付、扩展简易</li><li>关系型数据库使用方便</li><li>交接方便</li></ul><h5 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h5><ul><li>不通过数据库难以集成</li><li>缺乏重用和问题抽象</li><li>复杂的迭代很快就会项目瓶颈</li><li>只能够简单的增加应用模块</li></ul><h3 id="软件中所表示的模型"><a href="#软件中所表示的模型" class="headerlink" title="软件中所表示的模型"></a>软件中所表示的模型</h3><h4 id="模型相互之间的约束"><a href="#模型相互之间的约束" class="headerlink" title="模型相互之间的约束"></a>模型相互之间的约束</h4><p>约束添加至模型和实现中，保证模型的精确性，利于实现的维护</p><h4 id="Entity模型"><a href="#Entity模型" class="headerlink" title="Entity模型"></a>Entity模型</h4>]]></content>
+      
+      
+      <categories>
+          
+          <category> 软件设计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> 设计 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HTML学习</title>
       <link href="/2021/04/28/html-xue-xi/"/>
       <url>/2021/04/28/html-xue-xi/</url>
@@ -20,9 +47,9 @@
       
         <tags>
             
-            <tag> HTML </tag>
-            
             <tag> 前端基础 </tag>
+            
+            <tag> HTML </tag>
             
         </tags>
       
@@ -47,9 +74,9 @@
       
         <tags>
             
-            <tag> 前端基础 </tag>
-            
             <tag> JS </tag>
+            
+            <tag> 前端基础 </tag>
             
         </tags>
       
@@ -474,9 +501,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 关系型数据库 </tag>
-            
             <tag> MySQL优化 </tag>
+            
+            <tag> 关系型数据库 </tag>
             
         </tags>
       
@@ -503,9 +530,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> 关系型数据库 </tag>
-            
             <tag> MySQL优化 </tag>
+            
+            <tag> 关系型数据库 </tag>
             
         </tags>
       
