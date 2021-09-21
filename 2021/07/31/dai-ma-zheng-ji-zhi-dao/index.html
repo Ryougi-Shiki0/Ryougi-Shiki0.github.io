@@ -4,12 +4,14 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="从零开始的JVM实现(一), Shiki&#39;s Blog">
-    <meta name="description" content="JCommander
-JCommander是Java解析命令行参数的工具，作者cebust
+    <meta name="keywords" content="代码整洁之道, Shiki&#39;s Blog">
+    <meta name="description" content="代码整洁之道对象和数据结构数据、对象得反对称性
+过程式代码难以添加新数据结构，而面对对象代码难以添加新函数
 
-特点
-注解驱动它的核心功能命令行参数定义是基于注解的，这也是我选择用它的主要原因。我们可以轻松做到命令行参数与属性的映射，属性除了是String类">
+得墨忒尔律
+过长的且跨类权限过多
+//避免如下写法
+final String outputDir = ctxt.getOption">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +19,7 @@ JCommander是Java解析命令行参数的工具，作者cebust
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>从零开始的JVM实现(一) | Shiki&#39;s Blog</title>
+    <title>代码整洁之道 | Shiki&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -307,12 +309,12 @@ JCommander是Java解析命令行参数的工具，作者cebust
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">从零开始的JVM实现(一)</h1>
+                    <h1 class="description center-align post-title">代码整洁之道</h1>
                 </div>
             </div>
         </div>
@@ -429,16 +431,12 @@ JCommander是Java解析命令行参数的工具，作者cebust
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/JVM/">
-                                <span class="chip bg-color">JVM</span>
-                            </a>
-                        
                             <a href="/tags/Java/">
                                 <span class="chip bg-color">Java</span>
                             </a>
                         
-                            <a href="/tags/%E5%BC%80%E6%BA%90%E5%B7%A5%E5%85%B7/">
-                                <span class="chip bg-color">开源工具</span>
+                            <a href="/tags/%E8%AE%BE%E8%AE%A1/">
+                                <span class="chip bg-color">设计</span>
                             </a>
                         
                     </div>
@@ -449,8 +447,8 @@ JCommander是Java解析命令行参数的工具，作者cebust
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/JVM/" class="post-category">
-                                JVM
+                            <a href="/categories/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                软件设计
                             </a>
                         
                     </div>
@@ -462,14 +460,14 @@ JCommander是Java解析命令行参数的工具，作者cebust
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-02-19
+                    2021-07-31
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-02-21
+                    2021-09-10
                 </div>
                 
 
@@ -489,75 +487,28 @@ JCommander是Java解析命令行参数的工具，作者cebust
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="JCommander"><a href="#JCommander" class="headerlink" title="JCommander"></a>JCommander</h3><blockquote>
-<p>JCommander是Java解析命令行参数的工具，作者cebust</p>
-</blockquote>
-<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><ul>
-<li>注解驱动<br>它的核心功能<strong>命令行参数定义</strong>是基于注解的，这也是我选择用它的主要原因。我们可以轻松做到命令行参数与属性的映射，属性除了是String类型，还可以是Integer、boolean，甚至是File、集合类型。</li>
-<li>功能丰富<br>它同时支持文章开头的两种命令行风格，并且提供了输出帮助文档的能力(<code>usage()</code>)，还提供了国际化的支持。</li>
-<li>高度扩展</li>
-</ul>
-<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>在一般应用场景，大多只需要设置<code>@Parameter</code>以下几个属性值：</p>
-<ul>
-<li>names 设置命令行参数，如<code>-version</code></li>
-<li>required 设置此参数是否必须</li>
-<li>description 设置参数的描述</li>
-<li>order 设置帮助文档的顺序</li>
-<li>help 设置此参数是否为展示帮助文档或者辅助功能</li>
-</ul>
-<h4 id="两个扩展接口"><a href="#两个扩展接口" class="headerlink" title="两个扩展接口"></a>两个扩展接口</h4><p>可以通过以下两个接口实现正则校验等校验方式的实现</p>
-<ul>
-<li>IStringConverter 支持String类型的参数值可以转化为任意其他类型的属性</li>
-<li>IParameterValidator 支持参数值的校验</li>
-</ul>
-<h3 id="类路径的解析"><a href="#类路径的解析" class="headerlink" title="类路径的解析"></a>类路径的解析</h3><ul>
-<li><p>四种路径分别进行处理</p>
-<ul>
-<li>ZipEntry</li>
-<li>CompositeEntry</li>
-<li>WildcardEntry</li>
-<li>DirEntry</li>
-</ul>
+                <h1 id="代码整洁之道"><a href="#代码整洁之道" class="headerlink" title="代码整洁之道"></a>代码整洁之道</h1><h3 id="对象和数据结构"><a href="#对象和数据结构" class="headerlink" title="对象和数据结构"></a>对象和数据结构</h3><h4 id="数据、对象得反对称性"><a href="#数据、对象得反对称性" class="headerlink" title="数据、对象得反对称性"></a>数据、对象得反对称性</h4><ol>
+<li>过程式代码难以添加新数据结构，而面对对象代码难以添加新函数</li>
+</ol>
+<h4 id="得墨忒尔律"><a href="#得墨忒尔律" class="headerlink" title="得墨忒尔律"></a>得墨忒尔律</h4><ol>
+<li><p>过长的且跨类权限过多</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//避免如下写法</span>
+<span class="token keyword">final</span> String outputDir <span class="token operator">=</span> ctxt<span class="token punctuation">.</span><span class="token function">getOptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getScratchDir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getAbsolutePath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//更改为如下设计</span>
+<span class="token keyword">final</span> String outputDir <span class="token operator">=</span> ctxt<span class="token punctuation">.</span>options<span class="token punctuation">.</span>scratchDir<span class="token punctuation">.</span>absolutePath<span class="token punctuation">;</span></code></pre>
 </li>
-<li><p>Tips：</p>
-<p>-Xbootclasspath/a:<path></p>
-<p>Appends the specified resources to the end of the bootstrap class path</p>
-<p>NIO包</p>
-<ul>
-<li>Files类<ul>
-<li>exists()测试文件是否存在</li>
-<li>newBufferedReader()</li>
-<li>walkFileTree()走一个文件树</li>
-<li>walk()</li>
-</ul>
+<li><p>隐藏结构</p>
+<pre class=" language-java"><code class="language-java">String outFile <span class="token operator">=</span> outputDir <span class="token operator">+</span> <span class="token string">"/"</span> <span class="token operator">+</span> className<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">,</span><span class="token punctuation">.</span><span class="token string">'/'</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".class"</span><span class="token punctuation">;</span>
+FileOutPutStream fout <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span>outFile<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 </li>
-<li>Paths类<ul>
-<li>get()</li>
-</ul>
-</li>
-<li>FileSystems类</li>
-</ul>
-<p>Stream包</p>
-<ul>
-<li>初始化与转换<ul>
-<li>Stream.of()</li>
-<li>list.stream()</li>
-</ul>
-</li>
-<li>流操作<ul>
-<li>stream().map()</li>
-<li>stream().filter()</li>
-<li>stream().forEach()</li>
-<li>stream().skip().limit()</li>
-<li>stream().distinct()</li>
-<li>stream().anyMatch()</li>
-<li>stream().noneMath()</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="Class文件的读取"><a href="#Class文件的读取" class="headerlink" title="Class文件的读取"></a>Class文件的读取</h3>
+</ol>
+<h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><ol>
+<li>避免出现调用处逐个判断异常，统一抛出异常在外层使用异常Code处理</li>
+<li>尽量使用不可控异常，省去从底层一直传递到最上层的函数签名声明</li>
+<li>可以将异常处理封装为单独的类（是否会有隐藏业务逻辑的问题）</li>
+<li>不要返回null，可以使用emptyCollection进行返回</li>
+</ol>
+<h3 id="边界"><a href="#边界" class="headerlink" title="边界"></a>边界</h3>
             </div>
             <hr/>
 
@@ -582,7 +533,7 @@ JCommander是Java解析命令行参数的工具，作者cebust
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://ryougi-shiki0.github.io/2020/02/19/cong-ling-kai-shi-de-jvm-shi-xian/">http://ryougi-shiki0.github.io/2020/02/19/cong-ling-kai-shi-de-jvm-shi-xian/</a>
+                    <a href="http://ryougi-shiki0.github.io/2021/07/31/dai-ma-zheng-ji-zhi-dao/">http://ryougi-shiki0.github.io/2021/07/31/dai-ma-zheng-ji-zhi-dao/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -620,16 +571,12 @@ JCommander是Java解析命令行参数的工具，作者cebust
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/JVM/">
-                                    <span class="chip bg-color">JVM</span>
-                                </a>
-                            
                                 <a href="/tags/Java/">
                                     <span class="chip bg-color">Java</span>
                                 </a>
                             
-                                <a href="/tags/%E5%BC%80%E6%BA%90%E5%B7%A5%E5%85%B7/">
-                                    <span class="chip bg-color">开源工具</span>
+                                <a href="/tags/%E8%AE%BE%E8%AE%A1/">
+                                    <span class="chip bg-color">设计</span>
                                 </a>
                             
                         </div>
@@ -670,48 +617,49 @@ JCommander是Java解析命令行参数的工具，作者cebust
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/20/she-ji-mo-shi/">
+                <a href="/2021/07/31/dai-ma-zheng-ji-zhi-dao/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="设计模式复习笔记">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="代码整洁之道">
                         
-                        <span class="card-title">设计模式复习笔记</span>
+                        <span class="card-title">代码整洁之道</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            设计模式
-使程序具有更好的重用性、可读性、可扩展性、可靠性、呈现高内聚低耦合的特性
+                            代码整洁之道对象和数据结构数据、对象得反对称性
+过程式代码难以添加新数据结构，而面对对象代码难以添加新函数
 
-设计模式七大原则
-最终目的：
-找出应用中可能需要变化的内容，从不需要变化的部分拆分出来
-针对接口编程，而不是针对实现编程
-为了实现交互对象之间的松耦合设计
+得墨忒尔律
+过长的且跨类权限过多
+//避免如下写法
+final String outputDir = ctxt.getOption
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-20
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-31
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-category">
-                                    设计模式
+                            <a href="/categories/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                    软件设计
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -719,8 +667,8 @@ JCommander是Java解析命令行参数的工具，作者cebust
                         <span class="chip bg-color">Java</span>
                     </a>
                     
-                    <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                        <span class="chip bg-color">设计模式</span>
+                    <a href="/tags/%E8%AE%BE%E8%AE%A1/">
+                        <span class="chip bg-color">设计</span>
                     </a>
                     
                 </div>
@@ -734,36 +682,36 @@ JCommander是Java解析命令行参数的工具，作者cebust
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/02/07/redis/">
+                <a href="/2021/07/31/ling-yu-qu-dong-she-ji/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Redis">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="领域驱动设计">
                         
-                        <span class="card-title">Redis</span>
+                        <span class="card-title">领域驱动设计</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Nosql
-NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数据库的补充。
-作用：应对基于海量用户和海量数据前提下的数据处理问题
+                            领域驱动设计交流与语言的使用模式船运清关制定路线场景
+ 对比两种方式，方式二在交流过程中，交换信息更高效，不必对细节表达不清额外解释
 
-特征：可扩容，可伸缩;大数据量下高性能;灵活的数据模型;高可用
-常见Nosql 数
+
+讨论方式一：描述出发地、目的地及清关地点改变时，对航线进行改变
+讨论方式二：航线表述为抽象模型Itin
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-31
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/NoSQL/" class="post-category">
-                                    NoSQL
+                            <a href="/categories/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/" class="post-category">
+                                    软件设计
                                 </a>
                             
                             
@@ -773,20 +721,12 @@ NoSQL：即Not-Only SQL（泛指非关系型的数据库），作为关系型数
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Redis/">
-                        <span class="chip bg-color">Redis</span>
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
                     </a>
                     
-                    <a href="/tags/%E7%BC%93%E5%AD%98/">
-                        <span class="chip bg-color">缓存</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                        <span class="chip bg-color">非关系型数据库</span>
-                    </a>
-                    
-                    <a href="/tags/Redis%E9%9B%86%E7%BE%A4/">
-                        <span class="chip bg-color">Redis集群</span>
+                    <a href="/tags/%E8%AE%BE%E8%AE%A1/">
+                        <span class="chip bg-color">设计</span>
                     </a>
                     
                 </div>

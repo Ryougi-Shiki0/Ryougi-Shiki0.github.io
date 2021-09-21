@@ -4,7 +4,34 @@
   
     
     <entry>
-      <title>MyBatis入门学习</title>
+      <title>代码整洁之道</title>
+      <link href="/2021/07/31/dai-ma-zheng-ji-zhi-dao/"/>
+      <url>/2021/07/31/dai-ma-zheng-ji-zhi-dao/</url>
+      
+        <content type="html"><![CDATA[<h1 id="代码整洁之道"><a href="#代码整洁之道" class="headerlink" title="代码整洁之道"></a>代码整洁之道</h1><h3 id="对象和数据结构"><a href="#对象和数据结构" class="headerlink" title="对象和数据结构"></a>对象和数据结构</h3><h4 id="数据、对象得反对称性"><a href="#数据、对象得反对称性" class="headerlink" title="数据、对象得反对称性"></a>数据、对象得反对称性</h4><ol><li>过程式代码难以添加新数据结构，而面对对象代码难以添加新函数</li></ol><h4 id="得墨忒尔律"><a href="#得墨忒尔律" class="headerlink" title="得墨忒尔律"></a>得墨忒尔律</h4><ol><li><p>过长的且跨类权限过多</p><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//避免如下写法</span><span class="token keyword">final</span> String outputDir <span class="token operator">=</span> ctxt<span class="token punctuation">.</span><span class="token function">getOptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getScratchDir</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getAbsolutePath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//更改为如下设计</span><span class="token keyword">final</span> String outputDir <span class="token operator">=</span> ctxt<span class="token punctuation">.</span>options<span class="token punctuation">.</span>scratchDir<span class="token punctuation">.</span>absolutePath<span class="token punctuation">;</span></code></pre></li><li><p>隐藏结构</p><pre class=" language-java"><code class="language-java">String outFile <span class="token operator">=</span> outputDir <span class="token operator">+</span> <span class="token string">"/"</span> <span class="token operator">+</span> className<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">,</span><span class="token punctuation">.</span><span class="token string">'/'</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".class"</span><span class="token punctuation">;</span>FileOutPutStream fout <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span>outFile<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre></li></ol><h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><ol><li>避免出现调用处逐个判断异常，统一抛出异常在外层使用异常Code处理</li><li>尽量使用不可控异常，省去从底层一直传递到最上层的函数签名声明</li><li>可以将异常处理封装为单独的类（是否会有隐藏业务逻辑的问题）</li><li>不要返回null，可以使用emptyCollection进行返回</li></ol><h3 id="边界"><a href="#边界" class="headerlink" title="边界"></a>边界</h3>]]></content>
+      
+      
+      <categories>
+          
+          <category> 软件设计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> 设计 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>领域驱动设计</title>
       <link href="/2021/07/31/ling-yu-qu-dong-she-ji/"/>
       <url>/2021/07/31/ling-yu-qu-dong-she-ji/</url>
       
@@ -47,9 +74,9 @@
       
         <tags>
             
-            <tag> 前端基础 </tag>
-            
             <tag> HTML </tag>
+            
+            <tag> 前端基础 </tag>
             
         </tags>
       
@@ -74,9 +101,9 @@
       
         <tags>
             
-            <tag> JS </tag>
-            
             <tag> 前端基础 </tag>
+            
+            <tag> JS </tag>
             
         </tags>
       
@@ -501,9 +528,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> MySQL优化 </tag>
-            
             <tag> 关系型数据库 </tag>
+            
+            <tag> MySQL优化 </tag>
             
         </tags>
       
@@ -530,9 +557,9 @@
             
             <tag> MySQL </tag>
             
-            <tag> MySQL优化 </tag>
-            
             <tag> 关系型数据库 </tag>
+            
+            <tag> MySQL优化 </tag>
             
         </tags>
       
